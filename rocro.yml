@@ -23,7 +23,9 @@ inspecode:
     thresholds: { num-issues: 60 }
 
   cpplint:
-    thresholds: { num-issues: 999 }
+    options:
+      --filter: -whitespace
+    thresholds: { num-issues: 820 }
 
   grep:
     thresholds: { num-issues: 112 }
@@ -57,7 +59,9 @@ inspecode:
   #  thresholds: { num-issues: 999 }
 
   shellcheck:
-    thresholds: { num-issues: 999 }
+    options:
+      --exclude: [ SC2086, SC2039 ]
+    thresholds: { num-issues: 485 }
 
   ##----------------------------------------------------------------------------
   ##  $ uncrustify -L1 -c /etc/uncrustify/defaults.cfg --check ${INPUT}
