@@ -18,8 +18,16 @@ inspecode:
   grep:
     thresholds: { num-issues: 999 }
 
-  infer:
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ##  $ infer --jobs 1 --results-dir "${OUTPUT}" -- make
+  ##  Capturing in make/cc mode...
+  ##  Makefile:12: *** The 'sphinx-build' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the 'sphinx-build' executable. Alternatively you can add the directory with the executable to your PATH. If you don't have Sphinx installed, grab it from http://sphinx-doc.org/.  Stop.
+  ##  External Error: *** capture command failed:
+  ##  *** make
+  ##  *** exited with code 2
+  ##----------------------------------------------------------------------------
+  #infer:
+  #  thresholds: { num-issues: 999 }
 
   jscpd:
     thresholds: { num-issues: 999 }
@@ -28,12 +36,30 @@ inspecode:
     auto-fix: true
     thresholds: { num-issues: 999 }
 
-  scan-build:
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ##  $ scan-build -o "${OUTPUT}" make
+  ##  scan-build: Using '/usr/local/bin/clang-7' for static analysis
+  ##  Makefile:12: *** The 'sphinx-build' command was not found. Make sure you have Sphinx installed, then set the SPHINXBUILD environment variable to point to the full path of the 'sphinx-build' executable. Alternatively you can add the directory with the executable to your PATH. If you don't have Sphinx installed, grab it from http://sphinx-doc.org/.  Stop.
+  ##  scan-build: Removing directory '/tmp/.scanbuild.914455887/2020-02-19-052621-60-1' because it contains no reports.
+  ##  scan-build: No bugs found.
+  ##----------------------------------------------------------------------------
+  #scan-build:
+  #  thresholds: { num-issues: 999 }
 
-  uncrustify:
-    auto-fix: true
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ##  $ uncrustify -L1 -c /etc/uncrustify/defaults.cfg --check ${INPUT}
+  ##  flag_parens(21): no match for '(' at [2:43] [CallStack: flag_parens:14, fix_symbols:2004]
+  ##  parse_cleanup(757): Unmatched BRACE_CLOSE
+  ##  orig_line is 51, orig_col is 24
+  ##  parse_cleanup(761): Try the option 'tok_split_gte = true'
+  ##----------------------------------------------------------------------------
+  #uncrustify:
+  #  auto-fix: true
+  #  thresholds: { num-issues: 999 }
 
-  unused:
-    thresholds: { num-issues: 999 }
+  ##----------------------------------------------------------------------------
+  ##  $ cat "${TAGS_FILE}" | unused --stdin -C -P -g none
+  ##  Unused: analyzing unused: <stdin>: hGetContents: invalid argument (invalid byte sequence)
+  ##----------------------------------------------------------------------------
+  #unused:
+  #  thresholds: { num-issues: 999 }
