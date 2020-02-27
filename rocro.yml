@@ -22,11 +22,6 @@ inspecode:
   cppcheck:
     thresholds: { num-issues: 60 }
 
-  cpplint:
-    options:
-      --filter: -whitespace
-    thresholds: { num-issues: 820 }
-
   grep:
     thresholds: { num-issues: 112 }
 
