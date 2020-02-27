@@ -18,11 +18,12 @@ inspecode:
   #  thresholds: { num-issues: 484 }
 
   ##----------------------------------------------------------------------------
-  ##  CPD was aborted unexpectedly.
+  ## [on both staging and prod]
+  ##   Aborted ... CPD was aborted unexpectedly.
   ##----------------------------------------------------------------------------
-  cpd:
-    options: [ --skip-lexical-errors ]
-    thresholds: { num-issues: 999 }
+  #cpd:
+  #  options: [ --skip-lexical-errors ]
+  #  thresholds: { num-issues: 999 }
 
   cppcheck:
     thresholds: { num-issues: 60 }
