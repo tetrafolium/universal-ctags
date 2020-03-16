@@ -333,7 +333,7 @@ extern int main (int argc, char **argv)
         for (i = 1; i < argc; i++)
         {
             printf("\nParsing %s:\n", argv[i]);
-            /* parseRawBuffer() is called repeatadly during Geany execution */
+            /* parseRawBuffer() is called repeatedly during Geany execution */
             parseRawBuffer(argv[i], NULL, 0, getNamedLanguage("C", 0), tagArray);
 
             processCollectedTags(tagArray);

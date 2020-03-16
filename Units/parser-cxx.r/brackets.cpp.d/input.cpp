@@ -22,7 +22,7 @@ auto f01(std::string p01) -> std::string {
     // copy list initialisation for local
     std::string l02 = { "" };
 
-    // return list initalizer
+    // return list initializer
     return { "" };
 }
 

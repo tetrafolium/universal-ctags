@@ -1,5 +1,5 @@
 // cs_override_keyword.cs
-// Calling overriden methods from the base class
+// Calling overridden methods from the base class
 using System;
 class TestClass
 {

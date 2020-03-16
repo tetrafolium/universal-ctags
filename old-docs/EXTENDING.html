@@ -249,7 +249,7 @@ static void findSwineTags (void)
     vStringDelete (name);
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* SwineParser (void)
 {
     static const char *const extensions [] = { "swn", NULL };
@@ -281,7 +281,7 @@ static void installSwineRegex (const langType language)
     addTagRegex (language, "^def[ \t]*([a-zA-Z0-9_]+)", "\\1", "d,definition", NULL);
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* SwineParser (void)
 {
     static const char *const extensions [] = { "swn", NULL };
@@ -340,7 +340,7 @@ static void installSwine (const langType language)
     addCallbackRegex (language, "^def[ \t]+([a-zA-Z0-9_]+)", NULL, definition);
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* SwineParser (void)
 {
     static const char *const extensions [] = { "swn", NULL };
@@ -371,7 +371,7 @@ static void installMakefileRegex (const langType language)
     addTagRegex (language, "(^|[ \t])([A-Z0-9_]+)[ \t]*:?=", "\\2", "m,macro", "i");
 }
 
-/* Create parser definition stucture */
+/* Create parser definition structure */
 extern parserDefinition* MakefileParser (void)
 {
     static const char *const patterns [] = { "[Mm]akefile", NULL };
