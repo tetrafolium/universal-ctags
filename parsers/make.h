@@ -21,14 +21,14 @@
 typedef struct sMakeSubparser makeSubparser;
 
 struct sMakeSubparser {
-	subparser subparser;
+    subparser subparser;
 
-	void (* valueNotify) (makeSubparser *s, char* name);
-	void (* directiveNotify) (makeSubparser *s, char* name);
-	void (* newMacroNotify) (makeSubparser *s,
-							 char* name,
-							 bool withDefineDirective,
-							 bool appending);
+    void (* valueNotify) (makeSubparser *s, char* name);
+    void (* directiveNotify) (makeSubparser *s, char* name);
+    void (* newMacroNotify) (makeSubparser *s,
+                             char* name,
+                             bool withDefineDirective,
+                             bool appending);
 };
 
 #endif

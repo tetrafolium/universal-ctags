@@ -1,7 +1,7 @@
 struct {
-	int a;
+    int a;
 } A;
 
 struct {
-	int b;
+    int b;
 } B;

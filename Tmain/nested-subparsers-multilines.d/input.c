@@ -1,8 +1,8 @@
 DEFINE_EVENT(a,
-			 b);
+             b);
 
 DEFINE_HOOK(h,
-			i);
+            i);
 
 int
 main(void)

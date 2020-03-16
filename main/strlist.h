@@ -42,8 +42,8 @@ extern void stringListDelete (stringList *const current);
 extern bool stringListHasInsensitive (const stringList *const current, const char *const string);
 extern bool stringListHas (const stringList *const current, const char *const string);
 extern bool stringListHasTest (const stringList *const current,
-				  bool (*test)(const char *s, void *userData),
-				  void *userData);
+                               bool (*test)(const char *s, void *userData),
+                               void *userData);
 extern bool stringListDeleteItemExtension (stringList* const current, const char* const extension);
 extern bool stringListExtensionMatched (const stringList* const list, const char* const extension);
 extern vString* stringListExtensionFinds (const stringList* const list, const char* const extension);

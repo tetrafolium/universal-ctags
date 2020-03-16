@@ -1,2 +1,2 @@
 class C {
- void main
+    void main

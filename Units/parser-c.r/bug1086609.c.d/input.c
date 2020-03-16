@@ -1,7 +1,7 @@
 /*
 Bugs item #1086609, was opened at 2004-12-16 13:07
 Message generated for change (Tracker Item Submitted) made by Item Submitter
-You can respond by visiting: 
+You can respond by visiting:
 https://sourceforge.net/tracker/?func=detail&atid=106556&aid=1086609&group_id=6556
 
 Category: None

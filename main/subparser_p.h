@@ -38,9 +38,9 @@ extern subparser* teardownSubparsersInUse (struct slaveControlBlock *controlBloc
 
 extern struct colprintTable * subparserColprintTableNew (void);
 extern void subparserColprintAddSubparsers (struct colprintTable *table,
-											struct slaveControlBlock *scb);
+        struct slaveControlBlock *scb);
 extern void subparserColprintTablePrint (struct colprintTable *table,
-										 bool withListHeader, bool machinable, FILE *fp);
+        bool withListHeader, bool machinable, FILE *fp);
 
 extern void useDefaultSubparsers (struct slaveControlBlock *controlBlock);
 extern void useSpecifiedSubparser (struct slaveControlBlock *controlBlock, subparser *s);

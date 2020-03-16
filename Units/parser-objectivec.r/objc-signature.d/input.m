@@ -1,4 +1,4 @@
-@interface X: NSObject
+@interface X : NSObject
 - doNothing;
 - (void)doVoidReturn;
 - (void*)doVoidPtrReturn;
@@ -20,14 +20,14 @@
 @implementation X
 - doNothing
 {
-  return nil;
+    return nil;
 }
 - doNothing: idarg
 {
-  return nil;
+    return nil;
 }
 - (void*)doVoidUInt: (unsigned int) idarg1 andWithStruct: (struct foo *) idarg2PtrExplicit
 {
-  return NULL;
+    return NULL;
 }
 @end

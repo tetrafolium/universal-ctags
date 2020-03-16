@@ -74,6 +74,6 @@ extern struct colprintTable * fieldColprintTableNew (void);
 extern void fieldColprintAddCommonLines (struct colprintTable *table);
 extern void fieldColprintAddLanguageLines (struct colprintTable *table, langType language);
 extern void fieldColprintTablePrint (struct colprintTable *table,
-									 bool withListHeader, bool machinable, FILE *fp);
+                                     bool withListHeader, bool machinable, FILE *fp);
 
 #endif	/* CTAGS_MAIN_FIELD_PRIVATE_H */

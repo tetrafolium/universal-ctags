@@ -21,25 +21,25 @@
 
 typedef struct sXmlSubparser xmlSubparser;
 struct sXmlSubparser {
-	subparser subparser;
+    subparser subparser;
 
-	/* Similar to makeTagEntryNotify method of subparser.
-	 * However, makeTagEntryWithNodeNotify passes the xml node
-	 * just found to subparsers.
-	 */
-	void (* makeTagEntryWithNodeNotify) (xmlSubparser *s,
-										 xmlNode *node, tagEntryInfo *xmlTag);
+    /* Similar to makeTagEntryNotify method of subparser.
+     * However, makeTagEntryWithNodeNotify passes the xml node
+     * just found to subparsers.
+     */
+    void (* makeTagEntryWithNodeNotify) (xmlSubparser *s,
+                                         xmlNode *node, tagEntryInfo *xmlTag);
 
-	/* A subparser should call findXMLTags() in the callback function
-	 * assigned to this field. The XML base parser prepares CTX and ROOT.
-	 * A subparser may pass the CTX and ROOT to findXMLTags().
-	 * The XML base parser tags id= and namespace related attributes before
-	 * calling this hook. CTX and ROOT are already used once by
-	 * the XML base parser for tagging id= and namespace related attributes.
-	 * The resource life cycle of CTX and ROOT is managed by the base parser.
-	 */
-	void (* runXPathEngine) (xmlSubparser *s,
-							 xmlXPathContext *ctx, xmlNode *root);
+    /* A subparser should call findXMLTags() in the callback function
+     * assigned to this field. The XML base parser prepares CTX and ROOT.
+     * A subparser may pass the CTX and ROOT to findXMLTags().
+     * The XML base parser tags id= and namespace related attributes before
+     * calling this hook. CTX and ROOT are already used once by
+     * the XML base parser for tagging id= and namespace related attributes.
+     * The resource life cycle of CTX and ROOT is managed by the base parser.
+     */
+    void (* runXPathEngine) (xmlSubparser *s,
+                             xmlXPathContext *ctx, xmlNode *root);
 };
 
 #endif /* CTAGS_PARSER_XML_H */

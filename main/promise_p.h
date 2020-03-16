@@ -18,9 +18,9 @@ bool forcePromises (void);
 void breakPromisesAfter (int promise);
 int getLastPromise (void);
 void runModifiers (int promise,
-				   unsigned long startLine, long startCharOffset,
-				   unsigned long endLine, long endCharOffset,
-				   unsigned char *input,
-				   size_t size);
+                   unsigned long startLine, long startCharOffset,
+                   unsigned long endLine, long endCharOffset,
+                   unsigned char *input,
+                   size_t size);
 
 #endif	/* CTAGS_MAIN_PROMISE_PRIVATE_H */

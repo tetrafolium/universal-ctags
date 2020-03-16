@@ -42,32 +42,32 @@ extern const char *const PathDelimiters;
 #endif
 
 typedef struct {
-		/* Name of file for which status is valid */
-	char* name;
+    /* Name of file for which status is valid */
+    char* name;
 
-		/* Does file exist? If not, members below do not contain valid data. */
-	bool exists;
+    /* Does file exist? If not, members below do not contain valid data. */
+    bool exists;
 
-		/* is file path a symbolic link to another file? */
-	bool isSymbolicLink;
+    /* is file path a symbolic link to another file? */
+    bool isSymbolicLink;
 
-		/* Is file (pointed to) a directory? */
-	bool isDirectory;
+    /* Is file (pointed to) a directory? */
+    bool isDirectory;
 
-		/* Is file (pointed to) a normal file? */
-	bool isNormalFile;
+    /* Is file (pointed to) a normal file? */
+    bool isNormalFile;
 
-		/* Is file (pointed to) executable? */
-	bool isExecutable;
+    /* Is file (pointed to) executable? */
+    bool isExecutable;
 
-		/* Is file (pointed to) setuid? */
-	bool isSetuid;
+    /* Is file (pointed to) setuid? */
+    bool isSetuid;
 
-		/* Is file (pointed to) setgid? */
-	bool isSetgid;
+    /* Is file (pointed to) setgid? */
+    bool isSetgid;
 
-		/* Size of file (pointed to) */
-	unsigned long size;
+    /* Size of file (pointed to) */
+    unsigned long size;
 } fileStatus;
 
 /*

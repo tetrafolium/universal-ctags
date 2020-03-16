@@ -2,7 +2,7 @@ public class input extends Object
 {
     private static String getTarget ()
     {
-	return "world";
+        return "world";
     }
 
     abstract protected static int life ();

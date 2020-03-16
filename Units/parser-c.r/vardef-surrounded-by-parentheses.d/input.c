@@ -12,8 +12,8 @@ int *(d[2][3]);
 int *(* const volatile * e[3]);
 
 struct s {
-	int *(* const volatile * f[3][3]);
-	int (g[3]);
+    int *(* const volatile * f[3][3]);
+    int (g[3]);
 } t;
 
 int (* volatile * (*h[1]));

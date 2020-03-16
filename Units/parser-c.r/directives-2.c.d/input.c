@@ -1,12 +1,12 @@
 int main()
 {
-        if (something) {
-                printf("hello");
+    if (something) {
+        printf("hello");
 #ifdef world
-        } else
-                printf(" world\n");
+    } else
+        printf(" world\n");
 #else
-        }
+    }
 #endif
 }
 

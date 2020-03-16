@@ -18,10 +18,12 @@
 #include "selectors.h"
 
 static tagRegexTable dosTagRegexTable [] = {
-	{"^:([A-Za-z_0-9]+)", "\\1",
-	 "l,label,labels", NULL},
-	{"set[ \t]+([A-Za-z_0-9]+)[ \t]*=", "\\1",
-	 "v,variable,variables", NULL},
+    {   "^:([A-Za-z_0-9]+)", "\\1",
+        "l,label,labels", NULL
+    },
+    {   "set[ \t]+([A-Za-z_0-9]+)[ \t]*=", "\\1",
+        "v,variable,variables", NULL
+    },
 };
 
 /*
@@ -30,15 +32,16 @@ static tagRegexTable dosTagRegexTable [] = {
 
 extern parserDefinition* DosBatchParser (void)
 {
-	static const char *const extensions [] = { "bat", "cmd", NULL };
-	parserDefinition* const def = parserNew ("DosBatch");
-	static selectLanguage selectors[] = { selectByRexxCommentAndDosbatchLabelPrefix,
-					      NULL };
+    static const char *const extensions [] = { "bat", "cmd", NULL };
+    parserDefinition* const def = parserNew ("DosBatch");
+    static selectLanguage selectors[] = { selectByRexxCommentAndDosbatchLabelPrefix,
+                                          NULL
+                                        };
 
-	def->extensions = extensions;
-	def->tagRegexTable = dosTagRegexTable;
-	def->tagRegexCount = ARRAY_SIZE (dosTagRegexTable);
-	def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
-	def->selectLanguage = selectors;
-	return def;
+    def->extensions = extensions;
+    def->tagRegexTable = dosTagRegexTable;
+    def->tagRegexCount = ARRAY_SIZE (dosTagRegexTable);
+    def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
+    def->selectLanguage = selectors;
+    return def;
 }

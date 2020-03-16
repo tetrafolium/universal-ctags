@@ -39,96 +39,97 @@
 typedef enum { OPTION_NONE, OPTION_SHORT, OPTION_LONG } optionType;
 
 typedef struct sCookedArgs {
-	/* private */
-	Arguments* args;
-	char *shortOptions;
-	char simple[2];
-	bool isOption;
-	bool longOption;
-	const char* parameter;
-	/* public */
-	char* item;
+    /* private */
+    Arguments* args;
+    char *shortOptions;
+    char simple[2];
+    bool isOption;
+    bool longOption;
+    const char* parameter;
+    /* public */
+    char* item;
 } cookedArgs;
 
 typedef enum eLocate {
-	EX_MIX,      /* line numbers for defines, patterns otherwise */
-	EX_LINENUM,  /* -n  only line numbers in tag file */
-	EX_PATTERN,  /* -N  only patterns in tag file */
-	EX_COMBINE,  /* Combine linenum and pattern with `;'*/
+    EX_MIX,      /* line numbers for defines, patterns otherwise */
+    EX_LINENUM,  /* -n  only line numbers in tag file */
+    EX_PATTERN,  /* -N  only patterns in tag file */
+    EX_COMBINE,  /* Combine linenum and pattern with `;'*/
 } exCmd;
 
 typedef enum sortType {
-	SO_UNSORTED,
-	SO_SORTED,
-	SO_FOLDSORTED
+    SO_UNSORTED,
+    SO_SORTED,
+    SO_FOLDSORTED
 } sortType;
 
 typedef enum eTagRelative {
-	TREL_NO,
-	TREL_YES,
-	TREL_ALWAYS,
-	TREL_NEVER,
+    TREL_NO,
+    TREL_YES,
+    TREL_ALWAYS,
+    TREL_NEVER,
 } tagRelative;
 
 typedef enum eOptionLoadingStage {
-	OptionLoadingStageNone,
-	OptionLoadingStageCustom,
-	OptionLoadingStageDosCnf,
-	OptionLoadingStageEtc,
-	OptionLoadingStageLocalEtc,
-	OptionLoadingStageXdg,
-	OptionLoadingStageHomeRecursive,
-	OptionLoadingStageCurrentRecursive,
-	OptionLoadingStagePreload,
-	OptionLoadingStageEnvVar,
-	OptionLoadingStageCmdline,
+    OptionLoadingStageNone,
+    OptionLoadingStageCustom,
+    OptionLoadingStageDosCnf,
+    OptionLoadingStageEtc,
+    OptionLoadingStageLocalEtc,
+    OptionLoadingStageXdg,
+    OptionLoadingStageHomeRecursive,
+    OptionLoadingStageCurrentRecursive,
+    OptionLoadingStagePreload,
+    OptionLoadingStageEnvVar,
+    OptionLoadingStageCmdline,
 } OptionLoadingStage;
 
 /*  This stores the command line options.
  */
 typedef struct sOptionValues {
-	bool append;         /* -a  append to "tags" file */
-	bool backward;       /* -B  regexp patterns search backwards */
-	bool etags;          /* -e  output Emacs style tags file */
-	exCmd locate;           /* --excmd  EX command used to locate tag */
-	bool recurse;        /* -R  recurse into directories */
-	sortType sorted;        /* -u,--sort  sort tags */
-	bool xref;           /* -x  generate xref output instead */
-	fmtElement *customXfmt;	/* compiled code for --xformat=XFMT */
-	char *fileList;         /* -L  name of file containing names of files */
-	char *tagFileName;      /* -o  name of tags file */
-	stringList* headerExt;  /* -h  header extensions */
-	stringList* etagsInclude;/* --etags-include  list of TAGS files to include*/
-	unsigned int tagFileFormat;/* --format  tag file format (level) */
+    bool append;         /* -a  append to "tags" file */
+    bool backward;       /* -B  regexp patterns search backwards */
+    bool etags;          /* -e  output Emacs style tags file */
+    exCmd locate;           /* --excmd  EX command used to locate tag */
+    bool recurse;        /* -R  recurse into directories */
+    sortType sorted;        /* -u,--sort  sort tags */
+    bool xref;           /* -x  generate xref output instead */
+    fmtElement *customXfmt;	/* compiled code for --xformat=XFMT */
+    char *fileList;         /* -L  name of file containing names of files */
+    char *tagFileName;      /* -o  name of tags file */
+    stringList* headerExt;  /* -h  header extensions */
+    stringList* etagsInclude;/* --etags-include  list of TAGS files to include*/
+    unsigned int tagFileFormat;/* --format  tag file format (level) */
 #ifdef HAVE_ICONV
-	char *inputEncoding;	/* --input-encoding	convert text into --output-encoding */
-	char *outputEncoding;	/* --output-encoding	write tags file as this encoding */
+    char *inputEncoding;	/* --input-encoding	convert text into --output-encoding */
+    char *outputEncoding;	/* --output-encoding	write tags file as this encoding */
 #endif
-	langType language;      /* --lang specified language override */
-	bool followLinks;    /* --link  follow symbolic links? */
-	bool filter;         /* --filter  behave as filter: files in, tags out */
-	char* filterTerminator; /* --filter-terminator  string to output */
-	tagRelative tagRelative;    /* --tag-relative file paths relative to tag file */
-	int  printTotals;    /* --totals  print cumulative statistics */
-	bool lineDirectives; /* --linedirectives  process #line directives */
-	bool printLanguage;  /* --print-language */
-	bool guessLanguageEagerly; /* --guess-language-eagerly|-G */
-	bool quiet;		      /* --quiet */
-	bool fatalWarnings;	/* --_fatal-warnings */
-	unsigned int patternLengthLimit; /* --pattern-length-limit=N */
-	bool putFieldPrefix;		 /* --put-field-prefix */
-	unsigned int maxRecursionDepth; /* --maxdepth=<max-recursion-depth> */
-	enum interactiveMode { INTERACTIVE_NONE = 0,
-						   INTERACTIVE_DEFAULT,
-						   INTERACTIVE_SANDBOX, } interactive; /* --interactive */
+    langType language;      /* --lang specified language override */
+    bool followLinks;    /* --link  follow symbolic links? */
+    bool filter;         /* --filter  behave as filter: files in, tags out */
+    char* filterTerminator; /* --filter-terminator  string to output */
+    tagRelative tagRelative;    /* --tag-relative file paths relative to tag file */
+    int  printTotals;    /* --totals  print cumulative statistics */
+    bool lineDirectives; /* --linedirectives  process #line directives */
+    bool printLanguage;  /* --print-language */
+    bool guessLanguageEagerly; /* --guess-language-eagerly|-G */
+    bool quiet;		      /* --quiet */
+    bool fatalWarnings;	/* --_fatal-warnings */
+    unsigned int patternLengthLimit; /* --pattern-length-limit=N */
+    bool putFieldPrefix;		 /* --put-field-prefix */
+    unsigned int maxRecursionDepth; /* --maxdepth=<max-recursion-depth> */
+    enum interactiveMode { INTERACTIVE_NONE = 0,
+                           INTERACTIVE_DEFAULT,
+                           INTERACTIVE_SANDBOX,
+                         } interactive; /* --interactive */
 #ifdef WIN32
-	enum filenameSepOp { FILENAME_SEP_NO_REPLACE = false,
-						 FILENAME_SEP_USE_SLASH  = true,
-						 FILENAME_SEP_UNSET,
-	} useSlashAsFilenameSeparator; /* --use-slash-as-filename-separator */
+    enum filenameSepOp { FILENAME_SEP_NO_REPLACE = false,
+                         FILENAME_SEP_USE_SLASH  = true,
+                         FILENAME_SEP_UNSET,
+                       } useSlashAsFilenameSeparator; /* --use-slash-as-filename-separator */
 #endif
 #ifdef DEBUG
-	unsigned long breakLine;/* -b  input line at which to call lineBreak() */
+    unsigned long breakLine;/* -b  input line at which to call lineBreak() */
 #endif
 
 } optionValues;
@@ -169,9 +170,9 @@ extern void initOptions (void);
 extern void freeOptionResources (void);
 
 extern langType getLanguageComponentInOption (const char *const option,
-					      const char *const prefix);
+        const char *const prefix);
 extern langType getLanguageComponentInOptionFull (const char *const option,
-					      const char *const prefix, bool noPretending);
+        const char *const prefix, bool noPretending);
 
 extern void processLanguageDefineOption (const char *const option, const char *const parameter);
 extern bool processMapOption (const char *const option, const char *const parameter);

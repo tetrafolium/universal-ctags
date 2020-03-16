@@ -38,19 +38,19 @@ struct slaveControlBlock;	/* Opaque data type for parse.c */
 *   FUNCTION PROTOTYPES
 */
 extern void linkDependencyAtInitializeParsing (depType dtype,
-						   parserDefinition *const master,
-						   struct slaveControlBlock *masterSCB,
-						   struct kindControlBlock *masterKCB,
-						   parserDefinition *const slave,
-						   struct kindControlBlock *slaveKCB,
-						   void *data);
+        parserDefinition *const master,
+        struct slaveControlBlock *masterSCB,
+        struct kindControlBlock *masterKCB,
+        parserDefinition *const slave,
+        struct kindControlBlock *slaveKCB,
+        void *data);
 
 extern struct slaveControlBlock *allocSlaveControlBlock (parserDefinition *parser);
 extern void freeSlaveControlBlock (struct slaveControlBlock *cb);
 extern void initializeDependencies (parserDefinition *parser,
-									struct slaveControlBlock *cb);
+                                    struct slaveControlBlock *cb);
 extern void finalizeDependencies (parserDefinition *parser,
-								  struct slaveControlBlock *cb);
+                                  struct slaveControlBlock *cb);
 
 extern slaveParser *getFirstSlaveParser(struct slaveControlBlock *controlBlock);
 extern slaveParser *getNextSlaveParser(slaveParser *last);

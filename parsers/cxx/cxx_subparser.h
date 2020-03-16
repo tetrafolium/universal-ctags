@@ -19,27 +19,27 @@
 
 typedef struct sCxxSubparser cxxSubparser;
 struct sCxxSubparser {
-	subparser subparser;
+    subparser subparser;
 
-	void (* enterBlockNotify) (struct sCxxSubparser *pSubparser);
-	void (* leaveBlockNotify) (struct sCxxSubparser *pSubparser);
+    void (* enterBlockNotify) (struct sCxxSubparser *pSubparser);
+    void (* leaveBlockNotify) (struct sCxxSubparser *pSubparser);
 
-	/* Return true if the base parser should delete the token. */
-	bool (* newIdentifierAsHeadOfMemberNotify) (struct sCxxSubparser *pSubparser,
-											  CXXToken * pToken);
+    /* Return true if the base parser should delete the token. */
+    bool (* newIdentifierAsHeadOfMemberNotify) (struct sCxxSubparser *pSubparser,
+            CXXToken * pToken);
 
-	/* Return true if the subparser consumes the token and the base
-	   parser should not call the other subparsers. */
-	bool (* unknownIdentifierInClassNotify) (struct sCxxSubparser *pSubparser,
-											 CXXToken * pToken);
+    /* Return true if the subparser consumes the token and the base
+       parser should not call the other subparsers. */
+    bool (* unknownIdentifierInClassNotify) (struct sCxxSubparser *pSubparser,
+            CXXToken * pToken);
 
-	/* Return true from parseAccessSpecifierNotify () if a subparser
-	   has an interest in extra identifier in place where an access
-	   specifier is written. The token holding the extra identifier
-	   has passed via foundExtraIdentifierAsAccessSpecifier method. */
-	bool (* parseAccessSpecifierNotify) (struct sCxxSubparser *pSubparser);
-	void (* foundExtraIdentifierAsAccessSpecifier) (struct sCxxSubparser *pSubparser,
-													CXXToken * pToken);
+    /* Return true from parseAccessSpecifierNotify () if a subparser
+       has an interest in extra identifier in place where an access
+       specifier is written. The token holding the extra identifier
+       has passed via foundExtraIdentifierAsAccessSpecifier method. */
+    bool (* parseAccessSpecifierNotify) (struct sCxxSubparser *pSubparser);
+    void (* foundExtraIdentifierAsAccessSpecifier) (struct sCxxSubparser *pSubparser,
+            CXXToken * pToken);
 };
 
 #endif //!ctags_cxx_subparser_h_

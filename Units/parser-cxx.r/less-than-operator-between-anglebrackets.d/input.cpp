@@ -13,4 +13,6 @@ template<char i, char j, bool B = i < (10 && 30 > j)> void f9(void) { }
 template<char i, char j, bool B = (i < 10 && 30 > j)> void f10(void) { }
 template<bool b = 0 < 2 && 2 < 4> void f11(void) { }
 template<typename T1, typename T2> class A;
-int main(void) { return 0; }
+int main(void) {
+    return 0;
+}

@@ -48,7 +48,7 @@ const char * test = "" STRINGIFY(; int notVisible;);
 // Unbalanced brackets
 DECLARE_FUNCTION_4(int,foo,bar,int x)
 DECLARE_FUNCTION_4_BEGIN({)
-DECLARE_FUNCTION_4_END(},{ /*dtors*/ })
+                         DECLARE_FUNCTION_4_END(}, { /*dtors*/ })
 
 // Token pasting
 
@@ -62,6 +62,6 @@ IMPLEMENT_FUNCTIONS(f1);
 
 int main(int,char **)
 {
-	DECLARE_VARS(l);
-	return 0;
+    DECLARE_VARS(l);
+    return 0;
 }

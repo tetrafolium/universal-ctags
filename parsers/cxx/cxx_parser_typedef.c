@@ -26,50 +26,50 @@
 //
 bool cxxParserParseGenericTypedef(void)
 {
-	CXX_DEBUG_ENTER();
+    CXX_DEBUG_ENTER();
 
-	for(;;)
-	{
-		if(!cxxParserParseUpToOneOf(
-				CXXTokenTypeSemicolon | CXXTokenTypeEOF |
-				CXXTokenTypeClosingBracket | CXXTokenTypeKeyword,
-				false
-			))
-		{
-			CXX_DEBUG_LEAVE_TEXT("Failed to parse fast statement");
-			return false;
-		}
+    for(;;)
+    {
+        if(!cxxParserParseUpToOneOf(
+                    CXXTokenTypeSemicolon | CXXTokenTypeEOF |
+                    CXXTokenTypeClosingBracket | CXXTokenTypeKeyword,
+                    false
+                ))
+        {
+            CXX_DEBUG_LEAVE_TEXT("Failed to parse fast statement");
+            return false;
+        }
 
-		// This fixes bug reported by Emil Rojas in 2002.
-		// Though it's quite debatable if we really *should* do this.
-		if(!cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeKeyword))
-		{
-			// not a keyword
-			if(!cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeSemicolon))
-			{
-				// not semicolon
-				CXX_DEBUG_LEAVE_TEXT("Found EOF/closing bracket at typedef");
-				return true; // EOF
-			}
-			// semicolon: exit
-			break;
-		}
+        // This fixes bug reported by Emil Rojas in 2002.
+        // Though it's quite debatable if we really *should* do this.
+        if(!cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeKeyword))
+        {
+            // not a keyword
+            if(!cxxTokenTypeIs(g_cxx.pToken,CXXTokenTypeSemicolon))
+            {
+                // not semicolon
+                CXX_DEBUG_LEAVE_TEXT("Found EOF/closing bracket at typedef");
+                return true; // EOF
+            }
+            // semicolon: exit
+            break;
+        }
 
-		// keyword
-		if(
-			(g_cxx.pToken->eKeyword == CXXKeywordEXTERN) ||
-			(g_cxx.pToken->eKeyword == CXXKeywordTYPEDEF) ||
-			(g_cxx.pToken->eKeyword == CXXKeywordSTATIC)
-		)
-		{
-			CXX_DEBUG_LEAVE_TEXT("Found a terminating keyword inside typedef");
-			return true; // treat as semicolon but don't dare to emit a tag
-		}
-	}
+        // keyword
+        if(
+            (g_cxx.pToken->eKeyword == CXXKeywordEXTERN) ||
+            (g_cxx.pToken->eKeyword == CXXKeywordTYPEDEF) ||
+            (g_cxx.pToken->eKeyword == CXXKeywordSTATIC)
+        )
+        {
+            CXX_DEBUG_LEAVE_TEXT("Found a terminating keyword inside typedef");
+            return true; // treat as semicolon but don't dare to emit a tag
+        }
+    }
 
-	cxxParserExtractTypedef(g_cxx.pTokenChain,true);
-	CXX_DEBUG_LEAVE();
-	return true;
+    cxxParserExtractTypedef(g_cxx.pTokenChain,true);
+    CXX_DEBUG_LEAVE();
+    return true;
 }
 
 //
@@ -152,325 +152,325 @@ bool cxxParserParseGenericTypedef(void)
 //        baz     = int
 //
 void cxxParserExtractTypedef(
-		CXXTokenChain * pChain,
-		bool bExpectTerminatorAtEnd
-	)
+    CXXTokenChain * pChain,
+    bool bExpectTerminatorAtEnd
+)
 {
-	CXX_DEBUG_ENTER();
+    CXX_DEBUG_ENTER();
 
 #ifdef CXX_DO_DEBUGGING
-	vString * pX = cxxTokenChainJoin(pChain,NULL,0);
-	CXX_DEBUG_PRINT("Extracting typedef from '%s'",vStringValue(pX));
-	vStringDelete(pX);
+    vString * pX = cxxTokenChainJoin(pChain,NULL,0);
+    CXX_DEBUG_PRINT("Extracting typedef from '%s'",vStringValue(pX));
+    vStringDelete(pX);
 #endif
 
-	// At least something like
-	//   a b;
+    // At least something like
+    //   a b;
 
-	if(pChain->iCount < (bExpectTerminatorAtEnd ? 3 : 2))
-	{
-		CXX_DEBUG_LEAVE_TEXT("Not enough tokens for a type definition");
-		return;
-	}
+    if(pChain->iCount < (bExpectTerminatorAtEnd ? 3 : 2))
+    {
+        CXX_DEBUG_LEAVE_TEXT("Not enough tokens for a type definition");
+        return;
+    }
 
-	CXXToken * t;
+    CXXToken * t;
 
-	if(bExpectTerminatorAtEnd)
-	{
-		t = cxxTokenChainLast(pChain);
-		CXX_DEBUG_ASSERT(
-				cxxTokenTypeIs(t,CXXTokenTypeSemicolon),
-				"The terminator should be present here"
-			);
-		cxxTokenChainDestroyLast(pChain);
-	}
+    if(bExpectTerminatorAtEnd)
+    {
+        t = cxxTokenChainLast(pChain);
+        CXX_DEBUG_ASSERT(
+            cxxTokenTypeIs(t,CXXTokenTypeSemicolon),
+            "The terminator should be present here"
+        );
+        cxxTokenChainDestroyLast(pChain);
+    }
 
-	// There may be multiple typedefs inside a single declaration.
+    // There may be multiple typedefs inside a single declaration.
 
-	// [typedef] x y, *z;
-	//   -> y is x
-	//   -> z is x *
+    // [typedef] x y, *z;
+    //   -> y is x
+    //   -> z is x *
 
-	// The angle brackets are not necessarily condensed in chains here
-	// since we were parsing a generic statement which expected less-than
-	// and greater-than operators to be present. We need to take care of that.
+    // The angle brackets are not necessarily condensed in chains here
+    // since we were parsing a generic statement which expected less-than
+    // and greater-than operators to be present. We need to take care of that.
 
-	while(pChain->iCount >= 2)
-	{
-		//
-		// Skip either to a comma or to the end, but keep track of the first parenthesis.
-		//
+    while(pChain->iCount >= 2)
+    {
+        //
+        // Skip either to a comma or to the end, but keep track of the first parenthesis.
+        //
 
-		t = cxxTokenChainFirst(pChain);
+        t = cxxTokenChainFirst(pChain);
 
-		CXX_DEBUG_ASSERT(t,"There should be a token here!");
+        CXX_DEBUG_ASSERT(t,"There should be a token here!");
 
-		CXXToken * pFirstParenthesis = NULL;
-		int iSearchTypes = CXXTokenTypeComma | CXXTokenTypeSmallerThanSign |
-								CXXTokenTypeParenthesisChain;
-		CXXToken * pComma;
+        CXXToken * pFirstParenthesis = NULL;
+        int iSearchTypes = CXXTokenTypeComma | CXXTokenTypeSmallerThanSign |
+                           CXXTokenTypeParenthesisChain;
+        CXXToken * pComma;
 
 skip_to_comma_or_end:
 
-		pComma = cxxTokenChainNextTokenOfType(t,iSearchTypes);
+        pComma = cxxTokenChainNextTokenOfType(t,iSearchTypes);
 
-		if(pComma)
-		{
-			// , < or (
-			if(cxxTokenTypeIs(pComma,CXXTokenTypeSmallerThanSign))
-			{
-				CXX_DEBUG_PRINT("Found angle bracket, trying to skip it");
+        if(pComma)
+        {
+            // , < or (
+            if(cxxTokenTypeIs(pComma,CXXTokenTypeSmallerThanSign))
+            {
+                CXX_DEBUG_PRINT("Found angle bracket, trying to skip it");
 
-				t = cxxTokenChainSkipToEndOfTemplateAngleBracket(pComma);
-				if(!t)
-				{
-					CXX_DEBUG_LEAVE_TEXT("Mismatched < sign inside typedef: giving up on it");
-					return;
-				}
-				// and go ahead
-				goto skip_to_comma_or_end;
-			}
+                t = cxxTokenChainSkipToEndOfTemplateAngleBracket(pComma);
+                if(!t)
+                {
+                    CXX_DEBUG_LEAVE_TEXT("Mismatched < sign inside typedef: giving up on it");
+                    return;
+                }
+                // and go ahead
+                goto skip_to_comma_or_end;
+            }
 
-			if(cxxTokenTypeIs(pComma,CXXTokenTypeParenthesisChain))
-			{
-				// We keep track only of the first one
-				CXX_DEBUG_ASSERT(
-						!pFirstParenthesis,
-						"We should have stopped only at the first parenthesis"
-					);
+            if(cxxTokenTypeIs(pComma,CXXTokenTypeParenthesisChain))
+            {
+                // We keep track only of the first one
+                CXX_DEBUG_ASSERT(
+                    !pFirstParenthesis,
+                    "We should have stopped only at the first parenthesis"
+                );
 
-				iSearchTypes &= ~CXXTokenTypeParenthesisChain;
-				pFirstParenthesis = pComma;
-				// and go ahead
-				goto skip_to_comma_or_end;
-			}
+                iSearchTypes &= ~CXXTokenTypeParenthesisChain;
+                pFirstParenthesis = pComma;
+                // and go ahead
+                goto skip_to_comma_or_end;
+            }
 
-			CXX_DEBUG_ASSERT(cxxTokenTypeIs(pComma,CXXTokenTypeComma),"Oops, expected a comma!");
+            CXX_DEBUG_ASSERT(cxxTokenTypeIs(pComma,CXXTokenTypeComma),"Oops, expected a comma!");
 
-			// Really a comma!
-			CXX_DEBUG_PRINT("Found comma");
+            // Really a comma!
+            CXX_DEBUG_PRINT("Found comma");
 
-			if((!pComma->pPrev) || (!pComma->pPrev->pPrev))
-			{
-				CXX_DEBUG_LEAVE_TEXT("Found comma but not enough tokens before it");
-				return;
-			}
+            if((!pComma->pPrev) || (!pComma->pPrev->pPrev))
+            {
+                CXX_DEBUG_LEAVE_TEXT("Found comma but not enough tokens before it");
+                return;
+            }
 
-			t = pComma->pPrev;
-		} else {
-			CXX_DEBUG_PRINT("Found no comma, pointing at end of declaration");
+            t = pComma->pPrev;
+        } else {
+            CXX_DEBUG_PRINT("Found no comma, pointing at end of declaration");
 
-			t = cxxTokenChainLast(pChain);
-		}
+            t = cxxTokenChainLast(pChain);
+        }
 
-		CXX_DEBUG_ASSERT(t,"We should have found a token here!");
+        CXX_DEBUG_ASSERT(t,"We should have found a token here!");
 
-		//
-		// Now look for the identifier
-		//
-		CXXTokenChain * pTParentChain;
-		CXXToken * pLookupStart = t;
+        //
+        // Now look for the identifier
+        //
+        CXXTokenChain * pTParentChain;
+        CXXToken * pLookupStart = t;
 
-		if(cxxTokenTypeIs(t,CXXTokenTypeIdentifier))
-		{
-			// Use the identifier at end, whatever comes before
-			CXX_DEBUG_PRINT("Identifier seems to be at end: %s",vStringValue(t->pszWord));
-			pTParentChain = pChain;
-		} else if(pFirstParenthesis)
-		{
-			CXX_DEBUG_PRINT("Identifier not at end, but got parenthesis chain");
-			//
-			// Possibly function pointer or function type definition.
-			//
-			//    typedef blah (*(foo))(baz)
-			//    typedef blah (*foo)(baz)
-			//    typedef blah (*foo)[...]
-			//    typedef blah (foo)(baz)
-			//    typedef blah ((foo))(baz)
-			//    typedef blah foo(baz)
-			//
-			// So we have two cases: either there are at least two parentheses at the
-			// top level or there is only one. If there are at least two then
-			// we expect foo we want to capture to be at the end of the first nested
-			// parenthesis chain. If there is only one then we expect it to be the
-			// last identifier before the parenthesis.
-			//
-			if(
-					pFirstParenthesis->pNext &&
-					cxxTokenTypeIsOneOf(
-							pFirstParenthesis->pNext,
-							CXXTokenTypeParenthesisChain |
-								CXXTokenTypeSquareParenthesisChain
-						)
-				)
-			{
-				CXX_DEBUG_PRINT("There are two parenthesis chains. Looking in the first one");
-				t = cxxTokenChainLastPossiblyNestedTokenOfType(
-						pFirstParenthesis->pChain,
-						CXXTokenTypeIdentifier,
-						&pTParentChain
-					);
-			} else {
-				CXX_DEBUG_PRINT("There is one parenthesis chain. Looking just before");
+        if(cxxTokenTypeIs(t,CXXTokenTypeIdentifier))
+        {
+            // Use the identifier at end, whatever comes before
+            CXX_DEBUG_PRINT("Identifier seems to be at end: %s",vStringValue(t->pszWord));
+            pTParentChain = pChain;
+        } else if(pFirstParenthesis)
+        {
+            CXX_DEBUG_PRINT("Identifier not at end, but got parenthesis chain");
+            //
+            // Possibly function pointer or function type definition.
+            //
+            //    typedef blah (*(foo))(baz)
+            //    typedef blah (*foo)(baz)
+            //    typedef blah (*foo)[...]
+            //    typedef blah (foo)(baz)
+            //    typedef blah ((foo))(baz)
+            //    typedef blah foo(baz)
+            //
+            // So we have two cases: either there are at least two parentheses at the
+            // top level or there is only one. If there are at least two then
+            // we expect foo we want to capture to be at the end of the first nested
+            // parenthesis chain. If there is only one then we expect it to be the
+            // last identifier before the parenthesis.
+            //
+            if(
+                pFirstParenthesis->pNext &&
+                cxxTokenTypeIsOneOf(
+                    pFirstParenthesis->pNext,
+                    CXXTokenTypeParenthesisChain |
+                    CXXTokenTypeSquareParenthesisChain
+                )
+            )
+            {
+                CXX_DEBUG_PRINT("There are two parenthesis chains. Looking in the first one");
+                t = cxxTokenChainLastPossiblyNestedTokenOfType(
+                        pFirstParenthesis->pChain,
+                        CXXTokenTypeIdentifier,
+                        &pTParentChain
+                    );
+            } else {
+                CXX_DEBUG_PRINT("There is one parenthesis chain. Looking just before");
 
-				if(
-					pFirstParenthesis->pPrev &&
-					cxxTokenTypeIs(pFirstParenthesis->pPrev,CXXTokenTypeIdentifier)
-				)
-				{
-					// Nasty "typedef blah foo(baz)" case.
-					t = pFirstParenthesis->pPrev;
+                if(
+                    pFirstParenthesis->pPrev &&
+                    cxxTokenTypeIs(pFirstParenthesis->pPrev,CXXTokenTypeIdentifier)
+                )
+                {
+                    // Nasty "typedef blah foo(baz)" case.
+                    t = pFirstParenthesis->pPrev;
 
-					// Let's have a consistent typeref too. We correct user
-					// input so it becomes "typedef blah (foo)(baz)".
+                    // Let's have a consistent typeref too. We correct user
+                    // input so it becomes "typedef blah (foo)(baz)".
 
-					pTParentChain = cxxTokenChainCreate();
+                    pTParentChain = cxxTokenChainCreate();
 
-					CXXToken * par = cxxTokenCreate();
-					par->eType = CXXTokenTypeOpeningParenthesis;
-					par->iLineNumber = t->iLineNumber;
-					par->oFilePosition = t->oFilePosition;
-					vStringPut(par->pszWord,'(');
-					par->pChain = NULL;
-					cxxTokenChainAppend(pTParentChain,par);
+                    CXXToken * par = cxxTokenCreate();
+                    par->eType = CXXTokenTypeOpeningParenthesis;
+                    par->iLineNumber = t->iLineNumber;
+                    par->oFilePosition = t->oFilePosition;
+                    vStringPut(par->pszWord,'(');
+                    par->pChain = NULL;
+                    cxxTokenChainAppend(pTParentChain,par);
 
-					par = cxxTokenCreate();
-					par->eType = CXXTokenTypeIdentifier;
-					par->iLineNumber = t->iLineNumber;
-					par->oFilePosition = t->oFilePosition;
-					vStringCopy(par->pszWord,t->pszWord);
-					par->pChain = NULL;
-					cxxTokenChainAppend(pTParentChain,par);
+                    par = cxxTokenCreate();
+                    par->eType = CXXTokenTypeIdentifier;
+                    par->iLineNumber = t->iLineNumber;
+                    par->oFilePosition = t->oFilePosition;
+                    vStringCopy(par->pszWord,t->pszWord);
+                    par->pChain = NULL;
+                    cxxTokenChainAppend(pTParentChain,par);
 
-					t->eType = CXXTokenTypeParenthesisChain;
-					t->pChain = pTParentChain;
-					vStringClear(t->pszWord);
+                    t->eType = CXXTokenTypeParenthesisChain;
+                    t->pChain = pTParentChain;
+                    vStringClear(t->pszWord);
 
-					pFirstParenthesis = t;
-					t = par;
+                    pFirstParenthesis = t;
+                    t = par;
 
-					par = cxxTokenCreate();
-					par->eType = CXXTokenTypeClosingParenthesis;
-					par->iLineNumber = t->iLineNumber;
-					par->oFilePosition = t->oFilePosition;
-					vStringPut(par->pszWord,')');
-					par->pChain = NULL;
-					cxxTokenChainAppend(pTParentChain,par);
+                    par = cxxTokenCreate();
+                    par->eType = CXXTokenTypeClosingParenthesis;
+                    par->iLineNumber = t->iLineNumber;
+                    par->oFilePosition = t->oFilePosition;
+                    vStringPut(par->pszWord,')');
+                    par->pChain = NULL;
+                    cxxTokenChainAppend(pTParentChain,par);
 
-				} else {
-					CXX_DEBUG_LEAVE_TEXT("Parenthesis but no identifier: no clue");
-					return;
-				}
-			}
-		} else {
-			// just scan backwards to the last identifier
-			CXX_DEBUG_PRINT("No identifier and no parenthesis chain, trying to scan backwards");
-			pTParentChain = pChain;
-			t = cxxTokenChainPreviousTokenOfType(t,CXXTokenTypeIdentifier);
-		}
+                } else {
+                    CXX_DEBUG_LEAVE_TEXT("Parenthesis but no identifier: no clue");
+                    return;
+                }
+            }
+        } else {
+            // just scan backwards to the last identifier
+            CXX_DEBUG_PRINT("No identifier and no parenthesis chain, trying to scan backwards");
+            pTParentChain = pChain;
+            t = cxxTokenChainPreviousTokenOfType(t,CXXTokenTypeIdentifier);
+        }
 
-		if(!t)
-		{
-			// Not found yet.
-			// If we're in C++ mode but we haven't confirmed that the language is really C++
-			// then we might try to look for a C++ identifier here.
-			if(
-				cxxParserCurrentLanguageIsCPP() &&
-				(!g_cxx.bConfirmedCPPLanguage) &&
-				cxxTokenTypeIs(pLookupStart,CXXTokenTypeKeyword) &&
-				cxxKeywordIsCPPSpecific(pLookupStart->eKeyword)
-			)
-			{
-				// treat as identifier
-				pLookupStart->eType = CXXTokenTypeIdentifier;
-				t = pLookupStart;
-			}
+        if(!t)
+        {
+            // Not found yet.
+            // If we're in C++ mode but we haven't confirmed that the language is really C++
+            // then we might try to look for a C++ identifier here.
+            if(
+                cxxParserCurrentLanguageIsCPP() &&
+                (!g_cxx.bConfirmedCPPLanguage) &&
+                cxxTokenTypeIs(pLookupStart,CXXTokenTypeKeyword) &&
+                cxxKeywordIsCPPSpecific(pLookupStart->eKeyword)
+            )
+            {
+                // treat as identifier
+                pLookupStart->eType = CXXTokenTypeIdentifier;
+                t = pLookupStart;
+            }
 
-			if(!t)
-			{
-				CXX_DEBUG_LEAVE_TEXT("Didn't find an identifier: something nasty is going on");
-				return;
-			}
-		}
+            if(!t)
+            {
+                CXX_DEBUG_LEAVE_TEXT("Didn't find an identifier: something nasty is going on");
+                return;
+            }
+        }
 
-		tagEntryInfo * tag = cxxTagBegin(CXXTagKindTYPEDEF,t);
+        tagEntryInfo * tag = cxxTagBegin(CXXTagKindTYPEDEF,t);
 
-		if(tag)
-		{
-			CXXToken * pTypeName = NULL;
+        if(tag)
+        {
+            CXXToken * pTypeName = NULL;
 
-			cxxTokenChainTake(pTParentChain,t);
+            cxxTokenChainTake(pTParentChain,t);
 
-			// Avoid emitting typerefs for strange things like
-			//  typedef MACRO(stuff,stuff) X;
-			// or parsing errors we might make in ugly cases like
-			//  typedef WHATEVER struct x { ... } y;
-			if(
-					(pTParentChain == pChain) && // not function pointer (see above)
-					(
-						pComma ?
-							cxxTokenChainPreviousTokenOfType(
-									pComma,
-									CXXTokenTypeParenthesisChain | CXXTokenTypeAngleBracketChain
-								) :
-							cxxTokenChainLastTokenOfType(
-									pChain,
-									CXXTokenTypeParenthesisChain | CXXTokenTypeAngleBracketChain
-								)
-					)
-				)
-			{
-				CXX_DEBUG_LEAVE_TEXT(
-						"Wild parenthesis in type definition: not emitting typeref"
-					);
-			} else {
-				// other kind of typeref, use typename here.
-				CXX_DEBUG_ASSERT(
-						pChain->iCount > 0,
-						"There should be at least another token here!"
-					);
+            // Avoid emitting typerefs for strange things like
+            //  typedef MACRO(stuff,stuff) X;
+            // or parsing errors we might make in ugly cases like
+            //  typedef WHATEVER struct x { ... } y;
+            if(
+                (pTParentChain == pChain) && // not function pointer (see above)
+                (
+                    pComma ?
+                    cxxTokenChainPreviousTokenOfType(
+                        pComma,
+                        CXXTokenTypeParenthesisChain | CXXTokenTypeAngleBracketChain
+                    ) :
+                    cxxTokenChainLastTokenOfType(
+                        pChain,
+                        CXXTokenTypeParenthesisChain | CXXTokenTypeAngleBracketChain
+                    )
+                )
+            )
+            {
+                CXX_DEBUG_LEAVE_TEXT(
+                    "Wild parenthesis in type definition: not emitting typeref"
+                );
+            } else {
+                // other kind of typeref, use typename here.
+                CXX_DEBUG_ASSERT(
+                    pChain->iCount > 0,
+                    "There should be at least another token here!"
+                );
 
-				pTypeName = cxxTagCheckAndSetTypeField(
-							cxxTokenChainFirst(pChain),
-							pComma ? pComma->pPrev : cxxTokenChainLast(pChain)
-						);
-			}
+                pTypeName = cxxTagCheckAndSetTypeField(
+                                cxxTokenChainFirst(pChain),
+                                pComma ? pComma->pPrev : cxxTokenChainLast(pChain)
+                            );
+            }
 
-			tag->isFileScope = !isInputHeaderFile();
+            tag->isFileScope = !isInputHeaderFile();
 
-			cxxTagCommit();
-			cxxTokenDestroy(t);
-			if(pTypeName)
-				cxxTokenDestroy(pTypeName);
-		}
+            cxxTagCommit();
+            cxxTokenDestroy(t);
+            if(pTypeName)
+                cxxTokenDestroy(pTypeName);
+        }
 
-		if(!pComma)
-			break;
+        if(!pComma)
+            break;
 
-		// We must kill anything up to either an identifier, a keyword (type) or > which is
-		// assumed to be part of a template.
+        // We must kill anything up to either an identifier, a keyword (type) or > which is
+        // assumed to be part of a template.
 
-		while(
-				pComma->pPrev &&
-				(
-					!cxxTokenTypeIsOneOf(
-							pComma->pPrev,
-							CXXTokenTypeIdentifier | CXXTokenTypeKeyword |
-							CXXTokenTypeGreaterThanSign | CXXTokenTypeAngleBracketChain
-						)
-				)
-			)
-		{
-			CXXToken * pAux = pComma->pPrev;
-			cxxTokenChainTake(pChain,pAux);
-			cxxTokenDestroy(pAux);
-		}
+        while(
+            pComma->pPrev &&
+            (
+                !cxxTokenTypeIsOneOf(
+                    pComma->pPrev,
+                    CXXTokenTypeIdentifier | CXXTokenTypeKeyword |
+                    CXXTokenTypeGreaterThanSign | CXXTokenTypeAngleBracketChain
+                )
+            )
+        )
+        {
+            CXXToken * pAux = pComma->pPrev;
+            cxxTokenChainTake(pChain,pAux);
+            cxxTokenDestroy(pAux);
+        }
 
-		// got a comma.
-		cxxTokenChainTake(pChain,pComma);
-		cxxTokenDestroy(pComma);
-	}
+        // got a comma.
+        cxxTokenChainTake(pChain,pComma);
+        cxxTokenDestroy(pComma);
+    }
 
-	CXX_DEBUG_LEAVE();
-	return;
+    CXX_DEBUG_LEAVE();
+    return;
 }

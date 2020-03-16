@@ -10,13 +10,16 @@ using System;
 [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct)]
 public class Author : Attribute
 {
-   public Author(string name) { this.name = name; version = 1.0; }
-   public double version;
-   string name;
+    public Author(string name) {
+        this.name = name;
+        version = 1.0;
+    }
+    public double version;
+    string name;
 }
 
 [AttributeUsage(AttributeTargets.Class|AttributeTargets.Struct,
-   AllowMultiple=true)] // multiuse attribute
+                AllowMultiple=true)] // multiuse attribute
 public class Author : Attribute
 {
 }

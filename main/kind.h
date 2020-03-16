@@ -21,11 +21,11 @@
 */
 
 struct sRoleDefinition {
-	bool enabled;
-	char* name;		  /* role name */
-	char* description;	  /* displayed in --help output */
+    bool enabled;
+    char* name;		  /* role name */
+    char* description;	  /* displayed in --help output */
 
-	int id;
+    int id;
 };
 
 /*
@@ -64,36 +64,36 @@ struct sRoleDefinition {
 #define KIND_WILDCARD_LETTER '*'
 
 typedef struct sScopeSeparator {
-	int parentKindIndex;
-	const char *separator;
+    int parentKindIndex;
+    const char *separator;
 } scopeSeparator;
 
 struct sKindDefinition {
-	bool enabled;          /* are tags for kind enabled? */
-	char  letter;               /* kind letter */
-	char* name;		  /* kind name */
-	char* description;	  /* displayed in --help output */
-	bool referenceOnly;
-	int nRoles;		/* The number of role elements. */
-	roleDefinition *roles;
-	scopeSeparator *separators;
-	unsigned int separatorCount;
+    bool enabled;          /* are tags for kind enabled? */
+    char  letter;               /* kind letter */
+    char* name;		  /* kind name */
+    char* description;	  /* displayed in --help output */
+    bool referenceOnly;
+    int nRoles;		/* The number of role elements. */
+    roleDefinition *roles;
+    scopeSeparator *separators;
+    unsigned int separatorCount;
 
-	int id;
+    int id;
 
-	/* TODO:Following fields should be moved to kindObject. */
-	/* Usage of `syncWith' field is a bit tricky.
+    /* TODO:Following fields should be moved to kindObject. */
+    /* Usage of `syncWith' field is a bit tricky.
 
-	   If `LANG_AUTO' is specified to `syncWith' field of a kind
-	   (target kind), the main part of ctags updates the field with
-	   the id of a  parser (master parser) when initializing
-	   parsers. It also updates `slave' and `master' fields.
+       If `LANG_AUTO' is specified to `syncWith' field of a kind
+       (target kind), the main part of ctags updates the field with
+       the id of a  parser (master parser) when initializing
+       parsers. It also updates `slave' and `master' fields.
 
-	   If the value other than `LANG_AUTO' is specified,
-	   the main part does nothing. */
-	langType syncWith;
-	kindDefinition *slave;
-	kindDefinition *master;
+       If the value other than `LANG_AUTO' is specified,
+       the main part does nothing. */
+    langType syncWith;
+    kindDefinition *slave;
+    kindDefinition *master;
 };
 
 #define ATTACH_ROLES(RS) .nRoles = ARRAY_SIZE(RS), .roles = RS

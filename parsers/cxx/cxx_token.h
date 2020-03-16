@@ -21,44 +21,44 @@
 //
 enum CXXTokenType
 {
-	CXXTokenTypeEOF = 1,
-	CXXTokenTypeIdentifier = (1 << 1),
-	CXXTokenTypeKeyword = (1 << 2),
-	CXXTokenTypeNumber = (1 << 3),
-	CXXTokenTypeSingleColon = (1 << 4),
-	CXXTokenTypeMultipleColons = (1 << 5),
-	CXXTokenTypeSemicolon = (1 << 6),
-	CXXTokenTypeComma = (1 << 7), // ,
-	CXXTokenTypeAssignment = (1 << 8), // =
-	CXXTokenTypeOperator = (1 << 9), // != == += ++ -= -- / whatever
-	CXXTokenTypeUnknown = (1 << 10),
-	CXXTokenTypeDotOperator = (1 << 11), // .
-	CXXTokenTypePointerOperator = (1 << 12), // ->
-	CXXTokenTypeStringConstant = (1 << 13),
-	CXXTokenTypeStar = (1 << 14), // *
-	CXXTokenTypeAnd = (1 << 15), // &
-	CXXTokenTypeMultipleAnds = (1 << 16), // &&
-	CXXTokenTypeCharacterConstant = (1 << 17),
-	CXXTokenTypeMultipleDots = (1 << 18), // ...
+    CXXTokenTypeEOF = 1,
+    CXXTokenTypeIdentifier = (1 << 1),
+    CXXTokenTypeKeyword = (1 << 2),
+    CXXTokenTypeNumber = (1 << 3),
+    CXXTokenTypeSingleColon = (1 << 4),
+    CXXTokenTypeMultipleColons = (1 << 5),
+    CXXTokenTypeSemicolon = (1 << 6),
+    CXXTokenTypeComma = (1 << 7), // ,
+    CXXTokenTypeAssignment = (1 << 8), // =
+    CXXTokenTypeOperator = (1 << 9), // != == += ++ -= -- / whatever
+    CXXTokenTypeUnknown = (1 << 10),
+    CXXTokenTypeDotOperator = (1 << 11), // .
+    CXXTokenTypePointerOperator = (1 << 12), // ->
+    CXXTokenTypeStringConstant = (1 << 13),
+    CXXTokenTypeStar = (1 << 14), // *
+    CXXTokenTypeAnd = (1 << 15), // &
+    CXXTokenTypeMultipleAnds = (1 << 16), // &&
+    CXXTokenTypeCharacterConstant = (1 << 17),
+    CXXTokenTypeMultipleDots = (1 << 18), // ...
 
-	// These must come in pairs. Note that the opening
-	// tokens can be shifted by 4 to get the matching closing
-	// tokens can be shifted by 8 to get the matching subchain marker below
-	CXXTokenTypeOpeningBracket = (1 << 19), // {
-	CXXTokenTypeOpeningParenthesis = (1 << 20), // (
-	CXXTokenTypeOpeningSquareParenthesis = (1 << 21), // [
-	CXXTokenTypeSmallerThanSign = (1 << 22), // <
+    // These must come in pairs. Note that the opening
+    // tokens can be shifted by 4 to get the matching closing
+    // tokens can be shifted by 8 to get the matching subchain marker below
+    CXXTokenTypeOpeningBracket = (1 << 19), // {
+    CXXTokenTypeOpeningParenthesis = (1 << 20), // (
+    CXXTokenTypeOpeningSquareParenthesis = (1 << 21), // [
+    CXXTokenTypeSmallerThanSign = (1 << 22), // <
 
-	CXXTokenTypeClosingBracket = (1 << 23), // }
-	CXXTokenTypeClosingParenthesis = (1 << 24), // )
-	CXXTokenTypeClosingSquareParenthesis = (1 << 25), // ]
-	CXXTokenTypeGreaterThanSign = (1 << 26), // >
+    CXXTokenTypeClosingBracket = (1 << 23), // }
+    CXXTokenTypeClosingParenthesis = (1 << 24), // )
+    CXXTokenTypeClosingSquareParenthesis = (1 << 25), // ]
+    CXXTokenTypeGreaterThanSign = (1 << 26), // >
 
-	// Subchains (caution: read the comment above about CXXTokenTypeOpeningBracket)
-	CXXTokenTypeBracketChain = (1 << 27), // {...}
-	CXXTokenTypeParenthesisChain = (1 << 28), // (...)
-	CXXTokenTypeSquareParenthesisChain = (1 << 29), // [...]
-	CXXTokenTypeAngleBracketChain = (1 << 30), // <...>
+    // Subchains (caution: read the comment above about CXXTokenTypeOpeningBracket)
+    CXXTokenTypeBracketChain = (1 << 27), // {...}
+    CXXTokenTypeParenthesisChain = (1 << 28), // (...)
+    CXXTokenTypeSquareParenthesisChain = (1 << 29), // [...]
+    CXXTokenTypeAngleBracketChain = (1 << 30), // <...>
 };
 
 // Forward decl
@@ -68,24 +68,24 @@ typedef struct _CXXTokenChain CXXTokenChain;
 
 typedef struct _CXXToken
 {
-	enum CXXTokenType eType;
-	vString * pszWord;
-	CXXKeyword eKeyword;
-	CXXTokenChain * pChain; // this is NOT the parent chain!
-	bool bFollowedBySpace;
+    enum CXXTokenType eType;
+    vString * pszWord;
+    CXXKeyword eKeyword;
+    CXXTokenChain * pChain; // this is NOT the parent chain!
+    bool bFollowedBySpace;
 
-	int iLineNumber;
-	MIOPos oFilePosition;
+    int iLineNumber;
+    MIOPos oFilePosition;
 
-	struct _CXXToken * pNext;
-	struct _CXXToken * pPrev;
+    struct _CXXToken * pNext;
+    struct _CXXToken * pPrev;
 
-	// These members are used by the scope management functions to store
-	// scope information. Only cxxScope* functions can make sense of it.
-	// In other contexts these are simply left
-	// uninitialized and must be treated as undefined.
-	unsigned char uInternalScopeType;
-	unsigned char uInternalScopeAccess;
+    // These members are used by the scope management functions to store
+    // scope information. Only cxxScope* functions can make sense of it.
+    // In other contexts these are simply left
+    // uninitialized and must be treated as undefined.
+    unsigned char uInternalScopeType;
+    unsigned char uInternalScopeAccess;
 } CXXToken;
 
 CXXToken * cxxTokenCreate(void);

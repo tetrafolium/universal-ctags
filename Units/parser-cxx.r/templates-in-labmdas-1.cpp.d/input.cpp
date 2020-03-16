@@ -21,7 +21,9 @@ int f1()
 int f2()
 {
     Bar<int> b;
-    auto l = [](auto & p){ return p.template foo<int>();};
+    auto l = [](auto & p) {
+        return p.template foo<int>();
+    };
     return l(b);
 }
 

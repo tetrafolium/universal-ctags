@@ -27,8 +27,8 @@ extern void catFile (MIO *mio);
 extern void externalSortTags (const bool toStdout, MIO *tagFile);
 #else
 extern void internalSortTags (const bool toStdout,
-			      MIO *mio,
-			      size_t numTags);
+                              MIO *mio,
+                              size_t numTags);
 #endif
 
 /* mio is closed in this function. */

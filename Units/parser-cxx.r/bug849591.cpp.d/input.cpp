@@ -1,7 +1,7 @@
 /*
 Bugs item #849591, was opened at 2003-11-26 11:35
 Message generated for change (Tracker Item Submitted) made by Item Submitter
-You can respond by visiting: 
+You can respond by visiting:
 https://sourceforge.net/tracker/?func=detail&atid=106556&aid=849591&group_id=6556
 
 Category: None
@@ -11,16 +11,16 @@ Resolution: None
 Priority: 5
 Submitted By: Igor Proskuriakov (proskig)
 Assigned to: Nobody/Anonymous (nobody)
-Summary: C++ Member templates 
+Summary: C++ Member templates
 
 Initial Comment:
 Hi,
-There seems to be a problem with how ctags treats C++ 
+There seems to be a problem with how ctags treats C++
 member templates. Example:
 */
 void MainClass< ParamClass1&, ParamClass2>::Foo()
 {
-  exit(0);
+    exit(0);
 };
 /*
 Generates erroneous tag
@@ -42,10 +42,10 @@ Removing space after first angle bracket:
 */
 void MainClass<ParamClass1&, ParamClass2>::Foo()
 {
-  exit(0);
+    exit(0);
 };
 /*
-makes ctags to drop first letter from parameter class 
+makes ctags to drop first letter from parameter class
 name:
 
 aramClass1	test.cpp	/^void MainClass<ParamClass1&, ParamClass2>::Foo()$/;"	v

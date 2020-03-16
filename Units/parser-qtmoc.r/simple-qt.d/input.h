@@ -16,50 +16,50 @@ Q_SLOTS:
     void slot5(void);
 
 private:
-  int field0;
+    int field0;
 
 protected:
-  virtual void method1(void);
+    virtual void method1(void);
 
 private Q_SLOTS:
-  void slot6(void);
-  void slot7(void);
+    void slot6(void);
+    void slot7(void);
 
 public Q_SLOTS:
-  void slot8(void);
-  void slot9(void);
+    void slot8(void);
+    void slot9(void);
 
 slots:
-  void slot10(void);
-  void slot11(void);
+    void slot10(void);
+    void slot11(void);
 
 private:
-  int field1;
+    int field1;
 
 signals:
-  void signal0(void);
-  void signal1(void);
+    void signal0(void);
+    void signal1(void);
 
 private:
-  int field2;
+    int field2;
 
 protected:
-  virtual void method2(void);
+    virtual void method2(void);
 
 Q_SIGNALS:
-  void signal2(void);
-  void signal3(void);
+    void signal2(void);
+    void signal3(void);
 
 private:
-  int field3;
+    int field3;
 
 protected:
-  virtual void method3(void);
+    virtual void method3(void);
 
-  Q_PROPERTY(QString text MEMBER m_text NOTIFY textChanged)
-  Q_PROPERTY( bool ShowNonprinting READ showsNonprinting WRITE setShowsNonprinting )
+    Q_PROPERTY(QString text MEMBER m_text NOTIFY textChanged)
+    Q_PROPERTY( bool ShowNonprinting READ showsNonprinting WRITE setShowsNonprinting )
 
 private:
-  int field4;
+    int field4;
 
 };

@@ -7,12 +7,12 @@ using x = std::string;
 class A
 {
 public:
-	void test();
+    void test();
 };
 
 class B : public A
 {
 public:
-	void test(x t);
-	using A::test;
+    void test(x t);
+    using A::test;
 };
