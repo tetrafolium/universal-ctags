@@ -21,8 +21,8 @@ inspecode:
   ##  CPD was aborted unexpectedly.
   ##----------------------------------------------------------------------------
   cpd:
-    ignore:
-    - 'Units/parser-php.r/'   # control charactors used in identifiers
+    #ignore:
+    #- 'Units/parser-php.r/'   # control charactors used in identifiers
     options:
       --skip-lexical-errors:
     thresholds: { num-issues: 999 }
