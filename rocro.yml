@@ -17,13 +17,11 @@ inspecode:
   #  auto-fix: true
   #  thresholds: { num-issues: 484 }
 
-  ##----------------------------------------------------------------------------
-  ## [on both staging and prod]
-  ##   Aborted ... CPD was aborted unexpectedly.
-  ##----------------------------------------------------------------------------
-  #cpd:
-  #  options: [ --skip-lexical-errors ]
-  #  thresholds: { num-issues: 999 }
+  cpd:
+    ignore: [ 'Units/parser-php.r/whitespaces.php.d/' ]
+              # using control charactors in some identifiers. (as test-case)
+    options: [ --skip-lexical-errors ]
+    thresholds: { num-issues: 41 }
 
   cppcheck:
     thresholds: { num-issues: 60 }
