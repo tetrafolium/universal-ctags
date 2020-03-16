@@ -20,10 +20,12 @@ inspecode:
   ##----------------------------------------------------------------------------
   ##  CPD was aborted unexpectedly.
   ##----------------------------------------------------------------------------
-  #cpd:
-  #  options:
-  #    --skip-lexical-errors:
-  #  thresholds: { num-issues: 999 }
+  cpd:
+    ignore:
+    - 'Units/parser-php.r/'   # control charactors used in identifiers
+    options:
+      --skip-lexical-errors:
+    thresholds: { num-issues: 999 }
 
   cppcheck:
     thresholds: { num-issues: 60 }
