@@ -22,7 +22,7 @@ inspecode:
     - 'Units/parser-php.r/whitespaces.php.d/' # control charactors used in identifiers
     options:
       --skip-lexical-errors:
-    thresholds: { num-issues: 999 }
+    thresholds: { num-issues: 41 }
 
   cppcheck:
     thresholds: { num-issues: 60 }
