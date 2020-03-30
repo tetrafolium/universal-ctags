@@ -1475,7 +1475,7 @@ static void parseLabel (tokenInfo *const token)
      *	   BEGIN
      *		  IF total_contributions (v_senator, 'TOBACCO') > 25000
      *		  THEN
-     *			 <<alochol_dependency>>
+     *			 <<alcohol_dependency>>
      *			 DECLARE
      *				v_senator VARCHAR2(100) := 'WHATEVERIT, TAKES';
      *			 BEGIN

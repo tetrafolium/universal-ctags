@@ -29,7 +29,7 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-    K_PSUEDO_MACRO_END = -2,
+    K_PSEUDO_MACRO_END = -2,
     K_NONE = -1, K_DEFINE, K_LABEL, K_MACRO, K_TYPE,
     K_SECTION,
 } AsmKind;
@@ -114,7 +114,7 @@ static const opKind OpKinds [] = {
     { OP_ALIGN,       K_NONE   },
     { OP_COLON_EQUAL, K_DEFINE },
     { OP_END,         K_NONE   },
-    { OP_ENDM,        K_PSUEDO_MACRO_END },
+    { OP_ENDM,        K_PSEUDO_MACRO_END },
     { OP_ENDMACRO,    K_NONE   },
     { OP_ENDP,        K_NONE   },
     { OP_ENDS,        K_NONE   },
@@ -227,7 +227,7 @@ static void makeAsmTag (
                 *lastMacroCorkIndex = makeSimpleTag (operator,
                                                      kind_for_directive);
                 break;
-            case K_PSUEDO_MACRO_END:
+            case K_PSEUDO_MACRO_END:
                 if (*lastMacroCorkIndex != CORK_NIL)
                 {
                     macro_tag = getEntryInCorkQueue (*lastMacroCorkIndex);

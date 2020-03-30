@@ -37,5 +37,5 @@ ignored and the closing brace does get ignored and
 ctags drops out on "int func2(int a)" line with "failed
 to find match for '(' at line 11" error.
 Granted, having #if 0 in the middle of args list is
-weird, but perfeclty legal.
+weird, but perfectly legal.
 */

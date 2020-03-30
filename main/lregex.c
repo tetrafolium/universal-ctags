@@ -1973,7 +1973,7 @@ static regexPattern *addTagRegexInternal (struct lregexControlBlock *lcb,
     char* description;
     kindDefinition* fileKind;
 
-    bool explictly_defined =  parseKinds (kinds, &kindLetter, &kindName, &description);
+    bool explicitly_defined =  parseKinds (kinds, &kindLetter, &kindName, &description);
     fileKind = getLanguageKind (lcb->owner, KIND_FILE_INDEX);
     if (kindLetter == fileKind->letter)
         error (FATAL,
@@ -2033,7 +2033,7 @@ static regexPattern *addTagRegexInternal (struct lregexControlBlock *lcb,
     regexPattern *rptr = addCompiledTagPattern (lcb, table_index,
                          regptype, cp, name,
                          kindLetter, kindName, description, flags,
-                         explictly_defined,
+                         explicitly_defined,
                          disabled);
     rptr->pattern_string = escapeRegexPattern(regex);
 
