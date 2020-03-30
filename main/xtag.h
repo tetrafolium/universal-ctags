@@ -23,43 +23,43 @@
 */
 
 typedef enum eXtagType { /* extra tag content control */
-	XTAG_UNKNOWN = -1,
+    XTAG_UNKNOWN = -1,
 
-	XTAG_FILE_SCOPE,
-	XTAG_FILE_NAMES,
-	XTAG_PSEUDO_TAGS,
-	XTAG_QUALIFIED_TAGS,
-	XTAG_REFERENCE_TAGS,
-	XTAG_GUEST,
-	XTAG_TAGS_GENERATED_BY_GUEST_PARSERS = XTAG_GUEST, /* Geany uses the old name */
-	XTAG_SUBPARSER,
-	XTAG_ANONYMOUS,
+    XTAG_FILE_SCOPE,
+    XTAG_FILE_NAMES,
+    XTAG_PSEUDO_TAGS,
+    XTAG_QUALIFIED_TAGS,
+    XTAG_REFERENCE_TAGS,
+    XTAG_GUEST,
+    XTAG_TAGS_GENERATED_BY_GUEST_PARSERS = XTAG_GUEST, /* Geany uses the old name */
+    XTAG_SUBPARSER,
+    XTAG_ANONYMOUS,
 
-	XTAG_COUNT
+    XTAG_COUNT
 } xtagType;
 
 struct sXtagDefinition {
-	bool enabled;
-	/* letter, and ftype are initialized in the main part,
-	   not in a parser. */
+    bool enabled;
+    /* letter, and ftype are initialized in the main part,
+       not in a parser. */
 #define NUL_XTAG_LETTER '\0'
-	unsigned char letter;
-	const char* name;	 /* used in extra: field */
-	const char* description;  /* displayed in --list-extra output */
+    unsigned char letter;
+    const char* name;	 /* used in extra: field */
+    const char* description;  /* displayed in --list-extra output */
 
-	/* If the value for "enabled" is given dynamically,
-	   use this field.
+    /* If the value for "enabled" is given dynamically,
+       use this field.
 
-	   "enabled" field of Pseudo extra tag depends on where
-	   the output stream is connected to. If it is connected
-	   to standard output, the tag is disabled by default.
-	   If it is connected to a regular file, the tag is enabled
-	   by default. */
-	bool (* isEnabled) (struct sXtagDefinition *def);
-	bool (* isFixed)   (struct sXtagDefinition *def);
-	void (* enable)    (struct sXtagDefinition *def, bool state);
+       "enabled" field of Pseudo extra tag depends on where
+       the output stream is connected to. If it is connected
+       to standard output, the tag is disabled by default.
+       If it is connected to a regular file, the tag is enabled
+       by default. */
+    bool (* isEnabled) (struct sXtagDefinition *def);
+    bool (* isFixed)   (struct sXtagDefinition *def);
+    void (* enable)    (struct sXtagDefinition *def, bool state);
 
-	unsigned int xtype;	/* Given from the main part */
+    unsigned int xtype;	/* Given from the main part */
 };
 
 extern bool isXtagEnabled (xtagType type);

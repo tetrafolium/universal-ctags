@@ -49,37 +49,37 @@
 
 static void *eMalloc (const size_t size)
 {
-	void *buffer = malloc (size);
+    void *buffer = malloc (size);
 
-	if (buffer == NULL)
-	{
-		fprintf(stderr, "out of memory");
-		abort ();
-	}
+    if (buffer == NULL)
+    {
+        fprintf(stderr, "out of memory");
+        abort ();
+    }
 
-	return buffer;
+    return buffer;
 }
 
 static void *eRealloc (void *const ptr, const size_t size)
 {
-	void *buffer;
-	if (ptr == NULL)
-		buffer = eMalloc (size);
-	else
-	{
-		buffer = realloc (ptr, size);
-		if (buffer == NULL)
-		{
-			fprintf(stderr, "out of memory");
-			abort ();
-		}
-	}
-	return buffer;
+    void *buffer;
+    if (ptr == NULL)
+        buffer = eMalloc (size);
+    else
+    {
+        buffer = realloc (ptr, size);
+        if (buffer == NULL)
+        {
+            fprintf(stderr, "out of memory");
+            abort ();
+        }
+    }
+    return buffer;
 }
 
 static void eFree (void *const ptr)
 {
-	free (ptr);
+    free (ptr);
 }
 
 #  define Assert(c) do {} while(0)
@@ -122,8 +122,8 @@ static void eFree (void *const ptr)
 
 typedef struct _MIOUserData MIOUserData;
 struct _MIOUserData {
-	void *d;
-	MIODestroyNotify f;
+    void *d;
+    MIODestroyNotify f;
 };
 
 /**
@@ -133,27 +133,27 @@ struct _MIOUserData {
  * what compose this object, and none of its fields should be accessed directly.
  */
 struct _MIO {
-	/*< private >*/
-	MIOType type;
-	unsigned int refcount;
-	union {
-		struct {
-			FILE *fp;
-			MIOFCloseFunc close_func;
-		} file;
-		struct {
-			unsigned char *buf;
-			int ungetch;
-			size_t pos;
-			size_t size;
-			size_t allocated_size;
-			MIOReallocFunc realloc_func;
-			MIODestroyNotify free_func;
-			bool error;
-			bool eof;
-		} mem;
-	} impl;
-	MIOUserData udata;
+    /*< private >*/
+    MIOType type;
+    unsigned int refcount;
+    union {
+        struct {
+            FILE *fp;
+            MIOFCloseFunc close_func;
+        } file;
+        struct {
+            unsigned char *buf;
+            int ungetch;
+            size_t pos;
+            size_t size;
+            size_t allocated_size;
+            MIOReallocFunc realloc_func;
+            MIODestroyNotify free_func;
+            bool error;
+            bool eof;
+        } mem;
+    } impl;
+    MIOUserData udata;
 };
 
 
@@ -183,37 +183,37 @@ struct _MIO {
  * Returns: A new #MIO on success, or %NULL on failure.
  */
 MIO *mio_new_file_full (const char *filename,
-						const char *mode,
-						MIOFOpenFunc open_func,
-						MIOFCloseFunc close_func)
+                        const char *mode,
+                        MIOFOpenFunc open_func,
+                        MIOFCloseFunc close_func)
 {
-	MIO *mio;
+    MIO *mio;
 
-	/* we need to create the MIO object first, because we may not be able to close
-	 * the opened file if the user passed NULL as the close function, which means
-	 * that everything must succeed if we've opened the file successfully */
-	mio = xMalloc (1, MIO);
-	if (mio)
-	{
-		FILE *fp = open_func (filename, mode);
+    /* we need to create the MIO object first, because we may not be able to close
+     * the opened file if the user passed NULL as the close function, which means
+     * that everything must succeed if we've opened the file successfully */
+    mio = xMalloc (1, MIO);
+    if (mio)
+    {
+        FILE *fp = open_func (filename, mode);
 
-		if (! fp)
-		{
-			eFree (mio);
-			mio = NULL;
-		}
-		else
-		{
-			mio->type = MIO_TYPE_FILE;
-			mio->impl.file.fp = fp;
-			mio->impl.file.close_func = close_func;
-			mio->refcount = 1;
-			mio->udata.d = NULL;
-			mio->udata.f = NULL;
-		}
-	}
+        if (! fp)
+        {
+            eFree (mio);
+            mio = NULL;
+        }
+        else
+        {
+            mio->type = MIO_TYPE_FILE;
+            mio->impl.file.fp = fp;
+            mio->impl.file.close_func = close_func;
+            mio->refcount = 1;
+            mio->udata.d = NULL;
+            mio->udata.f = NULL;
+        }
+    }
 
-	return mio;
+    return mio;
 }
 
 /**
@@ -232,7 +232,7 @@ MIO *mio_new_file_full (const char *filename,
  */
 MIO *mio_new_file (const char *filename, const char *mode)
 {
-	return mio_new_file_full (filename, mode, fopen, fclose);
+    return mio_new_file_full (filename, mode, fopen, fclose);
 }
 
 /**
@@ -257,23 +257,23 @@ MIO *mio_new_file (const char *filename, const char *mode)
  */
 MIO *mio_new_fp (FILE *fp, MIOFCloseFunc close_func)
 {
-	MIO *mio;
+    MIO *mio;
 
-	if (!fp)
-		return NULL;
+    if (!fp)
+        return NULL;
 
-	mio = xMalloc (1, MIO);
-	if (mio)
-	{
-		mio->type = MIO_TYPE_FILE;
-		mio->impl.file.fp = fp;
-		mio->impl.file.close_func = close_func;
-		mio->refcount = 1;
-		mio->udata.d = NULL;
-		mio->udata.f = NULL;
-	}
+    mio = xMalloc (1, MIO);
+    if (mio)
+    {
+        mio->type = MIO_TYPE_FILE;
+        mio->impl.file.fp = fp;
+        mio->impl.file.close_func = close_func;
+        mio->refcount = 1;
+        mio->udata.d = NULL;
+        mio->udata.f = NULL;
+    }
 
-	return mio;
+    return mio;
 }
 
 /**
@@ -313,31 +313,31 @@ MIO *mio_new_fp (FILE *fp, MIOFCloseFunc close_func)
  * Returns: A new #MIO on success, or %NULL on failure.
  */
 MIO *mio_new_memory (unsigned char *data,
-					 size_t size,
-					 MIOReallocFunc realloc_func,
-					 MIODestroyNotify free_func)
+                     size_t size,
+                     MIOReallocFunc realloc_func,
+                     MIODestroyNotify free_func)
 {
-	MIO *mio;
+    MIO *mio;
 
-	mio = xMalloc (1, MIO);
-	if (mio)
-	{
-		mio->type = MIO_TYPE_MEMORY;
-		mio->impl.mem.buf = data;
-		mio->impl.mem.ungetch = EOF;
-		mio->impl.mem.pos = 0;
-		mio->impl.mem.size = size;
-		mio->impl.mem.allocated_size = size;
-		mio->impl.mem.realloc_func = realloc_func;
-		mio->impl.mem.free_func = free_func;
-		mio->impl.mem.eof = false;
-		mio->impl.mem.error = false;
-		mio->refcount = 1;
-		mio->udata.d = NULL;
-		mio->udata.f = NULL;
-	}
+    mio = xMalloc (1, MIO);
+    if (mio)
+    {
+        mio->type = MIO_TYPE_MEMORY;
+        mio->impl.mem.buf = data;
+        mio->impl.mem.ungetch = EOF;
+        mio->impl.mem.pos = 0;
+        mio->impl.mem.size = size;
+        mio->impl.mem.allocated_size = size;
+        mio->impl.mem.realloc_func = realloc_func;
+        mio->impl.mem.free_func = free_func;
+        mio->impl.mem.eof = false;
+        mio->impl.mem.error = false;
+        mio->refcount = 1;
+        mio->udata.d = NULL;
+        mio->udata.f = NULL;
+    }
 
-	return mio;
+    return mio;
 }
 
 /**
@@ -362,43 +362,43 @@ MIO *mio_new_memory (unsigned char *data,
 
 MIO *mio_new_mio (MIO *base, long start, long size)
 {
-	unsigned char *data;
-	long original_pos;
-	MIO *submio;
-	size_t r;
+    unsigned char *data;
+    long original_pos;
+    MIO *submio;
+    size_t r;
 
-	original_pos = mio_tell (base);
+    original_pos = mio_tell (base);
 
-	if (size == -1)
-	{
-		long end;
+    if (size == -1)
+    {
+        long end;
 
-		if (mio_seek (base, 0, SEEK_END) != 0)
-			return NULL;
-		end = mio_tell (base);
-		Assert (end >= start);
-		size = end - start;
-	}
+        if (mio_seek (base, 0, SEEK_END) != 0)
+            return NULL;
+        end = mio_tell (base);
+        Assert (end >= start);
+        size = end - start;
+    }
 
-	if (mio_seek (base, start, SEEK_SET) != 0)
-		return NULL;
+    if (mio_seek (base, start, SEEK_SET) != 0)
+        return NULL;
 
-	data = xMalloc (size, unsigned char);
-	r= mio_read (base, data, 1, size);
-	mio_seek (base, original_pos, SEEK_SET);
+    data = xMalloc (size, unsigned char);
+    r= mio_read (base, data, 1, size);
+    mio_seek (base, original_pos, SEEK_SET);
 
-	if (r != size)
-		goto cleanup;
+    if (r != size)
+        goto cleanup;
 
-	submio = mio_new_memory (data, size, eRealloc, eFree);
-	if (! submio)
-		goto cleanup;
+    submio = mio_new_memory (data, size, eRealloc, eFree);
+    if (! submio)
+        goto cleanup;
 
-	return submio;
+    return submio;
 
 cleanup:
-	eFree (data);
-	return NULL;
+    eFree (data);
+    return NULL;
 }
 
 /**
@@ -411,8 +411,8 @@ cleanup:
  */
 MIO *mio_ref        (MIO *mio)
 {
-	mio->refcount++;
-	return mio;
+    mio->refcount++;
+    return mio;
 }
 
 /**
@@ -430,12 +430,12 @@ MIO *mio_ref        (MIO *mio)
  */
 FILE *mio_file_get_fp (MIO *mio)
 {
-	FILE *fp = NULL;
+    FILE *fp = NULL;
 
-	if (mio->type == MIO_TYPE_FILE)
-		fp = mio->impl.file.fp;
+    if (mio->type == MIO_TYPE_FILE)
+        fp = mio->impl.file.fp;
 
-	return fp;
+    return fp;
 }
 
 /**
@@ -455,16 +455,16 @@ FILE *mio_file_get_fp (MIO *mio)
  */
 unsigned char *mio_memory_get_data (MIO *mio, size_t *size)
 {
-	unsigned char *ptr = NULL;
+    unsigned char *ptr = NULL;
 
-	if (mio->type == MIO_TYPE_MEMORY)
-	{
-		ptr = mio->impl.mem.buf;
-		if (size)
-			*size = mio->impl.mem.size;
-	}
+    if (mio->type == MIO_TYPE_MEMORY)
+    {
+        ptr = mio->impl.mem.buf;
+        if (size)
+            *size = mio->impl.mem.size;
+    }
 
-	return ptr;
+    return ptr;
 }
 
 /**
@@ -478,43 +478,43 @@ unsigned char *mio_memory_get_data (MIO *mio, size_t *size)
  */
 int mio_unref (MIO *mio)
 {
-	int rv = 0;
+    int rv = 0;
 
-	if (mio)
-	{
-		if (--mio->refcount)
-			return 0;
+    if (mio)
+    {
+        if (--mio->refcount)
+            return 0;
 
-		if (mio->udata.d && mio->udata.f)
-			mio->udata.f (mio->udata.d);
+        if (mio->udata.d && mio->udata.f)
+            mio->udata.f (mio->udata.d);
 
-		if (mio->type == MIO_TYPE_FILE)
-		{
-			if (mio->impl.file.close_func)
-				rv = mio->impl.file.close_func (mio->impl.file.fp);
-			mio->impl.file.close_func = NULL;
-			mio->impl.file.fp = NULL;
-		}
-		else if (mio->type == MIO_TYPE_MEMORY)
-		{
-			if (mio->impl.mem.free_func)
-				mio->impl.mem.free_func (mio->impl.mem.buf);
-			mio->impl.mem.buf = NULL;
-			mio->impl.mem.pos = 0;
-			mio->impl.mem.size = 0;
-			mio->impl.mem.allocated_size = 0;
-			mio->impl.mem.realloc_func = NULL;
-			mio->impl.mem.free_func = NULL;
-			mio->impl.mem.eof = false;
-			mio->impl.mem.error = false;
-		}
-		else
-			AssertNotReached ();
+        if (mio->type == MIO_TYPE_FILE)
+        {
+            if (mio->impl.file.close_func)
+                rv = mio->impl.file.close_func (mio->impl.file.fp);
+            mio->impl.file.close_func = NULL;
+            mio->impl.file.fp = NULL;
+        }
+        else if (mio->type == MIO_TYPE_MEMORY)
+        {
+            if (mio->impl.mem.free_func)
+                mio->impl.mem.free_func (mio->impl.mem.buf);
+            mio->impl.mem.buf = NULL;
+            mio->impl.mem.pos = 0;
+            mio->impl.mem.size = 0;
+            mio->impl.mem.allocated_size = 0;
+            mio->impl.mem.realloc_func = NULL;
+            mio->impl.mem.free_func = NULL;
+            mio->impl.mem.eof = false;
+            mio->impl.mem.error = false;
+        }
+        else
+            AssertNotReached ();
 
-		eFree (mio);
-	}
+        eFree (mio);
+    }
 
-	return rv;
+    return rv;
 }
 
 /**
@@ -533,52 +533,52 @@ int mio_unref (MIO *mio)
  *          mio_eof() and mio_error() to determine which occurred.
  */
 size_t mio_read (MIO *mio,
-				 void *ptr_,
-				 size_t size,
-				 size_t nmemb)
+                 void *ptr_,
+                 size_t size,
+                 size_t nmemb)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fread (ptr_, size, nmemb, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		size_t n_read = 0;
+    if (mio->type == MIO_TYPE_FILE)
+        return fread (ptr_, size, nmemb, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        size_t n_read = 0;
 
-		if (size != 0 && nmemb != 0)
-		{
-			size_t size_avail = mio->impl.mem.size - mio->impl.mem.pos;
-			size_t copy_bytes = size * nmemb;
-			unsigned char *ptr = ptr_;
+        if (size != 0 && nmemb != 0)
+        {
+            size_t size_avail = mio->impl.mem.size - mio->impl.mem.pos;
+            size_t copy_bytes = size * nmemb;
+            unsigned char *ptr = ptr_;
 
-			if (size_avail < copy_bytes)
-				copy_bytes = size_avail;
+            if (size_avail < copy_bytes)
+                copy_bytes = size_avail;
 
-			if (copy_bytes > 0)
-			{
-				n_read = copy_bytes / size;
+            if (copy_bytes > 0)
+            {
+                n_read = copy_bytes / size;
 
-				if (mio->impl.mem.ungetch != EOF)
-				{
-					*ptr = (unsigned char) mio->impl.mem.ungetch;
-					mio->impl.mem.ungetch = EOF;
-					copy_bytes--;
-					mio->impl.mem.pos++;
-					ptr++;
-				}
+                if (mio->impl.mem.ungetch != EOF)
+                {
+                    *ptr = (unsigned char) mio->impl.mem.ungetch;
+                    mio->impl.mem.ungetch = EOF;
+                    copy_bytes--;
+                    mio->impl.mem.pos++;
+                    ptr++;
+                }
 
-				memcpy (ptr, &mio->impl.mem.buf[mio->impl.mem.pos], copy_bytes);
-				mio->impl.mem.pos += copy_bytes;
-			}
-			if (mio->impl.mem.pos >= mio->impl.mem.size)
-				mio->impl.mem.eof = true;
-		}
+                memcpy (ptr, &mio->impl.mem.buf[mio->impl.mem.pos], copy_bytes);
+                mio->impl.mem.pos += copy_bytes;
+            }
+            if (mio->impl.mem.pos >= mio->impl.mem.size)
+                mio->impl.mem.eof = true;
+        }
 
-		return n_read;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return n_read;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /*
@@ -593,59 +593,59 @@ size_t mio_read (MIO *mio,
  */
 static int mem_try_resize (MIO *mio, size_t new_size)
 {
-	int success = false;
+    int success = false;
 
-	if (mio->impl.mem.realloc_func)
-	{
-		if (new_size == ULONG_MAX)
-		{
+    if (mio->impl.mem.realloc_func)
+    {
+        if (new_size == ULONG_MAX)
+        {
 #ifdef EOVERFLOW
-			errno = EOVERFLOW;
+            errno = EOVERFLOW;
 #endif
-		}
-		else
-		{
-			if (new_size > mio->impl.mem.size)
-			{
-				if (new_size <= mio->impl.mem.allocated_size)
-				{
-					mio->impl.mem.size = new_size;
-					success = true;
-				}
-				else
-				{
-					size_t newsize;
-					unsigned char *newbuf;
+        }
+        else
+        {
+            if (new_size > mio->impl.mem.size)
+            {
+                if (new_size <= mio->impl.mem.allocated_size)
+                {
+                    mio->impl.mem.size = new_size;
+                    success = true;
+                }
+                else
+                {
+                    size_t newsize;
+                    unsigned char *newbuf;
 
-					newsize = MAX (mio->impl.mem.allocated_size + MIO_CHUNK_SIZE,
-								   new_size);
-					newbuf = mio->impl.mem.realloc_func (mio->impl.mem.buf, newsize);
-					if (newbuf)
-					{
-						mio->impl.mem.buf = newbuf;
-						mio->impl.mem.allocated_size = newsize;
-						mio->impl.mem.size = new_size;
-						success = true;
-					}
-				}
-			}
-			else
-			{
-				unsigned char *newbuf;
+                    newsize = MAX (mio->impl.mem.allocated_size + MIO_CHUNK_SIZE,
+                                   new_size);
+                    newbuf = mio->impl.mem.realloc_func (mio->impl.mem.buf, newsize);
+                    if (newbuf)
+                    {
+                        mio->impl.mem.buf = newbuf;
+                        mio->impl.mem.allocated_size = newsize;
+                        mio->impl.mem.size = new_size;
+                        success = true;
+                    }
+                }
+            }
+            else
+            {
+                unsigned char *newbuf;
 
-				newbuf = mio->impl.mem.realloc_func (mio->impl.mem.buf, new_size);
-				if (newbuf || new_size == 0)
-				{
-					mio->impl.mem.buf = newbuf;
-					mio->impl.mem.allocated_size = new_size;
-					mio->impl.mem.size = new_size;
-					success = true;
-				}
-			}
-		}
-	}
+                newbuf = mio->impl.mem.realloc_func (mio->impl.mem.buf, new_size);
+                if (newbuf || new_size == 0)
+                {
+                    mio->impl.mem.buf = newbuf;
+                    mio->impl.mem.allocated_size = new_size;
+                    mio->impl.mem.size = new_size;
+                    success = true;
+                }
+            }
+        }
+    }
 
-	return success;
+    return success;
 }
 
 /*
@@ -660,12 +660,12 @@ static int mem_try_resize (MIO *mio, size_t new_size)
  */
 static int mem_try_ensure_space (MIO *mio, size_t n)
 {
-	int success = true;
+    int success = true;
 
-	if (mio->impl.mem.pos + n > mio->impl.mem.size)
-		success = mem_try_resize (mio, mio->impl.mem.pos + n);
+    if (mio->impl.mem.pos + n > mio->impl.mem.size)
+        success = mem_try_resize (mio, mio->impl.mem.pos + n);
 
-	return success;
+    return success;
 }
 
 /**
@@ -681,33 +681,33 @@ static int mem_try_ensure_space (MIO *mio, size_t n)
  *          smaller than the requested count if a write error occurs.
  */
 size_t mio_write (MIO *mio,
-				  const void *ptr,
-				  size_t size,
-				  size_t nmemb)
+                  const void *ptr,
+                  size_t size,
+                  size_t nmemb)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fwrite (ptr, size, nmemb, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		size_t n_written = 0;
+    if (mio->type == MIO_TYPE_FILE)
+        return fwrite (ptr, size, nmemb, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        size_t n_written = 0;
 
-		if (size != 0 && nmemb != 0)
-		{
-			if (mem_try_ensure_space (mio, size * nmemb))
-			{
-				memcpy (&mio->impl.mem.buf[mio->impl.mem.pos], ptr, size * nmemb);
-				mio->impl.mem.pos += size * nmemb;
-				n_written = nmemb;
-			}
-		}
+        if (size != 0 && nmemb != 0)
+        {
+            if (mem_try_ensure_space (mio, size * nmemb))
+            {
+                memcpy (&mio->impl.mem.buf[mio->impl.mem.pos], ptr, size * nmemb);
+                mio->impl.mem.pos += size * nmemb;
+                n_written = nmemb;
+            }
+        }
 
-		return n_written;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return n_written;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -722,26 +722,26 @@ size_t mio_write (MIO *mio,
  */
 int mio_putc (MIO *mio, int c)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fputc (c, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		int rv = EOF;
+    if (mio->type == MIO_TYPE_FILE)
+        return fputc (c, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        int rv = EOF;
 
-		if (mem_try_ensure_space (mio, 1))
-		{
-			mio->impl.mem.buf[mio->impl.mem.pos] = (unsigned char)c;
-			mio->impl.mem.pos++;
-			rv = (int)((unsigned char)c);
-		}
+        if (mem_try_ensure_space (mio, 1))
+        {
+            mio->impl.mem.buf[mio->impl.mem.pos] = (unsigned char)c;
+            mio->impl.mem.pos++;
+            rv = (int)((unsigned char)c);
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -755,28 +755,28 @@ int mio_putc (MIO *mio, int c)
  */
 int mio_puts (MIO *mio, const char *s)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fputs (s, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		int rv = EOF;
-		size_t len;
+    if (mio->type == MIO_TYPE_FILE)
+        return fputs (s, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        int rv = EOF;
+        size_t len;
 
-		len = strlen (s);
-		if (mem_try_ensure_space (mio, len))
-		{
-			memcpy (&mio->impl.mem.buf[mio->impl.mem.pos], s, len);
-			mio->impl.mem.pos += len;
-			rv = 1;
-		}
+        len = strlen (s);
+        if (mem_try_ensure_space (mio, len))
+        {
+            memcpy (&mio->impl.mem.buf[mio->impl.mem.pos], s, len);
+            mio->impl.mem.pos += len;
+            rv = 1;
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -793,53 +793,53 @@ int mio_puts (MIO *mio, const char *s)
  */
 int mio_vprintf (MIO *mio, const char *format, va_list ap)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return vfprintf (mio->impl.file.fp, format, ap);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		int rv = -1;
-		size_t n;
-		size_t old_pos;
-		size_t old_size;
-		va_list ap_copy;
-		char dummy;
+    if (mio->type == MIO_TYPE_FILE)
+        return vfprintf (mio->impl.file.fp, format, ap);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        int rv = -1;
+        size_t n;
+        size_t old_pos;
+        size_t old_size;
+        va_list ap_copy;
+        char dummy;
 
-		old_pos = mio->impl.mem.pos;
-		old_size = mio->impl.mem.size;
-		va_copy (ap_copy, ap);
-		/* compute the size we will need into the buffer */
-		n = vsnprintf (&dummy, 1, format, ap_copy);
-		va_end (ap_copy);
-		if (mem_try_ensure_space (mio, n))
-		{
-			unsigned char c;
+        old_pos = mio->impl.mem.pos;
+        old_size = mio->impl.mem.size;
+        va_copy (ap_copy, ap);
+        /* compute the size we will need into the buffer */
+        n = vsnprintf (&dummy, 1, format, ap_copy);
+        va_end (ap_copy);
+        if (mem_try_ensure_space (mio, n))
+        {
+            unsigned char c;
 
-			/* backup character at n+1 that will be overwritten by a \0 ... */
-			c = mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)];
-			rv = vsprintf ((char *)&mio->impl.mem.buf[mio->impl.mem.pos], format, ap);
-			/* ...and restore it */
-			mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)] = c;
-			if (rv >= 0 && (size_t)rv == (n - 1))
-			{
-				/* re-compute the actual size since we might have allocated one byte
-				 * more than needed */
-				mio->impl.mem.size = MAX (old_size, old_pos + (unsigned int)rv);
-				mio->impl.mem.pos += (unsigned int)rv;
-			}
-			else
-			{
-				mio->impl.mem.size = old_size;
-				rv = -1;
-			}
-		}
+            /* backup character at n+1 that will be overwritten by a \0 ... */
+            c = mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)];
+            rv = vsprintf ((char *)&mio->impl.mem.buf[mio->impl.mem.pos], format, ap);
+            /* ...and restore it */
+            mio->impl.mem.buf[mio->impl.mem.pos + (n - 1)] = c;
+            if (rv >= 0 && (size_t)rv == (n - 1))
+            {
+                /* re-compute the actual size since we might have allocated one byte
+                 * more than needed */
+                mio->impl.mem.size = MAX (old_size, old_pos + (unsigned int)rv);
+                mio->impl.mem.pos += (unsigned int)rv;
+            }
+            else
+            {
+                mio->impl.mem.size = old_size;
+                rv = -1;
+            }
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -856,14 +856,14 @@ int mio_vprintf (MIO *mio, const char *format, va_list ap)
  */
 int mio_printf (MIO *mio, const char *format, ...)
 {
-	int rv;
-	va_list ap;
+    int rv;
+    va_list ap;
 
-	va_start (ap, format);
-	rv = mio_vprintf (mio, format, ap);
-	va_end (ap);
+    va_start (ap, format);
+    rv = mio_vprintf (mio, format, ap);
+    va_end (ap);
 
-	return rv;
+    return rv;
 }
 
 /**
@@ -877,33 +877,33 @@ int mio_printf (MIO *mio, const char *format, ...)
  */
 int mio_getc (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fgetc (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		int rv = EOF;
+    if (mio->type == MIO_TYPE_FILE)
+        return fgetc (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        int rv = EOF;
 
-		if (mio->impl.mem.ungetch != EOF)
-		{
-			rv = mio->impl.mem.ungetch;
-			mio->impl.mem.ungetch = EOF;
-			mio->impl.mem.pos++;
-		}
-		else if (mio->impl.mem.pos < mio->impl.mem.size)
-		{
-			rv = mio->impl.mem.buf[mio->impl.mem.pos];
-			mio->impl.mem.pos++;
-		}
-		else
-			mio->impl.mem.eof = true;
+        if (mio->impl.mem.ungetch != EOF)
+        {
+            rv = mio->impl.mem.ungetch;
+            mio->impl.mem.ungetch = EOF;
+            mio->impl.mem.pos++;
+        }
+        else if (mio->impl.mem.pos < mio->impl.mem.size)
+        {
+            rv = mio->impl.mem.buf[mio->impl.mem.pos];
+            mio->impl.mem.pos++;
+        }
+        else
+            mio->impl.mem.eof = true;
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -924,26 +924,26 @@ int mio_getc (MIO *mio)
  */
 int mio_ungetc (MIO *mio, int ch)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return ungetc (ch, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		int rv = EOF;
+    if (mio->type == MIO_TYPE_FILE)
+        return ungetc (ch, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        int rv = EOF;
 
-		if (ch != EOF && mio->impl.mem.ungetch == EOF)
-		{
-			rv = mio->impl.mem.ungetch = ch;
-			mio->impl.mem.pos--;
-			mio->impl.mem.eof = false;
-		}
+        if (ch != EOF && mio->impl.mem.ungetch == EOF)
+        {
+            rv = mio->impl.mem.ungetch = ch;
+            mio->impl.mem.pos--;
+            mio->impl.mem.eof = false;
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -960,58 +960,58 @@ int mio_ungetc (MIO *mio, int ch)
  */
 char *mio_gets (MIO *mio, char *s, size_t size)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fgets (s, (int)size, mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		char *rv = NULL;
+    if (mio->type == MIO_TYPE_FILE)
+        return fgets (s, (int)size, mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        char *rv = NULL;
 
-		if (size > 0)
-		{
-			size_t i = 0;
-			bool newline = false;
-			/* Avoiding dereference inside the for loop below improves
-			 * performance so we do it here. */
-			size_t pos = mio->impl.mem.pos;
-			size_t buf_size = mio->impl.mem.size;
-			unsigned char *buf = mio->impl.mem.buf;
+        if (size > 0)
+        {
+            size_t i = 0;
+            bool newline = false;
+            /* Avoiding dereference inside the for loop below improves
+             * performance so we do it here. */
+            size_t pos = mio->impl.mem.pos;
+            size_t buf_size = mio->impl.mem.size;
+            unsigned char *buf = mio->impl.mem.buf;
 
-			if (mio->impl.mem.ungetch != EOF)
-			{
-				s[i] = (char)mio->impl.mem.ungetch;
-				mio->impl.mem.ungetch = EOF;
-				pos++;
-				i++;
-			}
-			for (; pos < buf_size && i < (size - 1); i++)
-			{
-				s[i] = (char)buf[pos];
-				pos++;
-				if (s[i] == '\n')
-				{
-					i++;
-					newline = true;
-					break;
-				}
-			}
-			if (i > 0)
-			{
-				s[i] = 0;
-				rv = s;
-			}
-			if (!newline && pos >= buf_size)
-				mio->impl.mem.eof = true;
-			mio->impl.mem.pos = pos;
-			mio->impl.mem.size = buf_size;
-		}
+            if (mio->impl.mem.ungetch != EOF)
+            {
+                s[i] = (char)mio->impl.mem.ungetch;
+                mio->impl.mem.ungetch = EOF;
+                pos++;
+                i++;
+            }
+            for (; pos < buf_size && i < (size - 1); i++)
+            {
+                s[i] = (char)buf[pos];
+                pos++;
+                if (s[i] == '\n')
+                {
+                    i++;
+                    newline = true;
+                    break;
+                }
+            }
+            if (i > 0)
+            {
+                s[i] = 0;
+                rv = s;
+            }
+            if (!newline && pos >= buf_size)
+                mio->impl.mem.eof = true;
+            mio->impl.mem.pos = pos;
+            mio->impl.mem.size = buf_size;
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -1023,15 +1023,15 @@ char *mio_gets (MIO *mio, char *s, size_t size)
  */
 void mio_clearerr (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		clearerr (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		mio->impl.mem.error = false;
-		mio->impl.mem.eof = false;
-	}
-	else
-		AssertNotReached ();
+    if (mio->type == MIO_TYPE_FILE)
+        clearerr (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        mio->impl.mem.error = false;
+        mio->impl.mem.eof = false;
+    }
+    else
+        AssertNotReached ();
 }
 
 /**
@@ -1045,15 +1045,15 @@ void mio_clearerr (MIO *mio)
  */
 int mio_eof (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return feof (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-		return mio->impl.mem.eof != false;
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+    if (mio->type == MIO_TYPE_FILE)
+        return feof (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+        return mio->impl.mem.eof != false;
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -1067,15 +1067,15 @@ int mio_eof (MIO *mio)
  */
 int mio_error (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return ferror (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-		return mio->impl.mem.error != false;
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+    if (mio->type == MIO_TYPE_FILE)
+        return ferror (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+        return mio->impl.mem.error != false;
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -1094,64 +1094,64 @@ int mio_error (MIO *mio)
  */
 int mio_seek (MIO *mio, long offset, int whence)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fseek (mio->impl.file.fp, offset, whence);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		/* FIXME: should we support seeking out of bounds like lseek() seems to do? */
-		int rv = -1;
+    if (mio->type == MIO_TYPE_FILE)
+        return fseek (mio->impl.file.fp, offset, whence);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        /* FIXME: should we support seeking out of bounds like lseek() seems to do? */
+        int rv = -1;
 
-		switch (whence)
-		{
-			case SEEK_SET:
-				if (offset < 0 || (size_t)offset > mio->impl.mem.size)
-					errno = EINVAL;
-				else
-				{
-					mio->impl.mem.pos = (size_t)offset;
-					rv = 0;
-				}
-				break;
+        switch (whence)
+        {
+        case SEEK_SET:
+            if (offset < 0 || (size_t)offset > mio->impl.mem.size)
+                errno = EINVAL;
+            else
+            {
+                mio->impl.mem.pos = (size_t)offset;
+                rv = 0;
+            }
+            break;
 
-			case SEEK_CUR:
-				if ((offset < 0 && (size_t)-offset > mio->impl.mem.pos) ||
-					mio->impl.mem.pos + (size_t)offset > mio->impl.mem.size)
-				{
-					errno = EINVAL;
-				}
-				else
-				{
-					mio->impl.mem.pos = (size_t)(mio->impl.mem.pos + offset);
-					rv = 0;
-				}
-				break;
+        case SEEK_CUR:
+            if ((offset < 0 && (size_t)-offset > mio->impl.mem.pos) ||
+                    mio->impl.mem.pos + (size_t)offset > mio->impl.mem.size)
+            {
+                errno = EINVAL;
+            }
+            else
+            {
+                mio->impl.mem.pos = (size_t)(mio->impl.mem.pos + offset);
+                rv = 0;
+            }
+            break;
 
-			case SEEK_END:
-				if (offset > 0 || (size_t)-offset > mio->impl.mem.size)
-					errno = EINVAL;
-				else
-				{
-					mio->impl.mem.pos = mio->impl.mem.size - (size_t)-offset;
-					rv = 0;
-				}
-				break;
+        case SEEK_END:
+            if (offset > 0 || (size_t)-offset > mio->impl.mem.size)
+                errno = EINVAL;
+            else
+            {
+                mio->impl.mem.pos = mio->impl.mem.size - (size_t)-offset;
+                rv = 0;
+            }
+            break;
 
-			default:
-				errno = EINVAL;
-		}
-		if (rv == 0)
-		{
-			mio->impl.mem.eof = false;
-			mio->impl.mem.ungetch = EOF;
-		}
+        default:
+            errno = EINVAL;
+        }
+        if (rv == 0)
+        {
+            mio->impl.mem.eof = false;
+            mio->impl.mem.ungetch = EOF;
+        }
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 
 }
 
@@ -1167,28 +1167,28 @@ int mio_seek (MIO *mio, long offset, int whence)
  */
 long mio_tell (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return ftell (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		long rv = -1;
+    if (mio->type == MIO_TYPE_FILE)
+        return ftell (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        long rv = -1;
 
-		if (mio->impl.mem.pos > LONG_MAX)
-		{
+        if (mio->impl.mem.pos > LONG_MAX)
+        {
 #ifdef EOVERFLOW
-			errno = EOVERFLOW;
+            errno = EOVERFLOW;
 #endif
-		}
-		else
-			rv = (long)mio->impl.mem.pos;
+        }
+        else
+            rv = (long)mio->impl.mem.pos;
 
-		return rv;
-	}
-	else
-	{
-		AssertNotReached ();
-		return 0;
-	}
+        return rv;
+    }
+    else
+    {
+        AssertNotReached ();
+        return 0;
+    }
 }
 
 /**
@@ -1201,17 +1201,17 @@ long mio_tell (MIO *mio)
  */
 void mio_rewind (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		rewind (mio->impl.file.fp);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		mio->impl.mem.pos = 0;
-		mio->impl.mem.ungetch = EOF;
-		mio->impl.mem.eof = false;
-		mio->impl.mem.error = false;
-	}
-	else
-		AssertNotReached ();
+    if (mio->type == MIO_TYPE_FILE)
+        rewind (mio->impl.file.fp);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        mio->impl.mem.pos = 0;
+        mio->impl.mem.ungetch = EOF;
+        mio->impl.mem.eof = false;
+        mio->impl.mem.error = false;
+    }
+    else
+        AssertNotReached ();
 }
 
 /**
@@ -1228,39 +1228,39 @@ void mio_rewind (MIO *mio)
  */
 int mio_getpos (MIO *mio, MIOPos *pos)
 {
-	int rv = -1;
+    int rv = -1;
 
-	pos->type = mio->type;
-	if (mio->type == MIO_TYPE_FILE)
-		rv = fgetpos (mio->impl.file.fp, &pos->impl.file);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		rv = -1;
+    pos->type = mio->type;
+    if (mio->type == MIO_TYPE_FILE)
+        rv = fgetpos (mio->impl.file.fp, &pos->impl.file);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        rv = -1;
 
-		if (mio->impl.mem.pos == (size_t)-1)
-		{
-			/* this happens if ungetc() was called at the start of the stream */
+        if (mio->impl.mem.pos == (size_t)-1)
+        {
+            /* this happens if ungetc() was called at the start of the stream */
 #ifdef EIO
-			errno = EIO;
+            errno = EIO;
 #endif
-		}
-		else
-		{
-			pos->impl.mem = mio->impl.mem.pos;
-			rv = 0;
-		}
-	}
-	else
-		AssertNotReached();
+        }
+        else
+        {
+            pos->impl.mem = mio->impl.mem.pos;
+            rv = 0;
+        }
+    }
+    else
+        AssertNotReached();
 
 #ifdef MIO_DEBUG
-	if (rv != -1)
-	{
-		pos->tag = mio;
-	}
+    if (rv != -1)
+    {
+        pos->tag = mio;
+    }
 #endif /* MIO_DEBUG */
 
-	return rv;
+    return rv;
 }
 
 /**
@@ -1280,40 +1280,40 @@ int mio_getpos (MIO *mio, MIOPos *pos)
  */
 int mio_setpos (MIO *mio, MIOPos *pos)
 {
-	int rv = -1;
+    int rv = -1;
 
 #ifdef MIO_DEBUG
-	if (pos->tag != mio)
-	{
-		g_critical ("mio_setpos((MIO*)%p, (MIOPos*)%p): "
-					"Given MIOPos was not set by a previous call to mio_getpos() "
-					"on the same MIO object, which means there is a bug in "
-					"someone's code.",
-					(void *)mio, (void *)pos);
-		errno = EINVAL;
-		return -1;
-	}
+    if (pos->tag != mio)
+    {
+        g_critical ("mio_setpos((MIO*)%p, (MIOPos*)%p): "
+                    "Given MIOPos was not set by a previous call to mio_getpos() "
+                    "on the same MIO object, which means there is a bug in "
+                    "someone's code.",
+                    (void *)mio, (void *)pos);
+        errno = EINVAL;
+        return -1;
+    }
 #endif /* MIO_DEBUG */
 
-	if (mio->type == MIO_TYPE_FILE)
-		rv = fsetpos (mio->impl.file.fp, &pos->impl.file);
-	else if (mio->type == MIO_TYPE_MEMORY)
-	{
-		rv = -1;
+    if (mio->type == MIO_TYPE_FILE)
+        rv = fsetpos (mio->impl.file.fp, &pos->impl.file);
+    else if (mio->type == MIO_TYPE_MEMORY)
+    {
+        rv = -1;
 
-		if (pos->impl.mem > mio->impl.mem.size)
-			errno = EINVAL;
-		else
-		{
-			mio->impl.mem.ungetch = EOF;
-			mio->impl.mem.pos = pos->impl.mem;
-			rv = 0;
-		}
-	}
-	else
-		AssertNotReached ();
+        if (pos->impl.mem > mio->impl.mem.size)
+            errno = EINVAL;
+        else
+        {
+            mio->impl.mem.ungetch = EOF;
+            mio->impl.mem.pos = pos->impl.mem;
+            rv = 0;
+        }
+    }
+    else
+        AssertNotReached ();
 
-	return rv;
+    return rv;
 }
 
 /**
@@ -1328,9 +1328,9 @@ int mio_setpos (MIO *mio, MIOPos *pos)
  */
 int mio_flush (MIO *mio)
 {
-	if (mio->type == MIO_TYPE_FILE)
-		return fflush (mio->impl.file.fp);
-	return 0;
+    if (mio->type == MIO_TYPE_FILE)
+        return fflush (mio->impl.file.fp);
+    return 0;
 }
 
 
@@ -1349,11 +1349,11 @@ int mio_flush (MIO *mio)
 
 void  mio_attach_user_data (MIO *mio, void *user_data, MIODestroyNotify user_data_free_func)
 {
-	if (mio->udata.d && mio->udata.f)
-		mio->udata.f (mio->udata.d);
+    if (mio->udata.d && mio->udata.f)
+        mio->udata.f (mio->udata.d);
 
-	mio->udata.d = user_data;
-	mio->udata.f = user_data_free_func;
+    mio->udata.d = user_data;
+    mio->udata.f = user_data_free_func;
 }
 
 /**
@@ -1365,5 +1365,5 @@ void  mio_attach_user_data (MIO *mio, void *user_data, MIODestroyNotify user_dat
  */
 void *mio_get_user_data (MIO *mio)
 {
-	return mio->udata.d;
+    return mio->udata.d;
 }

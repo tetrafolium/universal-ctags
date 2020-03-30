@@ -23,9 +23,9 @@
 typedef struct sQCode QCode;
 
 enum QRESULT {
-	Q_REJECT,
-	Q_ACCEPT,
-	Q_ERROR,
+    Q_REJECT,
+    Q_ACCEPT,
+    Q_ERROR,
 };
 
 QCode       *q_compile        (EsObject *exp);

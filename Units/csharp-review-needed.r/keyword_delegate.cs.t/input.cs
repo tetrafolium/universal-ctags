@@ -4,20 +4,20 @@ delegate void MyDelegate(int i);
 
 class Program
 {
-   public static void Main()
-   {
-      TakesADelegate(new MyDelegate(DelegateFunction));
-   }
+    public static void Main()
+    {
+        TakesADelegate(new MyDelegate(DelegateFunction));
+    }
 
-   public static void TakesADelegate(MyDelegate SomeFunction)
-   {
-      SomeFunction(21);
-   }
-   
-   public static void DelegateFunction(int i)
-   {
-      System.Console.WriteLine("Called by delegate with number: {0}.", i);
-   }
+    public static void TakesADelegate(MyDelegate SomeFunction)
+    {
+        SomeFunction(21);
+    }
+
+    public static void DelegateFunction(int i)
+    {
+        System.Console.WriteLine("Called by delegate with number: {0}.", i);
+    }
 }
 //
 // keyword_delegate2.cs
@@ -27,31 +27,31 @@ using System;
 // delegate declaration
 delegate void MyDelegate();
 
-public class MyClass 
+public class MyClass
 {
-   public void InstanceMethod() 
-   {
-      Console.WriteLine("A message from the instance method."); 
-   }
+    public void InstanceMethod()
+    {
+        Console.WriteLine("A message from the instance method.");
+    }
 
-   static public void StaticMethod() 
-   {
-      Console.WriteLine("A message from the static method.");
-   }
+    static public void StaticMethod()
+    {
+        Console.WriteLine("A message from the static method.");
+    }
 }
 
-public class MainClass 
+public class MainClass
 {
-   static public void Main() 
-   {
-      MyClass p = new MyClass();
+    static public void Main()
+    {
+        MyClass p = new MyClass();
 
-      // Map the delegate to the instance method:
-      MyDelegate d = new MyDelegate(p.InstanceMethod);
-      d();
+        // Map the delegate to the instance method:
+        MyDelegate d = new MyDelegate(p.InstanceMethod);
+        d();
 
-      // Map to the static method:
-      d = new MyDelegate(MyClass.StaticMethod);
-      d();
-   }
+        // Map to the static method:
+        d = new MyDelegate(MyClass.StaticMethod);
+        d();
+    }
 }

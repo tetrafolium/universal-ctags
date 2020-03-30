@@ -12,11 +12,13 @@ label:
     goto label;
     switch (token->keyword)
     {
-	case KEYWORD_UNION:
-	    result = TRUE;
-	    break;
+    case KEYWORD_UNION:
+        result = TRUE;
+        break;
 
-	default: result = FALSE; break;
+    default:
+        result = FALSE;
+        break;
     }
     return result;
 }

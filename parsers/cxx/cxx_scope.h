@@ -15,22 +15,22 @@
 
 enum CXXScopeAccess
 {
-	CXXScopeAccessUnknown,
-	CXXScopeAccessPublic,
-	CXXScopeAccessPrivate,
-	CXXScopeAccessProtected
+    CXXScopeAccessUnknown,
+    CXXScopeAccessPublic,
+    CXXScopeAccessPrivate,
+    CXXScopeAccessProtected
 };
 
 enum CXXScopeType
 {
-	CXXScopeTypeFunction,
-	CXXScopeTypeNamespace,
-	CXXScopeTypeClass,
-	CXXScopeTypeEnum,
-	CXXScopeTypeUnion,
-	CXXScopeTypeStruct,
-	CXXScopeTypeVariable, // template variables, mainly
-	CXXScopeTypeLAST
+    CXXScopeTypeFunction,
+    CXXScopeTypeNamespace,
+    CXXScopeTypeClass,
+    CXXScopeTypeEnum,
+    CXXScopeTypeUnion,
+    CXXScopeTypeStruct,
+    CXXScopeTypeVariable, // template variables, mainly
+    CXXScopeTypeLAST
 };
 
 void cxxScopeInit(void);
@@ -68,10 +68,10 @@ bool cxxScopeIsGlobal(void);
 
 // Add a token to the scope chain. The token ownership is transferred.
 void cxxScopePush(
-		CXXToken * t,
-		enum CXXScopeType eScopeType,
-		enum CXXScopeAccess eInitialAccess
-	);
+    CXXToken * t,
+    enum CXXScopeType eScopeType,
+    enum CXXScopeAccess eInitialAccess
+);
 void cxxScopeSetAccess(enum CXXScopeAccess eAccess);
 // Remove the last token from the scope chain
 void cxxScopePop(void);

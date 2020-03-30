@@ -18,5 +18,5 @@
 */
 int main(int argc, char **argv)
 {
-	return ctags_cli_main (argc, argv);
+    return ctags_cli_main (argc, argv);
 }

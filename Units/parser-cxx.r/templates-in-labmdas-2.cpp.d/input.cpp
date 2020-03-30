@@ -3,7 +3,7 @@
 namespace Foo
 {
 template <class T>
-T bar() 
+T bar()
 {
     return T{};
 };
@@ -11,6 +11,6 @@ T bar()
 
 int main()
 {
-    auto l = []{return Foo::template bar<int>();};
+    auto l = [] {return Foo::template bar<int>();};
     return l();
 }

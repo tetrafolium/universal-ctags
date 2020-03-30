@@ -362,9 +362,9 @@ _wopendir(
          * into absolute paths, so just assume its an absolute path.
          */
 #       if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-            n = wcslen(dirname);
+        n = wcslen(dirname);
 #       else
-            n = GetFullPathNameW (dirname, 0, NULL, NULL);
+        n = GetFullPathNameW (dirname, 0, NULL, NULL);
 #       endif
 
         /* Allocate room for absolute directory name and search pattern */
@@ -380,9 +380,9 @@ _wopendir(
              * into absolute paths, so just assume its an absolute path.
              */
 #           if defined(WINAPI_FAMILY) && (WINAPI_FAMILY == WINAPI_FAMILY_PHONE_APP)
-                wcsncpy_s(dirp->patt, n+1, dirname, n);
+            wcsncpy_s(dirp->patt, n+1, dirname, n);
 #           else
-                n = GetFullPathNameW (dirname, n, dirp->patt, NULL);
+            n = GetFullPathNameW (dirname, n, dirp->patt, NULL);
 #           endif
             if (n > 0) {
                 wchar_t *p;
@@ -395,7 +395,8 @@ _wopendir(
                     case '/':
                     case ':':
                         /* Directory ends in path separator, e.g. c:\temp\ */
-                        /*NOP*/;
+                        /*NOP*/
+                        ;
                         break;
 
                     default:
@@ -566,8 +567,8 @@ dirent_first(
 
     /* Open directory and retrieve the first entry */
     dirp->handle = FindFirstFileExW(
-        dirp->patt, FindExInfoStandard, &dirp->data,
-        FindExSearchNameMatch, NULL, 0);
+                       dirp->patt, FindExInfoStandard, &dirp->data,
+                       FindExSearchNameMatch, NULL, 0);
     if (dirp->handle != INVALID_HANDLE_VALUE) {
 
         /* a directory entry is now waiting in memory */
@@ -709,7 +710,7 @@ readdir(
 
         /* Attempt to convert file name to multi-byte string */
         error = dirent_wcstombs_s(
-            &n, dirp->ent.d_name, PATH_MAX, datap->cFileName, PATH_MAX);
+                    &n, dirp->ent.d_name, PATH_MAX, datap->cFileName, PATH_MAX);
 
         /*
          * If the file name cannot be represented by a multi-byte string,
@@ -723,8 +724,8 @@ readdir(
          */
         if (error  &&  datap->cAlternateFileName[0] != '\0') {
             error = dirent_wcstombs_s(
-                &n, dirp->ent.d_name, PATH_MAX,
-                datap->cAlternateFileName, PATH_MAX);
+                        &n, dirp->ent.d_name, PATH_MAX,
+                        datap->cAlternateFileName, PATH_MAX);
         }
 
         if (!error) {

@@ -14,25 +14,25 @@
 
 extern const kindDefinition* getTagKind(const tagEntryInfo *const tag)
 {
-	return getLanguageKind(tag->langType, tag->kindIndex);
+    return getLanguageKind(tag->langType, tag->kindIndex);
 }
 
 extern char getTagKindLetter(const tagEntryInfo *const tag)
 {
-	kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
-	return kdef->letter;
+    kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
+    return kdef->letter;
 }
 
 extern const char* getTagKindName(const tagEntryInfo *const tag)
 {
-	kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
-	return kdef->name;
+    kindDefinition *kdef = getLanguageKind(tag->langType, tag->kindIndex);
+    return kdef->name;
 }
 
 extern const roleDefinition* getTagRole(const tagEntryInfo *const tag,
-										int roleIndex)
+                                        int roleIndex)
 {
-	if (roleIndex == ROLE_DEFINITION_INDEX)
-		return NULL;
-	return getLanguageRole(tag->langType, tag->kindIndex, roleIndex);
+    if (roleIndex == ROLE_DEFINITION_INDEX)
+        return NULL;
+    return getLanguageRole(tag->langType, tag->kindIndex, roleIndex);
 }

@@ -16,7 +16,7 @@
 int
 M(void)
 {
-  return 0;
+    return 0;
 }
 
 #define D 1
@@ -27,6 +27,6 @@ M(void)
 #include       <i.h>
 #include       "j.h"
 
-   #    	include <stdio.h>
+#    	include <stdio.h>
 /* objc constant String */
 @"#include<y.h>"

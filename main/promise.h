@@ -18,9 +18,9 @@
 #include "numarray.h"
 
 int  makePromise   (const char *parser,
-		    unsigned long startLine, long startCharOffset,
-		    unsigned long endLine, long endCharOffset,
-		    unsigned long sourceLineOffset);
+                    unsigned long startLine, long startCharOffset,
+                    unsigned long endLine, long endCharOffset,
+                    unsigned long sourceLineOffset);
 
 /* Fill the line with white spaces.
    The callee takes the ownership of lines. */

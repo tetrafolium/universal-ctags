@@ -6,7 +6,7 @@ To: noreply@sourceforge.net
 Subject: [ ctags-Bugs-556645 ] Some typedef can not be tagged in C code
 
 Bugs item #556645, was opened at 2002-05-16 14:25
-You can respond by visiting: 
+You can respond by visiting:
 http://sourceforge.net/tracker/?func=detail&atid=106556&aid=556645&group_id=6556
 
 Category: None

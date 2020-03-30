@@ -95,78 +95,78 @@ static enum token
 matchToken (const char *s, int len)
 {
     switch (len) {
-        case 2:
-            if (STREQN(s, "my"))                return T_MY;
+    case 2:
+                if (STREQN(s, "my"))                return T_MY;
+        break;
+    case 3:
+        switch (s[0]) {
+        case 'o':
+            if (STREQN(s, "our"))       return T_OUR;
             break;
-        case 3:
-            switch (s[0]) {
-                case 'o':
-                    if (STREQN(s, "our"))       return T_OUR;
-                    break;
-                case 's':
-                    if (STREQN(s, "sub"))       return T_SUB;
-                    break;
-            }
+        case 's':
+            if (STREQN(s, "sub"))       return T_SUB;
             break;
-        case 4:
-            switch (s[1]) {
-                case 'o':
-                    if (STREQN(s, "role"))      return T_ROLE;
-                    break;
-                case 'u':
-                    if (STREQN(s, "rule"))      return T_RULE;
-                    break;
-                case 'n':
-                    if (STREQN(s, "unit"))      return T_UNIT;
-                    break;
-            }
+        }
+        break;
+    case 4:
+        switch (s[1]) {
+        case 'o':
+            if (STREQN(s, "role"))      return T_ROLE;
             break;
-        case 5:
-            switch (s[0]) {
-                case 'c':
-                    if (STREQN(s, "class"))     return T_CLASS;
-                    break;
-                case 'm':
-                    if (STREQN(s, "multi"))     return T_MULTI;
-                    break;
-                case 'p':
-                    if (STREQN(s, "proto"))     return T_PROTO;
-                    break;
-                case 't':
-                    if (STREQN(s, "token"))     return T_TOKEN;
-                    break;
-            }
+        case 'u':
+            if (STREQN(s, "rule"))      return T_RULE;
             break;
-        case 6:
-            switch (s[1]) {
-                case 'e':
-                    if (STREQN(s, "method"))    return T_METHOD;
-                    break;
-                case 'o':
-                    if (STREQN(s, "module"))    return T_MODULE;
-                    break;
-            }
+        case 'n':
+            if (STREQN(s, "unit"))      return T_UNIT;
             break;
-        case 7:
-            switch (s[0]) {
-                case 'g':
-                    if (STREQN(s, "grammar"))   return T_GRAMMAR;
-                    break;
-                case 'p':
-                    if (STREQN(s, "package"))   return T_PACKAGE;
-                    break;
-            }
+        }
+        break;
+    case 5:
+        switch (s[0]) {
+        case 'c':
+            if (STREQN(s, "class"))     return T_CLASS;
             break;
-        case 9:
-            if (STREQN(s, "submethod"))         return T_SUBMETHOD;
+        case 'm':
+            if (STREQN(s, "multi"))     return T_MULTI;
             break;
+        case 'p':
+            if (STREQN(s, "proto"))     return T_PROTO;
+            break;
+        case 't':
+            if (STREQN(s, "token"))     return T_TOKEN;
+            break;
+        }
+        break;
+    case 6:
+        switch (s[1]) {
+        case 'e':
+            if (STREQN(s, "method"))    return T_METHOD;
+            break;
+        case 'o':
+            if (STREQN(s, "module"))    return T_MODULE;
+            break;
+        }
+        break;
+    case 7:
+        switch (s[0]) {
+        case 'g':
+            if (STREQN(s, "grammar"))   return T_GRAMMAR;
+            break;
+        case 'p':
+            if (STREQN(s, "package"))   return T_PACKAGE;
+            break;
+        }
+        break;
+    case 9:
+        if (STREQN(s, "submethod"))         return T_SUBMETHOD;
+        break;
     }
     return -1;
 }
 
 static const int validPerl6Identifier[0x100] = {
-/* r!perl -e "print qq([(int)'\$_'] = 1,\n)for a..z,A..Z,0..9,':','-','_'"|fmt
- */
+    /* r!perl -e "print qq([(int)'\$_'] = 1,\n)for a..z,A..Z,0..9,':','-','_'"|fmt
+     */
     [(int)'a'] = 1, [(int)'b'] = 1, [(int)'c'] = 1, [(int)'d'] = 1,
     [(int)'e'] = 1, [(int)'f'] = 1, [(int)'g'] = 1, [(int)'h'] = 1,
     [(int)'i'] = 1, [(int)'j'] = 1, [(int)'k'] = 1, [(int)'l'] = 1,
@@ -191,7 +191,7 @@ static const int validMethodPrefix[0x100] = {
 };
 
 static const int kindMayHaveMethodPrefix = (1 << K_SUBMETHOD) |
-                                           (1 << K_METHOD)    ;
+        (1 << K_METHOD)    ;
 
 /* Trim identifier pointed to by ps, possibly advancing it, and return
  * the length of the valid portion.  If the returned value is zero, the
@@ -240,7 +240,7 @@ possiblyMakeTag (struct p6Ctx *ctx, const char *s, int len)
     Assert(ctx->n_tokens > 0);
     enum perl6Kind kind = token2kind[ ctx->tokens[ctx->n_tokens - 1] ];
     if (K_NONE != kind && perl6Kinds[kind].enabled
-                       && (len = trimIdentifier(kind, &s, len)) > 0)
+            && (len = trimIdentifier(kind, &s, len)) > 0)
         makeTag(ctx, kind, s, len);
 }
 
@@ -327,7 +327,8 @@ Perl6Parser (void)
 {
     static const char *const extensions[] = { "p6", "pm6", "pm", "pl6", NULL };
     static selectLanguage selectors [] = { selectByPickingPerlVersion,
-					   NULL };
+                                           NULL
+                                         };
     parserDefinition* def = parserNew("Perl6");
     def->kindTable      = perl6Kinds;
     def->kindCount  = ARRAY_SIZE(perl6Kinds);

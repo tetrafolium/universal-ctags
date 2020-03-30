@@ -42,11 +42,11 @@ extern void tagFilePosition (MIOPos *p);
 extern void setTagFilePosition (MIOPos *p);
 extern const char* getTagFileDirectory (void);
 extern void getTagScopeInformation (tagEntryInfo *const tag,
-				    const char **kind, const char **name);
+                                    const char **kind, const char **name);
 
 /* Getting line associated with tag */
 extern char *readLineFromBypassForTag (vString *const vLine, const tagEntryInfo *const tag,
-				   long *const pSeekValue);
+                                       long *const pSeekValue);
 
 /* Generating pattern associated tag, caller must do eFree for the returned value. */
 extern char* makePatternString (const tagEntryInfo *const tag);
@@ -54,9 +54,9 @@ extern char* makePatternString (const tagEntryInfo *const tag);
 
 /* language is optional: can be NULL. */
 extern bool writePseudoTag (const ptagDesc *pdesc,
-			       const char *const fileName,
-			       const char *const pattern,
-			       const char *const parserName);
+                            const char *const fileName,
+                            const char *const pattern,
+                            const char *const parserName);
 
 void          corkTagFile(void);
 void          uncorkTagFile(void);
@@ -68,10 +68,10 @@ extern const tagField* getParserField (const tagEntryInfo * tag, int index);
 
 CTAGS_INLINE roleBitsType makeRoleBit(int roleIndex)
 {
-	if (roleIndex == ROLE_DEFINITION_INDEX)
-		return 0;
-	else
-		return ((roleBitsType)1) << roleIndex;
+    if (roleIndex == ROLE_DEFINITION_INDEX)
+        return 0;
+    else
+        return ((roleBitsType)1) << roleIndex;
 }
 
 #endif	/* CTAGS_PRIVATE_ENTRY_H */

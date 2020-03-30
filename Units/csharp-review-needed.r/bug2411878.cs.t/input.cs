@@ -1,3 +1,3 @@
 public class C {
-  private System.String m_name;
+    private System.String m_name;
 }

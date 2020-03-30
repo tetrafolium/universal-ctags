@@ -39,7 +39,7 @@ typedef NSUInteger NSCompoundPredicateType;
 @interface NSCompoundPredicate : NSPredicate
 {
 #if	GS_EXPOSE(NSCompoundPredicate)
-  NSArray	*_subs;
+    NSArray	*_subs;
 #endif
 }
 

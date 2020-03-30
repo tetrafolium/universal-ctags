@@ -20,101 +20,101 @@
 
 void traceEnter(const char * szFunction,const char * szFormat,...)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	debugIndent ();
+    debugIndent ();
 
-	fprintf(stderr,"[>> %s][at %lu] ",szFunction,getInputLineNumber());
+    fprintf(stderr,"[>> %s][at %lu] ",szFunction,getInputLineNumber());
 
-	va_list va;
-	va_start(va,szFormat);
-	vfprintf(stderr,szFormat,va);
-	va_end(va);
+    va_list va;
+    va_start(va,szFormat);
+    vfprintf(stderr,szFormat,va);
+    va_end(va);
 
-	fprintf(stderr,"\n");
+    fprintf(stderr,"\n");
 
-	debugInc();
+    debugInc();
 }
 
 void traceLeave(const char * szFunction,const char * szFormat,...)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	debugDec();
-	debugIndent ();
+    debugDec();
+    debugIndent ();
 
-	fprintf(stderr,"[<< %s][at %lu] ",szFunction,getInputLineNumber());
+    fprintf(stderr,"[<< %s][at %lu] ",szFunction,getInputLineNumber());
 
-	va_list va;
-	va_start(va,szFormat);
-	vfprintf(stderr,szFormat,va);
-	va_end(va);
+    va_list va;
+    va_start(va,szFormat);
+    vfprintf(stderr,szFormat,va);
+    va_end(va);
 
-	fprintf(stderr,"\n");
+    fprintf(stderr,"\n");
 }
 
 static void tracePrintFmtVa(const char * szFormat, va_list va)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	vfprintf(stderr,szFormat,va);
+    vfprintf(stderr,szFormat,va);
 }
 
 void tracePrint(const char * szFunction, const char * szFormat,...)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	tracePrintPrefix(szFunction);
+    tracePrintPrefix(szFunction);
 
-	va_list va;
-	va_start(va,szFormat);
-	tracePrintFmtVa (szFormat,va);
-	va_end(va);
+    va_list va;
+    va_start(va,szFormat);
+    tracePrintFmtVa (szFormat,va);
+    va_end(va);
 
-	tracePrintNewline();
+    tracePrintNewline();
 }
 
 void tracePrintFmt(const char * szFormat,...)
 {
-	va_list va;
-	va_start(va,szFormat);
-	tracePrintFmtVa (szFormat,va);
-	va_end(va);
+    va_list va;
+    va_start(va,szFormat);
+    tracePrintFmtVa (szFormat,va);
+    va_end(va);
 }
 
 void tracePrintPrefix(const char * szFunction)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	debugIndent();
+    debugIndent();
 
-	fprintf(stderr,"[%s][at %lu] ",szFunction,getInputLineNumber());
+    fprintf(stderr,"[%s][at %lu] ",szFunction,getInputLineNumber());
 }
 
 void tracePrintNewline(void)
 {
-	if (!isTraced())
-		return;
+    if (!isTraced())
+        return;
 
-	fprintf(stderr,"\n");
+    fprintf(stderr,"\n");
 }
 
 static bool tracingMain;
 
 void traceMain(void)
 {
-	verbose("Tracing main part\n");
-	tracingMain = true;
+    verbose("Tracing main part\n");
+    tracingMain = true;
 }
 
 bool isMainTraced(void)
 {
-	return tracingMain;
+    return tracingMain;
 }
 
 #endif // DO_TRACING

@@ -1,83 +1,243 @@
-struct NotKeyword {int x;} v0;
-struct alignas {int x;} v1;
-struct alignof {int x;} v2;
-struct bool {int x;} v3;
-struct catch {int x;} v4;
-struct char16_t {int x;} v5;
-struct char32_t {int x;} v6;
-struct class {int x;} v7;
-struct concept {int x;} v8;
-struct constexpr {int x;} v9;
-struct const_cast {int x;} v10;
-struct decltype {int x;} v11;
-struct delete {int x;} v12;
-struct dynamic_cast {int x;} v13;
-struct explicit {int x;} v14;
-struct export {int x;} v15;
-struct final {int x;} v16;
-struct friend {int x;} v17;
-struct mutable {int x;} v18;
-struct namespace {int x;} v19;
-struct new {int x;} v20;
-struct noexcept {int x;} v21;
-struct nullptr {int x;} v22;
-struct operator {int x;} v23;
-struct private {int x;} v24;
-struct protected {int x;} v25;
-struct public {int x;} v26;
-struct reinterpret_cast {int x;} v27;
-struct requires {int x;} v28;
-struct static_assert {int x;} v29;
-struct static_cast {int x;} v30;
-struct template {int x;} v31;
-struct this {int x;} v32;
-struct thread_local {int x;} v33;
-struct throw {int x;} v34;
-struct try {int x;} v35;
-struct typeid {int x;} v36;
-struct typename {int x;} v37;
-struct using {int x;} v38;
-struct virtual {int x;} v39;
-struct s0 {int NotKeyword;} ;
-struct s1 {int alignas;} ;
-struct s2 {int alignof;} ;
-struct s3 {int bool;} ;
-struct s4 {int catch;} ;
-struct s5 {int char16_t;} ;
-struct s6 {int char32_t;} ;
-struct s7 {int class;} ;
-struct s8 {int concept;} ;
-struct s9 {int constexpr;} ;
-struct s10 {int const_cast;} ;
-struct s11 {int decltype;} ;
-struct s12 {int delete;} ;
-struct s13 {int dynamic_cast;} ;
-struct s14 {int explicit;} ;
-struct s15 {int export;} ;
-struct s16 {int final;} ;
-struct s17 {int friend;} ;
-struct s18 {int mutable;} ;
-struct s19 {int namespace;} ;
-struct s20 {int new;} ;
-struct s21 {int noexcept;} ;
-struct s22 {int nullptr;} ;
-struct s23 {int operator;} ;
-struct s24 {int private;} ;
-struct s25 {int protected;} ;
-struct s26 {int public;} ;
-struct s27 {int reinterpret_cast;} ;
-struct s28 {int requires;} ;
-struct s29 {int static_assert;} ;
-struct s30 {int static_cast;} ;
-struct s31 {int template;} ;
-struct s32 {int this;} ;
-struct s33 {int thread_local;} ;
-struct s34 {int throw;} ;
-struct s35 {int try;} ;
-struct s36 {int typeid;} ;
-struct s37 {int typename;} ;
-struct s38 {int using;} ;
-struct s39 {int virtual;} ;
+struct NotKeyword {
+    int x;
+} v0;
+struct alignas {
+    int x;
+} v1;
+struct alignof {
+    int x;
+} v2;
+struct bool {
+    int x;
+} v3;
+struct catch {
+        int x;
+    } v4;
+struct char16_t {
+    int x;
+} v5;
+struct char32_t {
+    int x;
+} v6;
+struct class {
+        int x;
+    } v7;
+struct concept {
+    int x;
+} v8;
+struct constexpr {
+    int x;
+} v9;
+struct const_cast {
+    int x;
+} v10;
+struct decltype {
+    int x;
+} v11;
+struct delete {
+    int x;
+} v12;
+struct dynamic_cast {
+    int x;
+} v13;
+struct explicit {
+    int x;
+} v14;
+struct export {
+    int x;
+} v15;
+struct final {
+    int x;
+} v16;
+struct friend {
+    int x;
+} v17;
+struct mutable {
+    int x;
+} v18;
+struct namespace {
+    int x;
+    } v19;
+struct new {
+    int x;
+} v20;
+struct noexcept {
+    int x;
+} v21;
+struct nullptr {
+    int x;
+} v22;
+struct operator {
+    int x;
+} v23;
+struct private {
+    int x;
+} v24;
+struct protected {
+    int x;
+} v25;
+struct public {
+    int x;
+} v26;
+struct reinterpret_cast {
+    int x;
+} v27;
+struct requires {
+    int x;
+} v28;
+struct static_assert {
+    int x;
+} v29;
+struct static_cast {
+    int x;
+} v30;
+struct template {
+    int x;
+} v31;
+struct this {
+    int x;
+} v32;
+struct thread_local {
+    int x;
+} v33;
+struct throw {
+    int x;
+} v34;
+struct try {
+        int x;
+    } v35;
+struct typeid {
+    int x;
+} v36;
+struct typename {
+    int x;
+} v37;
+struct using {
+    int x;
+} v38;
+struct virtual {
+    int x;
+} v39;
+struct s0 {
+    int NotKeyword;
+} ;
+struct s1 {
+    int alignas;
+} ;
+struct s2 {
+    int alignof;
+} ;
+struct s3 {
+    int bool;
+} ;
+struct s4 {
+    int catch;
+} ;
+struct s5 {
+    int char16_t;
+} ;
+struct s6 {
+    int char32_t;
+} ;
+struct s7 {
+    int class;
+} ;
+struct s8 {
+    int concept;
+} ;
+struct s9 {
+    int constexpr;
+} ;
+struct s10 {
+    int const_cast;
+} ;
+struct s11 {
+    int decltype;
+} ;
+struct s12 {
+    int delete;
+} ;
+struct s13 {
+    int dynamic_cast;
+} ;
+struct s14 {
+    int explicit;
+} ;
+struct s15 {
+    int export;
+} ;
+struct s16 {
+    int final;
+} ;
+struct s17 {
+    int friend;
+} ;
+struct s18 {
+    int mutable;
+} ;
+struct s19 {
+    int namespace;
+} ;
+struct s20 {
+    int new;
+} ;
+struct s21 {
+    int noexcept;
+} ;
+struct s22 {
+    int nullptr;
+} ;
+struct s23 {
+    int operator;
+} ;
+struct s24 {
+    int private;
+} ;
+struct s25 {
+    int protected;
+} ;
+struct s26 {
+    int public;
+} ;
+struct s27 {
+    int reinterpret_cast;
+} ;
+struct s28 {
+    int requires;
+} ;
+struct s29 {
+    int static_assert;
+} ;
+struct s30 {
+    int static_cast;
+} ;
+struct s31 {
+    int template;
+} ;
+struct s32 {
+    int this;
+} ;
+struct s33 {
+    int thread_local;
+} ;
+struct s34 {
+    int throw;
+} ;
+struct s35 {
+    int try;
+} ;
+struct s36 {
+    int typeid;
+} ;
+struct s37 {
+    int typename;
+} ;
+struct s38 {
+    int using;
+} ;
+struct s39 {
+    int virtual;
+} ;
 typedef int NotKeyword; /* 0 */
 typedef int alignas; /* 1 */
 typedef int alignof; /* 2 */

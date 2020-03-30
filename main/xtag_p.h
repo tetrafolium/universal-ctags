@@ -46,6 +46,6 @@ extern struct colprintTable * xtagColprintTableNew (void);
 extern void xtagColprintAddCommonLines (struct colprintTable *table);
 extern void xtagColprintAddLanguageLines (struct colprintTable *table, langType language);
 extern void xtagColprintTablePrint (struct colprintTable *table,
-									bool withListHeader, bool machinable, FILE *fp);
+                                    bool withListHeader, bool machinable, FILE *fp);
 
 #endif	/* CTAGS_MAIN_FIELD_PRIVATE_H */

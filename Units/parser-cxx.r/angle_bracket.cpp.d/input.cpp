@@ -2,7 +2,7 @@ static void foo (int nelem)
 {
     int rsize = 2;
     while (nelem < 0) {
-	rsize <<= 1;
+        rsize <<= 1;
     }
 }
 

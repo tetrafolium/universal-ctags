@@ -1,6 +1,10 @@
 #include <stdio.h>
 
-#define ERROR_HAPPENED 50 
+#define ERROR_HAPPENED
+50
+
+
+
 #define OK 2
 #define NEXT_DEFINE 3
 

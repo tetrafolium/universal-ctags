@@ -9,21 +9,23 @@ int g(); // same as above, but uses a single attr specifier that contains four a
 [[using gnu : const, always_inline, hot]] [[nodiscard]]
 int h[[gnu::always_inline]](); // an attribute may appear in multiple specifiers
 
-int i() { return 0; }
+int i() {
+    return 0;
+}
 
 [ [ deprecated ] ] int j(int k) {
-	switch(k)
-	{
-		case 1:
-			[[fallthrough]];
-		case 2:
-			[[likely]]
-			return 3;
-	}
-	
-	int v1;
-	
-	return -1;
+    switch(k)
+    {
+    case 1:
+        [[fallthrough]];
+    case 2:
+        [[likely]]
+        return 3;
+    }
+
+    int v1;
+
+    return -1;
 }
 
 /* Taken from issue #2364 opened by andrejlevkovitch. */
@@ -31,9 +33,9 @@ int i() { return 0; }
 void foo();
 
 int main([[maybe_unused]]int argc, [[maybe_unused]]char *argv[]) {
-  int alpha;
-  int bravo;
-  int charlie;
+    int alpha;
+    int bravo;
+    int charlie;
 
-  return 0;
+    return 0;
 }

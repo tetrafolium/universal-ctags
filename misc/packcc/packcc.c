@@ -332,17 +332,17 @@ static bool is_filled_string(const char *str) {
 static bool is_identifier_string(const char *str) {
     size_t i;
     if (!(
-        (str[0] >= 'a' && str[0] <= 'z') ||
-        (str[0] >= 'A' && str[0] <= 'Z') ||
-         str[0] == '_'
-    )) return false;
+                (str[0] >= 'a' && str[0] <= 'z') ||
+                (str[0] >= 'A' && str[0] <= 'Z') ||
+                str[0] == '_'
+            )) return false;
     for (i = 1; str[i]; i++) {
         if (!(
-            (str[i] >= 'a' && str[i] <= 'z') ||
-            (str[i] >= 'A' && str[i] <= 'Z') ||
-            (str[i] >= '0' && str[i] <= '9') ||
-             str[i] == '_'
-        )) return false;
+                    (str[i] >= 'a' && str[i] <= 'z') ||
+                    (str[i] >= 'A' && str[i] <= 'Z') ||
+                    (str[i] >= '0' && str[i] <= '9') ||
+                    str[i] == '_'
+                )) return false;
     }
     return true;
 }
@@ -363,21 +363,47 @@ static bool unescape_string(char *str, size_t *length) {
         if (str[i] == '\\') {
             i++;
             switch (str[i]) {
-            case '\0': str[j++] = '\\'; str[j] = '\0'; return false;
-            case '0': str[j++] = '\x00'; break;
-            case 'a': str[j++] = '\x07'; break;
-            case 'b': str[j++] = '\x08'; break;
-            case 'f': str[j++] = '\x0c'; break;
-            case 'n': str[j++] = '\x0a'; break;
-            case 'r': str[j++] = '\x0d'; break;
-            case 't': str[j++] = '\x09'; break;
-            case 'v': str[j++] = '\x0b'; break;
+            case '\0':
+                str[j++] = '\\';
+                str[j] = '\0';
+                return false;
+            case '0':
+                str[j++] = '\x00';
+                break;
+            case 'a':
+                str[j++] = '\x07';
+                break;
+            case 'b':
+                str[j++] = '\x08';
+                break;
+            case 'f':
+                str[j++] = '\x0c';
+                break;
+            case 'n':
+                str[j++] = '\x0a';
+                break;
+            case 'r':
+                str[j++] = '\x0d';
+                break;
+            case 't':
+                str[j++] = '\x09';
+                break;
+            case 'v':
+                str[j++] = '\x0b';
+                break;
             case 'x':
                 if (str[i + 1] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'x'; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'x';
+                    str[j] = '\0';
+                    return false;
                 }
                 if (str[i + 2] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'x'; str[j++] = str[i + 1]; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'x';
+                    str[j++] = str[i + 1];
+                    str[j] = '\0';
+                    return false;
                 }
                 {
                     char c = str[i + 1];
@@ -389,7 +415,10 @@ static bool unescape_string(char *str, size_t *length) {
                         (d >= 'a' && d <= 'f') ? d - 'a' + 10 :
                         (d >= 'A' && d <= 'F') ? d - 'A' + 10 : -1;
                     if (c < 0 || d < 0) {
-                        str[j++] = '\\'; str[j++] = 'x'; str[j++] = str[i + 1]; str[j++] = str[i + 2];
+                        str[j++] = '\\';
+                        str[j++] = 'x';
+                        str[j++] = str[i + 1];
+                        str[j++] = str[i + 2];
                         b = false;
                     }
                     else {
@@ -400,32 +429,55 @@ static bool unescape_string(char *str, size_t *length) {
                 break;
             case 'u':
                 if (str[i + 1] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'u'; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'u';
+                    str[j] = '\0';
+                    return false;
                 }
                 if (str[i + 2] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'u'; str[j++] = str[i + 1]; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'u';
+                    str[j++] = str[i + 1];
+                    str[j] = '\0';
+                    return false;
                 }
                 if (str[i + 3] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'u'; str[j++] = str[i + 1]; str[j++] = str[i + 2]; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'u';
+                    str[j++] = str[i + 1];
+                    str[j++] = str[i + 2];
+                    str[j] = '\0';
+                    return false;
                 }
                 if (str[i + 4] == '\0') {
-                    str[j++] = '\\'; str[j++] = 'u'; str[j++] = str[i + 1]; str[j++] = str[i + 2]; str[j++] = str[i + 3]; str[j] = '\0'; return false;
+                    str[j++] = '\\';
+                    str[j++] = 'u';
+                    str[j++] = str[i + 1];
+                    str[j++] = str[i + 2];
+                    str[j++] = str[i + 3];
+                    str[j] = '\0';
+                    return false;
                 }
                 {
                     char s[4];
-                    for (int k=0;k<4;k++) {
+                    for (int k=0; k<4; k++) {
                         char c = str[i + k + 1];
                         s[k] = (c >= '0' && c <= '9') ? c - '0' :
                                (c >= 'a' && c <= 'f') ? c - 'a' + 10 :
                                (c >= 'A' && c <= 'F') ? c - 'A' + 10 : -1;
                     }
                     if (s[0] < 0 || s[1] < 0 || s[2] < 0 || s[3] < 0) {
-                        str[j++] = '\\'; str[j++] = 'u'; str[j++] = str[i + 1]; str[j++] = str[i + 2]; str[j++] = str[i + 3]; str[j++] = str[i + 4];
+                        str[j++] = '\\';
+                        str[j++] = 'u';
+                        str[j++] = str[i + 1];
+                        str[j++] = str[i + 2];
+                        str[j++] = str[i + 3];
+                        str[j++] = str[i + 4];
                         b = false;
                     }
                     else {
                         int ch=s[0];
-                        for (int k=1;k<4;k++) ch = (ch << 4) | s[k];
+                        for (int k=1; k<4; k++) ch = (ch << 4) | s[k];
                         if (ch < 0x80) {
                             str[j++] = (char)ch;
                         } else if (ch < 0x800) {
@@ -445,9 +497,13 @@ static bool unescape_string(char *str, size_t *length) {
                     i += 4;
                 }
                 break;
-            case '\n': break;
-            case '\r': if (str[i + 1] == '\n') i++; break;
-            default: str[j++] = str[i];
+            case '\n':
+                break;
+            case '\r':
+                if (str[i + 1] == '\n') i++;
+                break;
+            default:
+                str[j++] = str[i];
             }
         }
         else {
@@ -461,17 +517,39 @@ static bool unescape_string(char *str, size_t *length) {
 
 static const char *escape_character(char ch, char (*buf)[5]) {
     switch (ch) {
-    case '\x00': strncpy(*buf, "\\0", 5); break;
-    case '\x07': strncpy(*buf, "\\a", 5); break;
-    case '\x08': strncpy(*buf, "\\b", 5); break;
-    case '\x0c': strncpy(*buf, "\\f", 5); break;
-    case '\x0a': strncpy(*buf, "\\n", 5); break;
-    case '\x0d': strncpy(*buf, "\\r", 5); break;
-    case '\x09': strncpy(*buf, "\\t", 5); break;
-    case '\x0b': strncpy(*buf, "\\v", 5); break;
-    case '\\':  strncpy(*buf, "\\\\", 5); break;
-    case '\'':  strncpy(*buf, "\\\'", 5); break;
-    case '\"':  strncpy(*buf, "\\\"", 5); break;
+    case '\x00':
+        strncpy(*buf, "\\0", 5);
+        break;
+    case '\x07':
+        strncpy(*buf, "\\a", 5);
+        break;
+    case '\x08':
+        strncpy(*buf, "\\b", 5);
+        break;
+    case '\x0c':
+        strncpy(*buf, "\\f", 5);
+        break;
+    case '\x0a':
+        strncpy(*buf, "\\n", 5);
+        break;
+    case '\x0d':
+        strncpy(*buf, "\\r", 5);
+        break;
+    case '\x09':
+        strncpy(*buf, "\\t", 5);
+        break;
+    case '\x0b':
+        strncpy(*buf, "\\v", 5);
+        break;
+    case '\\':
+        strncpy(*buf, "\\\\", 5);
+        break;
+    case '\'':
+        strncpy(*buf, "\\\'", 5);
+        break;
+    case '\"':
+        strncpy(*buf, "\\\"", 5);
+        break;
     default:
         if (ch >= '\x20' && ch < '\x7f')
             snprintf(*buf, 5, "%c", ch);
@@ -520,7 +598,7 @@ static void make_header_identifier(char *str) {
     for (i = 0; str[i]; i++) {
         str[i] =
             ((str[i] >= 'A' && str[i] <= 'Z') || (str[i] >= '0' && str[i] <= '9')) ? str[i] :
-             (str[i] >= 'a' && str[i] <= 'z') ? str[i] - 'a' + 'A' : '_';
+            (str[i] >= 'a' && str[i] <= 'z') ? str[i] - 'a' + 'A' : '_';
     }
 }
 
@@ -600,10 +678,12 @@ static void write_code_block(FILE *stream, const char *ptr, size_t len, int inde
             case ' ':
             case '\v':
             case '\f':
-                if (s) l++; else fputc(ptr[i], stream);
+                if (s) l++;
+                else fputc(ptr[i], stream);
                 break;
             case '\t':
-                if (s) l = (l + 8) & ~7; else fputc(ptr[i], stream);
+                if (s) l = (l + 8) & ~7;
+                else fputc(ptr[i], stream);
                 break;
             case '\n':
                 fputc('\n', stream);
@@ -775,7 +855,8 @@ static context_t *create_context(const char *iname, const char *oname, bool debu
     ctx->ifile = (iname && iname[0]) ? fopen_rb_e(ctx->iname) : stdin;
     ctx->sfile = fopen_wt_e(ctx->sname);
     ctx->hfile = fopen_wt_e(ctx->hname);
-    ctx->hid = strdup_e(ctx->hname); make_header_identifier(ctx->hid);
+    ctx->hid = strdup_e(ctx->hname);
+    make_header_identifier(ctx->hid);
     ctx->vtype = NULL;
     ctx->atype = NULL;
     ctx->prefix = NULL;
@@ -929,8 +1010,10 @@ static void destroy_context(context_t *ctx) {
     free(ctx->atype);
     free(ctx->vtype);
     free(ctx->hid);
-    fclose(ctx->hfile); if (ctx->errnum) unlink(ctx->hname);
-    fclose(ctx->sfile); if (ctx->errnum) unlink(ctx->sname);
+    fclose(ctx->hfile);
+    if (ctx->errnum) unlink(ctx->hname);
+    fclose(ctx->sfile);
+    if (ctx->errnum) unlink(ctx->sname);
     fclose(ctx->ifile);
     free(ctx->hname);
     free(ctx->sname);
@@ -960,7 +1043,8 @@ static void make_rulehash(context_t *ctx) {
         }
         ctx->rulehash.buf[j] = ctx->rules.buf[i];
 
-EXCEPTION:;
+EXCEPTION:
+        ;
     }
 }
 
@@ -982,7 +1066,7 @@ static void link_references(context_t *ctx, node_t *node) {
         node->data.reference.rule = lookup_rulehash(ctx, node->data.reference.name);
         if (node->data.reference.rule == NULL) {
             print_error("%s:%d:%d: No definition of rule '%s'\n",
-                ctx->iname, node->data.reference.line + 1, node->data.reference.col + 1, node->data.reference.name);
+                        ctx->iname, node->data.reference.line + 1, node->data.reference.col + 1, node->data.reference.name);
             ctx->errnum++;
         }
         else {
@@ -1001,21 +1085,21 @@ static void link_references(context_t *ctx, node_t *node) {
         link_references(ctx, node->data.predicate.expr);
         break;
     case NODE_SEQUENCE:
-        {
-            int i;
-            for (i = 0; i < node->data.sequence.nodes.len; i++) {
-                link_references(ctx, node->data.sequence.nodes.buf[i]);
-            }
+    {
+        int i;
+        for (i = 0; i < node->data.sequence.nodes.len; i++) {
+            link_references(ctx, node->data.sequence.nodes.buf[i]);
         }
-        break;
+    }
+    break;
     case NODE_ALTERNATE:
-        {
-            int i;
-            for (i = 0; i < node->data.alternate.nodes.len; i++) {
-                link_references(ctx, node->data.alternate.nodes.buf[i]);
-            }
+    {
+        int i;
+        for (i = 0; i < node->data.alternate.nodes.len; i++) {
+            link_references(ctx, node->data.alternate.nodes.buf[i]);
         }
-        break;
+    }
+    break;
     case NODE_CAPTURE:
         link_references(ctx, node->data.capture.expr);
         break;
@@ -1065,32 +1149,32 @@ static void verify_variables(context_t *ctx, node_t *node, node_const_array_t *v
         verify_variables(ctx, node->data.predicate.expr, vars);
         break;
     case NODE_SEQUENCE:
-        {
-            int i;
-            for (i = 0; i < node->data.sequence.nodes.len; i++) {
-                verify_variables(ctx, node->data.sequence.nodes.buf[i], vars);
-            }
+    {
+        int i;
+        for (i = 0; i < node->data.sequence.nodes.len; i++) {
+            verify_variables(ctx, node->data.sequence.nodes.buf[i], vars);
         }
-        break;
+    }
+    break;
     case NODE_ALTERNATE:
-        {
-            int i, j, k, m = vars->len;
-            node_const_array_t v;
-            node_const_array__init(&v, ARRAY_INIT_SIZE);
-            node_const_array__copy(&v, vars);
-            for (i = 0; i < node->data.alternate.nodes.len; i++) {
-                v.len = m;
-                verify_variables(ctx, node->data.alternate.nodes.buf[i], &v);
-                for (j = m; j < v.len; j++) {
-                    for (k = m; k < vars->len; k++) {
-                        if (v.buf[j]->data.reference.index == vars->buf[k]->data.reference.index) break;
-                    }
-                    if (k == vars->len) node_const_array__add(vars, v.buf[j]);
+    {
+        int i, j, k, m = vars->len;
+        node_const_array_t v;
+        node_const_array__init(&v, ARRAY_INIT_SIZE);
+        node_const_array__copy(&v, vars);
+        for (i = 0; i < node->data.alternate.nodes.len; i++) {
+            v.len = m;
+            verify_variables(ctx, node->data.alternate.nodes.buf[i], &v);
+            for (j = m; j < v.len; j++) {
+                for (k = m; k < vars->len; k++) {
+                    if (v.buf[j]->data.reference.index == vars->buf[k]->data.reference.index) break;
                 }
+                if (k == vars->len) node_const_array__add(vars, v.buf[j]);
             }
-            node_const_array__term(&v);
         }
-        break;
+        node_const_array__term(&v);
+    }
+    break;
     case NODE_CAPTURE:
         verify_variables(ctx, node->data.capture.expr, vars);
         break;
@@ -1137,47 +1221,47 @@ static void verify_captures(context_t *ctx, node_t *node, node_const_array_t *ca
         verify_captures(ctx, node->data.predicate.expr, capts);
         break;
     case NODE_SEQUENCE:
-        {
-            int i;
-            for (i = 0; i < node->data.sequence.nodes.len; i++) {
-                verify_captures(ctx, node->data.sequence.nodes.buf[i], capts);
-            }
+    {
+        int i;
+        for (i = 0; i < node->data.sequence.nodes.len; i++) {
+            verify_captures(ctx, node->data.sequence.nodes.buf[i], capts);
         }
-        break;
+    }
+    break;
     case NODE_ALTERNATE:
-        {
-            int i, j, m = capts->len;
-            node_const_array_t v;
-            node_const_array__init(&v, ARRAY_INIT_SIZE);
-            node_const_array__copy(&v, capts);
-            for (i = 0; i < node->data.alternate.nodes.len; i++) {
-                v.len = m;
-                verify_captures(ctx, node->data.alternate.nodes.buf[i], &v);
-                for (j = m; j < v.len; j++) {
-                    node_const_array__add(capts, v.buf[j]);
-                }
+    {
+        int i, j, m = capts->len;
+        node_const_array_t v;
+        node_const_array__init(&v, ARRAY_INIT_SIZE);
+        node_const_array__copy(&v, capts);
+        for (i = 0; i < node->data.alternate.nodes.len; i++) {
+            v.len = m;
+            verify_captures(ctx, node->data.alternate.nodes.buf[i], &v);
+            for (j = m; j < v.len; j++) {
+                node_const_array__add(capts, v.buf[j]);
             }
-            node_const_array__term(&v);
         }
-        break;
+        node_const_array__term(&v);
+    }
+    break;
     case NODE_CAPTURE:
         verify_captures(ctx, node->data.capture.expr, capts);
         node_const_array__add(capts, node);
         break;
     case NODE_EXPAND:
-        {
-            int i;
-            for (i = 0; i < capts->len; i++) {
-                assert(capts->buf[i]->type == NODE_CAPTURE);
-                if (node->data.expand.index == capts->buf[i]->data.capture.index) break;
-            }
-            if (i >= capts->len && node->data.expand.index >= 0) {
-                print_error("%s:%d:%d: Capture %d not available at this position\n",
-                    ctx->iname, node->data.expand.line + 1, node->data.expand.col + 1, node->data.expand.index + 1);
-                ctx->errnum++;
-            }
+    {
+        int i;
+        for (i = 0; i < capts->len; i++) {
+            assert(capts->buf[i]->type == NODE_CAPTURE);
+            if (node->data.expand.index == capts->buf[i]->data.capture.index) break;
         }
-        break;
+        if (i >= capts->len && node->data.expand.index >= 0) {
+            print_error("%s:%d:%d: Capture %d not available at this position\n",
+                        ctx->iname, node->data.expand.line + 1, node->data.expand.col + 1, node->data.expand.index + 1);
+            ctx->errnum++;
+        }
+    }
+    break;
     case NODE_ACTION:
         node_const_array__copy(&node->data.action.capts, capts);
         break;
@@ -1199,14 +1283,14 @@ static void dump_node(context_t *ctx, const node_t *node) {
     switch (node->type) {
     case NODE_RULE:
         fprintf(stdout, "Rule(name:'%s',ref:%d,vars.len:%d,capts.len:%d,codes.len:%d){\n",
-            node->data.rule.name, node->data.rule.ref, node->data.rule.vars.len, node->data.rule.capts.len, node->data.rule.codes.len);
+                node->data.rule.name, node->data.rule.ref, node->data.rule.vars.len, node->data.rule.capts.len, node->data.rule.codes.len);
         dump_node(ctx, node->data.rule.expr);
         fprintf(stdout, "}\n");
         break;
     case NODE_REFERENCE:
         fprintf(stdout, "Reference(var:'%s',index:%d,name:'%s',rule:'%s')\n",
-            node->data.reference.var, node->data.reference.index, node->data.reference.name,
-            (node->data.reference.rule) ? node->data.reference.rule->data.rule.name : NULL);
+                node->data.reference.var, node->data.reference.index, node->data.reference.name,
+                (node->data.reference.rule) ? node->data.reference.rule->data.rule.name : NULL);
         break;
     case NODE_STRING:
         fprintf(stdout, "String(value:'%s')\n", node->data.string.value);
@@ -1686,7 +1770,8 @@ static node_t *parse_primary(context_t *ctx, node_t *rule) {
     }
     return n_p;
 
-EXCEPTION:;
+EXCEPTION:
+    ;
     destroy_node(n_p);
     ctx->bufpos = p;
     ctx->linenum = l;
@@ -1766,7 +1851,8 @@ static node_t *parse_term(context_t *ctx, node_t *rule) {
     }
     return n_t;
 
-EXCEPTION:;
+EXCEPTION:
+    ;
     destroy_node(n_r);
     ctx->bufpos = p;
     ctx->linenum = l;
@@ -1799,7 +1885,8 @@ static node_t *parse_sequence(context_t *ctx, node_t *rule) {
     }
     return n_s;
 
-EXCEPTION:;
+EXCEPTION:
+    ;
     ctx->bufpos = p;
     ctx->linenum = l;
     ctx->linepos = p - m;
@@ -1833,7 +1920,8 @@ static node_t *parse_expression(context_t *ctx, node_t *rule) {
     }
     return n_e;
 
-EXCEPTION:;
+EXCEPTION:
+    ;
     destroy_node(n_e);
     ctx->bufpos = p;
     ctx->linenum = l;
@@ -1859,7 +1947,8 @@ static node_t *parse_rule(context_t *ctx) {
     n_r->data.rule.col = m;
     return n_r;
 
-EXCEPTION:;
+EXCEPTION:
+    ;
     destroy_node(n_r);
     ctx->bufpos = p;
     ctx->linenum = l;
@@ -1967,7 +2056,8 @@ static bool parse_directive_string_(context_t *ctx, const char *name, char **out
                 *output = s;
             }
             else {
-                free(s); s = NULL;
+                free(s);
+                s = NULL;
             }
         }
     }
@@ -2072,12 +2162,12 @@ static bool parse(context_t *ctx) {
         for (i = 1; i < ctx->rules.len; i++) {
             if (ctx->rules.buf[i]->data.rule.ref == 0) {
                 print_error("%s:%d:%d: Never used rule '%s'\n",
-                    ctx->iname, ctx->rules.buf[i]->data.rule.line + 1, ctx->rules.buf[i]->data.rule.col + 1, ctx->rules.buf[i]->data.rule.name);
+                            ctx->iname, ctx->rules.buf[i]->data.rule.line + 1, ctx->rules.buf[i]->data.rule.col + 1, ctx->rules.buf[i]->data.rule.name);
                 ctx->errnum++;
             }
             else if (ctx->rules.buf[i]->data.rule.ref < 0) {
                 print_error("%s:%d:%d: Multiple definition of rule '%s'\n",
-                    ctx->iname, ctx->rules.buf[i]->data.rule.line + 1, ctx->rules.buf[i]->data.rule.col + 1, ctx->rules.buf[i]->data.rule.name);
+                            ctx->iname, ctx->rules.buf[i]->data.rule.line + 1, ctx->rules.buf[i]->data.rule.col + 1, ctx->rules.buf[i]->data.rule.name);
                 ctx->errnum++;
             }
         }
@@ -2188,9 +2278,9 @@ static code_reach_t generate_matching_charclass_code(generate_t *gen, const char
                     if (i + 3 == n && value[i + 1] == '-') {
                         write_characters(gen->stream, ' ', indent);
                         fprintf(gen->stream,
-                            a ? "if (c >= '%s' && c <= '%s') goto L%04d;\n"
-                              : "if (!(c >= '%s' && c <= '%s')) goto L%04d;\n",
-                            escape_character(value[i], &s), escape_character(value[i + 2], &t), onfail);
+                                a ? "if (c >= '%s' && c <= '%s') goto L%04d;\n"
+                                : "if (!(c >= '%s' && c <= '%s')) goto L%04d;\n",
+                                escape_character(value[i], &s), escape_character(value[i + 2], &t), onfail);
                     }
                     else {
                         write_characters(gen->stream, ' ', indent);
@@ -2199,12 +2289,12 @@ static code_reach_t generate_matching_charclass_code(generate_t *gen, const char
                             write_characters(gen->stream, ' ', indent + 4);
                             if (i + 2 < n && value[i + 1] == '-') {
                                 fprintf(gen->stream, "(c >= '%s' && c <= '%s')%s\n",
-                                    escape_character(value[i], &s), escape_character(value[i + 2], &t), (i + 3 == n) ? "" : " ||");
+                                        escape_character(value[i], &s), escape_character(value[i + 2], &t), (i + 3 == n) ? "" : " ||");
                                 i += 2;
                             }
                             else {
                                 fprintf(gen->stream, "c == '%s'%s\n",
-                                    escape_character(value[i], &s), (i + 1 == n) ? "" : " ||");
+                                        escape_character(value[i], &s), (i + 1 == n) ? "" : " ||");
                             }
                         }
                         write_characters(gen->stream, ' ', indent);
@@ -2395,9 +2485,14 @@ static code_reach_t generate_predicating_code(generate_t *gen, const node_t *exp
             fputs("ctx->pos = pp;\n", gen->stream);
         }
         switch (r) {
-        case CODE_REACH__ALWAYS_SUCCEED: r = CODE_REACH__ALWAYS_FAIL; break;
-        case CODE_REACH__ALWAYS_FAIL: r = CODE_REACH__ALWAYS_SUCCEED; break;
-        case CODE_REACH__BOTH: break;
+        case CODE_REACH__ALWAYS_SUCCEED:
+            r = CODE_REACH__ALWAYS_FAIL;
+            break;
+        case CODE_REACH__ALWAYS_FAIL:
+            r = CODE_REACH__ALWAYS_SUCCEED;
+            break;
+        case CODE_REACH__BOTH:
+            break;
         }
     }
     else {
@@ -2589,20 +2684,20 @@ static code_reach_t generate_thunking_action_code(
     }
     write_characters(gen->stream, ' ', indent);
     fprintf(gen->stream, "pcc_thunk_t *thunk = pcc_thunk__create_leaf(ctx->auxil, pcc_action_%s_%d, %d, %d);\n",
-        gen->rule->data.rule.name, index, gen->rule->data.rule.vars.len, gen->rule->data.rule.capts.len);
+            gen->rule->data.rule.name, index, gen->rule->data.rule.vars.len, gen->rule->data.rule.capts.len);
     {
         int i;
         for (i = 0; i < vars->len; i++) {
             assert(vars->buf[i]->type == NODE_REFERENCE);
             write_characters(gen->stream, ' ', indent);
             fprintf(gen->stream, "thunk->data.leaf.values.buf[%d] = &(chunk->values.buf[%d]);\n",
-                vars->buf[i]->data.reference.index, vars->buf[i]->data.reference.index);
+                    vars->buf[i]->data.reference.index, vars->buf[i]->data.reference.index);
         }
         for (i = 0; i < capts->len; i++) {
             assert(capts->buf[i]->type == NODE_CAPTURE);
             write_characters(gen->stream, ' ', indent);
             fprintf(gen->stream, "thunk->data.leaf.capts.buf[%d] = &(chunk->capts.buf[%d]);\n",
-                capts->buf[i]->data.capture.index, capts->buf[i]->data.capture.index);
+                    capts->buf[i]->data.capture.index, capts->buf[i]->data.capture.index);
         }
         write_characters(gen->stream, ' ', indent);
         fputs("thunk->data.leaf.capt0.range.start = chunk->pos;\n", gen->stream);
@@ -2672,11 +2767,11 @@ static code_reach_t generate_code(generate_t *gen, const node_t *node, int onfai
         write_characters(gen->stream, ' ', indent);
         if (node->data.reference.index >= 0) {
             fprintf(gen->stream, "if (!pcc_apply_rule(ctx, pcc_evaluate_rule_%s, &chunk->thunks, &(chunk->values.buf[%d]))) goto L%04d;\n",
-                node->data.reference.name, node->data.reference.index, onfail);
+                    node->data.reference.name, node->data.reference.index, onfail);
         }
         else {
             fprintf(gen->stream, "if (!pcc_apply_rule(ctx, pcc_evaluate_rule_%s, &chunk->thunks, NULL)) goto L%04d;\n",
-                node->data.reference.name, onfail);
+                    node->data.reference.name, onfail);
         }
         return CODE_REACH__BOTH;
     case NODE_STRING:
@@ -2697,12 +2792,12 @@ static code_reach_t generate_code(generate_t *gen, const node_t *node, int onfai
         return generate_expanding_code(gen, node->data.expand.index, onfail, indent, bare);
     case NODE_ACTION:
         return generate_thunking_action_code(
-            gen, node->data.action.index, &node->data.action.vars, &node->data.action.capts, false, onfail, indent, bare
-        );
+                   gen, node->data.action.index, &node->data.action.vars, &node->data.action.capts, false, onfail, indent, bare
+               );
     case NODE_ERROR:
         return generate_thunking_error_code(
-            gen, node->data.error.expr, node->data.error.index, &node->data.error.vars, &node->data.error.capts, onfail, indent, bare
-        );
+                   gen, node->data.error.expr, node->data.error.index, &node->data.error.vars, &node->data.error.capts, onfail, indent, bare
+               );
     default:
         print_error("Internal error [%d]\n", __LINE__);
         exit(-1);
@@ -3811,15 +3906,15 @@ static bool generate(context_t *ctx) {
                     stream
                 );
                 if (ctx->rules.buf[i]->data.rule.vars.len) fprintf(
-                    stream,
-                    "    pcc_value_table__resize(ctx->auxil, &chunk->values, %d);\n",
-                    ctx->rules.buf[i]->data.rule.vars.len
-                );
+                        stream,
+                        "    pcc_value_table__resize(ctx->auxil, &chunk->values, %d);\n",
+                        ctx->rules.buf[i]->data.rule.vars.len
+                    );
                 if (ctx->rules.buf[i]->data.rule.capts.len) fprintf(
-                    stream,
-                    "    pcc_capture_table__resize(ctx->auxil, &chunk->capts, %d);\n",
-                    ctx->rules.buf[i]->data.rule.capts.len
-                );
+                        stream,
+                        "    pcc_capture_table__resize(ctx->auxil, &chunk->capts, %d);\n",
+                        ctx->rules.buf[i]->data.rule.capts.len
+                    );
                 r = generate_code(&g, ctx->rules.buf[i]->data.rule.expr, 0, 4, false);
                 fputs(
                     "    return chunk;\n",
@@ -3860,8 +3955,8 @@ static bool generate(context_t *ctx) {
         );
         fputs(
             "    pcc_thunk_array_t thunks;\n"
-			"    if (ctx->got_error)\n"
-			"        return 0;\n"
+            "    if (ctx->got_error)\n"
+            "        return 0;\n"
             "    pcc_thunk_array__init(ctx->auxil, &thunks, PCC_ARRAYSIZE);\n",
             stream
         );
@@ -3878,7 +3973,7 @@ static bool generate(context_t *ctx) {
                 "        PCC_ERROR(ctx->auxil);\n"
                 "    }\n"
                 "    if (ctx->got_error)\n"
-				"        return 0;\n"
+                "        return 0;\n"
                 "    pcc_commit_buffer(ctx);\n",
                 stream
             );
@@ -3999,7 +4094,8 @@ int main(int argc, char **argv) {
                 break;
             }
             else if (strcmp(argv[i] + 1, "-") == 0) {
-                i++; break;
+                i++;
+                break;
             }
             else if (argv[i][1] == 'o') {
                 const char *o = (argv[i][2] != '\0') ? argv[i] + 2 : (++i < argc) ?  argv[i] : NULL;

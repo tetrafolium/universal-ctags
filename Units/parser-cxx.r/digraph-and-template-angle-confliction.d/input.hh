@@ -2,10 +2,10 @@
 #include <map>
 
 namespace std {
-  template <>
-  struct hash<::sockaddr_in> {
+template <>
+struct hash<::sockaddr_in> {
     int a;
-  };
+};
 };
 
 int A <::> = {1, 2};
@@ -19,5 +19,5 @@ int E <:::M:> = {1, 2};
 
 int foo (void)
 {
-  return 0;
+    return 0;
 }

@@ -30,10 +30,10 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-	LMAP_PATTERN   = 1 << 0,
-	LMAP_EXTENSION = 1 << 1,
-	LMAP_ALL       = LMAP_PATTERN | LMAP_EXTENSION,
-	LMAP_TABLE_OUTPUT = 1 << 2,
+    LMAP_PATTERN   = 1 << 0,
+    LMAP_EXTENSION = 1 << 1,
+    LMAP_ALL       = LMAP_PATTERN | LMAP_EXTENSION,
+    LMAP_TABLE_OUTPUT = 1 << 2,
 } langmapType;
 
 /*
@@ -68,11 +68,11 @@ extern kindDefinition* getLanguageKind(const langType language, int kindIndex);
 extern kindDefinition* getLanguageKindForName (const langType language, const char *kindName);
 extern roleDefinition* getLanguageRole(const langType language, int kindIndex, int roleIndex);
 extern roleDefinition* getLanguageRoleForName (const langType language, int kindIndex,
-											   const char *roleName);
+        const char *roleName);
 
 
 extern int defineLanguageKind (const langType language, kindDefinition *def,
-							   freeKindDefFunc freeKindDef);
+                               freeKindDefFunc freeKindDef);
 
 extern unsigned int countLanguageKinds (const langType language);
 extern unsigned int countLanguageRoles (const langType language, int kindIndex);
@@ -87,10 +87,10 @@ extern void installLanguageMapDefaults (void);
 extern void clearLanguageMap (const langType language);
 extern bool removeLanguageExtensionMap (const langType language, const char *const extension);
 extern void addLanguageExtensionMap (const langType language, const char* extension,
-				     bool exclusiveInAllLanguages);
+                                     bool exclusiveInAllLanguages);
 extern bool removeLanguagePatternMap (const langType language, const char *const pattern);
 extern void addLanguagePatternMap (const langType language, const char* ptrn,
-				   bool exclusiveInAllLanguages);
+                                   bool exclusiveInAllLanguages);
 
 extern void installLanguageAliasesDefault (const langType language);
 extern void installLanguageAliasesDefaults (void);
@@ -98,7 +98,7 @@ extern void clearLanguageAliases (const langType language);
 extern void addLanguageAlias (const langType language, const char* alias);
 
 extern void printLanguageMaps (const langType language, langmapType type,
-							   bool withListHeader, bool machinable, FILE *fp);
+                               bool withListHeader, bool machinable, FILE *fp);
 extern void enableLanguages (const bool state);
 extern void enableLanguage (const langType language, const bool state);
 extern void initializeParsing (void);
@@ -107,29 +107,29 @@ extern unsigned int countParsers (void);
 extern void freeParserResources (void);
 extern void enableDefaultFileKind (bool state);
 extern void printLanguageKinds (const langType language, bool allKindFields,
-								bool withListHeader, bool machinable, FILE *fp);
+                                bool withListHeader, bool machinable, FILE *fp);
 extern void printLanguageRoles (const langType language, const char* letters,
-								bool withListHeader, bool machinable, FILE *fp);
+                                bool withListHeader, bool machinable, FILE *fp);
 extern void printLanguageAliases (const langType language,
-								  bool withListHeader, bool machinable, FILE *fp);
+                                  bool withListHeader, bool machinable, FILE *fp);
 extern void printLanguageList (void);
 extern void printLanguageParameters (const langType language,
-									 bool withListHeader, bool machinable, FILE *fp);
+                                     bool withListHeader, bool machinable, FILE *fp);
 extern void printLanguageSubparsers (const langType language,
-									 bool withListHeader, bool machinable, FILE *fp);
+                                     bool withListHeader, bool machinable, FILE *fp);
 extern void printLangdefFlags (bool withListHeader, bool machinable, FILE *fp);
 extern void printKinddefFlags (bool withListHeader, bool machinable, FILE *fp);
 extern bool doesParserRequireMemoryStream (const langType language);
 extern bool parseFile (const char *const fileName);
 extern bool parseFileWithMio (const char *const fileName, MIO *mio, void *clientData);
 extern bool parseRawBuffer(const char *fileName, unsigned char *buffer,
-			    size_t bufferSize, const langType language, void *clientData);
+                           size_t bufferSize, const langType language, void *clientData);
 
 extern bool runParserInNarrowedInputStream (const langType language,
-					       unsigned long startLine, long startCharOffset,
-					       unsigned long endLine, long endCharOffset,
-					       unsigned long sourceLineOffset,
-					       int promise);
+        unsigned long startLine, long startCharOffset,
+        unsigned long endLine, long endCharOffset,
+        unsigned long sourceLineOffset,
+        int promise);
 
 #ifdef HAVE_ICONV
 extern void freeEncodingResources (void);
@@ -162,9 +162,9 @@ extern xpathFileSpec* getXpathFileSpec (const langType language, unsigned int nt
 const tagXpathTableTable *getXpathTableTable (const langType language, unsigned int nth);
 
 extern bool makeKindSeparatorsPseudoTags (const langType language,
-					     const ptagDesc *pdesc);
+        const ptagDesc *pdesc);
 extern bool makeKindDescriptionsPseudoTags (const langType language,
-					       const ptagDesc *pdesc);
+        const ptagDesc *pdesc);
 
 extern void printLanguageMultitableStatistics (langType language);
 extern void printParserStatisticsIfUsed (langType lang);

@@ -34,15 +34,15 @@ extern "C" {
 #endif
 
 enum _EsType {
-  ES_TYPE_NIL,
-  ES_TYPE_INTEGER,
-  ES_TYPE_REAL,
-  ES_TYPE_BOOLEAN,
-  ES_TYPE_SYMBOL,
-  ES_TYPE_STRING,
-  ES_TYPE_CONS,
-  /* ... */
-  ES_TYPE_ERROR
+    ES_TYPE_NIL,
+    ES_TYPE_INTEGER,
+    ES_TYPE_REAL,
+    ES_TYPE_BOOLEAN,
+    ES_TYPE_SYMBOL,
+    ES_TYPE_STRING,
+    ES_TYPE_CONS,
+    /* ... */
+    ES_TYPE_ERROR
 };
 typedef enum _EsType EsType;
 
@@ -56,11 +56,11 @@ EsType      es_object_get_type      (const EsObject*      object);
 EsObject*   es_object_ref           (EsObject*       object);
 void        es_object_unref         (EsObject*       object);
 void        es_object_unref_batch   (EsObject*       array[],
-				     unsigned int    count);
+                                     unsigned int    count);
 EsObject*   es_object_autounref     (EsObject*      object);
 
 int         es_object_equal         (const EsObject* self,
-				     const EsObject* other);
+                                     const EsObject* other);
 
 int         es_atom                 (const EsObject* object);
 
@@ -147,7 +147,7 @@ EsObject*    es_cdr         (const EsObject* object);
  * Print
  */
 void         es_print           (const EsObject* object,
-				 MIO*           out);
+                                 MIO*           out);
 char*        es_print_to_string (EsObject*        object);
 
 /*
@@ -155,7 +155,7 @@ char*        es_print_to_string (EsObject*        object);
  */
 EsObject*    es_read            (MIO* in);
 EsObject*    es_read_from_string(const char* in,
-				 const char** saveptr);
+                                 const char** saveptr);
 
 #define      ES_READER_ERROR es_error_intern("READ-ERROR")
 #define      ES_READER_EOF   es_error_intern("EOF")
@@ -165,7 +165,7 @@ EsObject*    es_read_from_string(const char* in,
  * Comment
  */
 void         es_comment           (const char* comment,
-				   MIO*       out);
+                                   MIO*       out);
 char*        es_comment_to_string (const char* comment);
 
 /*

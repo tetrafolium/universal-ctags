@@ -30,9 +30,9 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-	RESCAN_NONE,   /* No rescan needed */
-	RESCAN_FAILED, /* Scan failed, clear out tags added, rescan */
-	RESCAN_APPEND  /* Scan succeeded, rescan */
+    RESCAN_NONE,   /* No rescan needed */
+    RESCAN_FAILED, /* Scan failed, clear out tags added, rescan */
+    RESCAN_APPEND  /* Scan succeeded, rescan */
 } rescanReason;
 
 typedef void (*createRegexTag) (const vString* const name);
@@ -54,66 +54,66 @@ typedef void (*printStatistics) (langType langType);
 typedef void (*parserFinalize) (langType language, bool initialized);
 
 typedef enum {
-	METHOD_NOT_CRAFTED    = 1 << 0,
-	METHOD_REGEX          = 1 << 1,
-	METHOD_XPATH          = 1 << 2,
+    METHOD_NOT_CRAFTED    = 1 << 0,
+    METHOD_REGEX          = 1 << 1,
+    METHOD_XPATH          = 1 << 2,
 } parsingMethod;
 
 typedef struct {
-	const char *name;
-	const int id;
+    const char *name;
+    const int id;
 } keywordTable;
 
 struct sParserDefinition {
-	/* defined by parser */
-	char* name;                    /* name of language */
-	kindDefinition* kindTable;	   /* tag kinds handled by parser */
-	unsigned int kindCount;        /* size of `kinds' list */
-	const char *const *extensions; /* list of default extensions */
-	const char *const *patterns;   /* list of default file name patterns */
-	const char *const *aliases;    /* list of default aliases (alternative names) */
-	parserInitialize initialize;   /* initialization routine, if needed */
-	parserFinalize finalize;       /* finalize routine, if needed */
-	simpleParser parser;           /* simple parser (common case) */
-	rescanParser parser2;          /* rescanning parser (unusual case) */
-	selectLanguage* selectLanguage; /* may be used to resolve conflicts */
-	unsigned int method;           /* See METHOD_ definitions above */
-	bool useCork;
-	bool useMemoryStreamInput;
-	bool allowNullTag;
-	bool requestAutomaticFQTag;
-	tagRegexTable *tagRegexTable;
-	unsigned int tagRegexCount;
-	const keywordTable *keywordTable;
-	unsigned int keywordCount;
-	tagXpathTableTable *tagXpathTableTable;
-	unsigned int tagXpathTableCount;
-	bool invisible;
-	fieldDefinition *fieldTable;
-	unsigned int fieldCount;
-	xtagDefinition *xtagTable;
-	unsigned int xtagCount;
+    /* defined by parser */
+    char* name;                    /* name of language */
+    kindDefinition* kindTable;	   /* tag kinds handled by parser */
+    unsigned int kindCount;        /* size of `kinds' list */
+    const char *const *extensions; /* list of default extensions */
+    const char *const *patterns;   /* list of default file name patterns */
+    const char *const *aliases;    /* list of default aliases (alternative names) */
+    parserInitialize initialize;   /* initialization routine, if needed */
+    parserFinalize finalize;       /* finalize routine, if needed */
+    simpleParser parser;           /* simple parser (common case) */
+    rescanParser parser2;          /* rescanning parser (unusual case) */
+    selectLanguage* selectLanguage; /* may be used to resolve conflicts */
+    unsigned int method;           /* See METHOD_ definitions above */
+    bool useCork;
+    bool useMemoryStreamInput;
+    bool allowNullTag;
+    bool requestAutomaticFQTag;
+    tagRegexTable *tagRegexTable;
+    unsigned int tagRegexCount;
+    const keywordTable *keywordTable;
+    unsigned int keywordCount;
+    tagXpathTableTable *tagXpathTableTable;
+    unsigned int tagXpathTableCount;
+    bool invisible;
+    fieldDefinition *fieldTable;
+    unsigned int fieldCount;
+    xtagDefinition *xtagTable;
+    unsigned int xtagCount;
 
-	parserDependency * dependencies;
-	unsigned int dependencyCount;
+    parserDependency * dependencies;
+    unsigned int dependencyCount;
 
-	parameterHandlerTable  *parameterHandlerTable;
-	unsigned int parameterHandlerCount;
+    parameterHandlerTable  *parameterHandlerTable;
+    unsigned int parameterHandlerCount;
 
-	xpathFileSpec *xpathFileSpecs;
-	unsigned int xpathFileSpecCount;
+    xpathFileSpec *xpathFileSpecs;
+    unsigned int xpathFileSpecCount;
 
-	/* Following two fields are used in a parser using cork. */
-	const char *defaultScopeSeparator;
-	const char *defaultRootScopeSeparator;
+    /* Following two fields are used in a parser using cork. */
+    const char *defaultScopeSeparator;
+    const char *defaultRootScopeSeparator;
 
-	initStatistics initStats;
-	printStatistics printStats;
+    initStatistics initStats;
+    printStatistics printStats;
 
-	/* used internally */
-	langType id;		    /* id assigned to language */
-	unsigned int enabled:1;	       /* currently enabled? */
-	unsigned int traced:1;
+    /* used internally */
+    langType id;		    /* id assigned to language */
+    unsigned int enabled:1;	       /* currently enabled? */
+    unsigned int traced:1;
 };
 
 typedef parserDefinition* (parserDefinitionFunc) (void);
@@ -125,7 +125,7 @@ typedef parserDefinition* (parserDefinitionFunc) (void);
 /* Language processing and parsing */
 extern int makeSimpleTag (const vString* const name, const int kindIndex);
 extern int makeSimpleRefTag (const vString* const name, const int kindIndex,
-			     int roleIndex);
+                             int roleIndex);
 extern int makeSimplePlaceholder(const vString* const name);
 extern parserDefinition* parserNew (const char* name);
 
@@ -151,17 +151,17 @@ extern const char *getLanguageEncoding (const langType language);
 
 /* Regex interface */
 extern void addLanguageCallbackRegex (const langType language, const char *const regex, const char *const flags,
-									  const regexCallback callback, bool *disabled, void *userData);
+                                      const regexCallback callback, bool *disabled, void *userData);
 extern void findRegexTagsMainloop (int (* driver)(void));
 extern void findRegexTags (void);
 
 /* Multiline Regex Interface */
 extern void addLanguageRegexTable (const langType language, const char *name);
 extern void addLanguageTagMultiTableRegex(const langType language,
-										  const char* const table_name,
-										  const char* const regex,
-										  const char* const name, const char* const kinds, const char* const flags,
-										  bool *disabled);
+        const char* const table_name,
+        const char* const regex,
+        const char* const name, const char* const kinds, const char* const flags,
+        bool *disabled);
 
 extern void anonGenerate (vString *buffer, const char *prefix, int kind);
 extern vString *anonGenerateNew (const char *prefix, int kind);

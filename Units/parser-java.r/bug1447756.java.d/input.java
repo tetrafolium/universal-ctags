@@ -2,8 +2,8 @@
 // parameterized type name instead of the interface name,
 // e.g.,
 
-	      public interface Foo<T> {
-		      public T bar();
-	      }
+public interface Foo<T> {
+    public T bar();
+}
 
 // is tagged on 'T' instead of 'Foo'.

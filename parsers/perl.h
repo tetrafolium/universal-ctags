@@ -17,25 +17,25 @@
 typedef struct sPerlSubparser perlSubparser;
 
 enum PerlModuleRoleType {
-	ROLE_PERL_MODULE_USED,
-	ROLE_PERL_MODULE_UNUSED,
+    ROLE_PERL_MODULE_USED,
+    ROLE_PERL_MODULE_UNUSED,
 };
 
 enum PerlKindType {
-	KIND_PERL_NONE = -1,
-	KIND_PERL_CONSTANT,
-	KIND_PERL_FORMAT,
-	KIND_PERL_LABEL,
-	KIND_PERL_PACKAGE,
-	KIND_PERL_SUBROUTINE,
-	KIND_PERL_SUBROUTINE_DECLARATION,
-	KIND_PERL_MODULE,
+    KIND_PERL_NONE = -1,
+    KIND_PERL_CONSTANT,
+    KIND_PERL_FORMAT,
+    KIND_PERL_LABEL,
+    KIND_PERL_PACKAGE,
+    KIND_PERL_SUBROUTINE,
+    KIND_PERL_SUBROUTINE_DECLARATION,
+    KIND_PERL_MODULE,
 };
 
 struct sPerlSubparser {
-	subparser subparser;
-	void (* enteringPodNotify) (perlSubparser *);
-	void (* leavingPodNotify)    (perlSubparser *);
+    subparser subparser;
+    void (* enteringPodNotify) (perlSubparser *);
+    void (* leavingPodNotify)    (perlSubparser *);
 };
 
 #endif	/* CTAGS_PARSER_PERL_H */

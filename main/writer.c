@@ -19,136 +19,136 @@ extern tagWriter xrefWriter;
 extern tagWriter jsonWriter;
 
 static tagWriter *writerTable [WRITER_COUNT] = {
-	[WRITER_U_CTAGS] = &uCtagsWriter,
-	[WRITER_E_CTAGS] = &eCtagsWriter,
-	[WRITER_ETAGS] = &etagsWriter,
-	[WRITER_XREF]  = &xrefWriter,
-	[WRITER_JSON]  = &jsonWriter,
-	[WRITER_CUSTOM] = NULL,
+    [WRITER_U_CTAGS] = &uCtagsWriter,
+    [WRITER_E_CTAGS] = &eCtagsWriter,
+    [WRITER_ETAGS] = &etagsWriter,
+    [WRITER_XREF]  = &xrefWriter,
+    [WRITER_JSON]  = &jsonWriter,
+    [WRITER_CUSTOM] = NULL,
 };
 
 static tagWriter *writer;
 
 extern void setTagWriter (writerType wtype, tagWriter *customWriter)
 {
-	if (wtype != WRITER_CUSTOM)
-		writer = writerTable [wtype];
-	else
-		writer = customWriter;
-	writer->type = wtype;
+    if (wtype != WRITER_CUSTOM)
+        writer = writerTable [wtype];
+    else
+        writer = customWriter;
+    writer->type = wtype;
 }
 
 extern void writerSetup (MIO *mio, void *clientData)
 {
-	writer->clientData = clientData;
+    writer->clientData = clientData;
 
-	if (writer->preWriteEntry)
-		writer->private = writer->preWriteEntry (writer, mio,
-												 writer->clientData);
-	else
-		writer->private = NULL;
+    if (writer->preWriteEntry)
+        writer->private = writer->preWriteEntry (writer, mio,
+                          writer->clientData);
+    else
+        writer->private = NULL;
 }
 
 extern bool writerTeardown (MIO *mio, const char *filename)
 {
-	if (writer->postWriteEntry)
-	{
-		bool r;
-		r = writer->postWriteEntry (writer, mio, filename,
-									writer->clientData);
-		writer->private = NULL;
-		return r;
-	}
-	return false;
+    if (writer->postWriteEntry)
+    {
+        bool r;
+        r = writer->postWriteEntry (writer, mio, filename,
+                                    writer->clientData);
+        writer->private = NULL;
+        return r;
+    }
+    return false;
 }
 
 extern int writerWriteTag (MIO * mio, const tagEntryInfo *const tag)
 {
-	return writer->writeEntry (writer, mio, tag,
-							   writer->clientData);
+    return writer->writeEntry (writer, mio, tag,
+                               writer->clientData);
 }
 
 extern int writerWritePtag (MIO * mio,
-					 const ptagDesc *desc,
-					 const char *const fileName,
-					 const char *const pattern,
-					 const char *const parserName)
+                            const ptagDesc *desc,
+                            const char *const fileName,
+                            const char *const pattern,
+                            const char *const parserName)
 {
-	if (writer->writePtagEntry == NULL)
-		return -1;
+    if (writer->writePtagEntry == NULL)
+        return -1;
 
-	return writer->writePtagEntry (writer, mio, desc, fileName,
-								   pattern, parserName,
-								   writer->clientData);
+    return writer->writePtagEntry (writer, mio, desc, fileName,
+                                   pattern, parserName,
+                                   writer->clientData);
 
 }
 
 extern void writerRescanFailed (unsigned long validTagNum)
 {
-	if (writer->rescanFailedEntry)
-		writer->rescanFailedEntry(writer, validTagNum, writer->clientData);
+    if (writer->rescanFailedEntry)
+        writer->rescanFailedEntry(writer, validTagNum, writer->clientData);
 }
 
 extern bool ptagMakeCtagsOutputMode (ptagDesc *desc, const void *data CTAGS_ATTR_UNUSED)
 {
-	const char *mode ="";
+    const char *mode ="";
 
-	if (&uCtagsWriter == writer)
-		mode = "u-ctags";
-	else if (&eCtagsWriter == writer)
-		mode = "e-ctags";
+    if (&uCtagsWriter == writer)
+        mode = "u-ctags";
+    else if (&eCtagsWriter == writer)
+        mode = "e-ctags";
 
-	return writePseudoTag (desc,
-						   mode,
-						   "u-ctags or e-ctags",
-						   NULL);
+    return writePseudoTag (desc,
+                           mode,
+                           "u-ctags or e-ctags",
+                           NULL);
 }
 
 extern const char *outputDefaultFileName (void)
 {
-	return writer->defaultFileName;
+    return writer->defaultFileName;
 }
 
 extern bool writerCanPrintPtag (void)
 {
-	return (writer->writePtagEntry)? true: false;
+    return (writer->writePtagEntry)? true: false;
 }
 
 extern bool writerDoesTreatFieldAsFixed (int fieldType)
 {
-	if (writer->treatFieldAsFixed)
-		return writer->treatFieldAsFixed (fieldType);
-	return false;
+    if (writer->treatFieldAsFixed)
+        return writer->treatFieldAsFixed (fieldType);
+    return false;
 }
 
 #ifdef WIN32
 extern enum filenameSepOp getFilenameSeparator (enum filenameSepOp currentSetting)
 {
-	if (writer->overrideFilenameSeparator)
-		return writer->overrideFilenameSeparator (currentSetting);
-	return currentSetting;
+    if (writer->overrideFilenameSeparator)
+        return writer->overrideFilenameSeparator (currentSetting);
+    return currentSetting;
 }
 #endif
 
 extern bool ptagMakeCtagsOutputFilesep (ptagDesc *desc, const void *data CTAGS_ATTR_UNUSED)
 {
-	const char *sep = "slash";
+    const char *sep = "slash";
 #ifdef WIN32
-	const optionValues *opt = data;
-	if (getFilenameSeparator (opt->useSlashAsFilenameSeparator)
-		!= FILENAME_SEP_USE_SLASH)
-		sep = "backslash";
+    const optionValues *opt = data;
+    if (getFilenameSeparator (opt->useSlashAsFilenameSeparator)
+            != FILENAME_SEP_USE_SLASH)
+        sep = "backslash";
 #endif
-	return writePseudoTag (desc, sep, "slash or backslash", NULL);
+    return writePseudoTag (desc, sep, "slash or backslash", NULL);
 }
 
 extern void writerCheckOptions (void)
 {
-	if (writer->checkOptions)
-		writer->checkOptions (writer);
+    if (writer->checkOptions)
+        writer->checkOptions (writer);
 }
 
 extern bool writerPrintPtagByDefault (void)
 {
-	return writer->printPtagByDefault;
+    return writer->printPtagByDefault;
 }

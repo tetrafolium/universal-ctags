@@ -58,9 +58,9 @@
 *   DATA DECLARATIONS
 */
 struct sUwiStats {
-	int maxLength;
-	bool overflow;
-	bool underflow;
+    int maxLength;
+    bool overflow;
+    bool underflow;
 };
 
 /*

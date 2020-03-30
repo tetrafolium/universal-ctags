@@ -5,6 +5,6 @@ DEFINE_HOOK(i);
 int
 main(void)
 {
-	LOAD_PLUGIN(mylib.so, isearch);
-	int u __attribute__((unused));
+    LOAD_PLUGIN(mylib.so, isearch);
+    int u __attribute__((unused));
 }
