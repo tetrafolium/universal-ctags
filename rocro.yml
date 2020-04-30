@@ -7,15 +7,11 @@ inspecode:
     auto-fix: true
     thresholds: { num-issues: 477 }
 
-  ##----------------------------------------------------------------------------
-  ## [on staging]
-  ##    ClangFormat was aborted unexpectedly.
-  ## [on prod]
-  ##    Successfully; found 484 issues.
-  ##----------------------------------------------------------------------------
-  #clang-format:
-  #  auto-fix: true
-  #  thresholds: { num-issues: 484 }
+  clang-format:
+    auto-fix: true
+    thresholds: { num-issues: 631 }
+      # 631 isseus ... (clang 9.0.0)
+      # 484 issues ... (clang 7.0.1)
 
   cpd:
     ignore:
