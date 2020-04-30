@@ -6,9 +6,7 @@ export function equals(p1: Point, p2: Point) {
   return p1.x == p2.x && p1.y == p2.y
 }
 
-export function message(s: string) {
-  console.log(s)
-}
+export function message(s: string) { console.log(s) }
 
 export default function point(x: number, y: number) {
   return { x, y }
@@ -19,21 +17,23 @@ function numberToString(a: number[]) {
   return stringArray
 }
 
-function *g(): Iterable<string> {
+function* g(): Iterable<string> {
   for (var i = 0; i < 100; i++) {
     yield "" // string is assignable to string
   }
-  yield * otherStringGenerator() // otherStringGenerator must be iterable and element type assignable to string
+  yield* otherStringGenerator() // otherStringGenerator must be iterable and
+                                // element type assignable to string
 }
 
-function *h(limit) {
+function* h(limit) {
   for (var i = 0; i < limit; i++) {
     yield i
   }
 }
 
-async function fn(): Promise<number> {  
-  var i = await p // suspend execution until 'p' is settled. 'i' has type "number"  
+async function fn(): Promise<number>{
+    var i =
+        await p // suspend execution until 'p' is settled. 'i' has type "number"
   return 1 + i
 }
 

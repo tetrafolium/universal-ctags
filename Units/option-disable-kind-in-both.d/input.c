@@ -1,6 +1,4 @@
-int
-main(void)
-{
+int main(void) {
   define a;
   return a;
 }

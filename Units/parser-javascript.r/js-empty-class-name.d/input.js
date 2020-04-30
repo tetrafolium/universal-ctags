@@ -1,1 +1,1 @@
-var {prop} = { prop: "value" };
+var {prop} = {prop : "value"};

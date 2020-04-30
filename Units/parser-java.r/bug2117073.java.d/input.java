@@ -7,6 +7,6 @@ public class AAssignmentExp {
     setExp(_exp_);
   }
 
-  @Override void removeChild(@SuppressWarnings("unused") Node child) {
-  }
+  @Override
+  void removeChild(@SuppressWarnings("unused") Node child) {}
 }

@@ -24,36 +24,35 @@
 
 #ifndef __NSCompoundPredicate_h_GNUSTEP_BASE_INCLUDE
 #define __NSCompoundPredicate_h_GNUSTEP_BASE_INCLUDE
-#import	<GNUstepBase/GSVersionMacros.h>
+#import <GNUstepBase/GSVersionMacros.h>
 
-#if	OS_API_VERSION(MAC_OS_X_VERSION_10_4, GS_API_LATEST)
+#if OS_API_VERSION(MAC_OS_X_VERSION_10_4, GS_API_LATEST)
 
-#import	<Foundation/NSPredicate.h>
+#import <Foundation/NSPredicate.h>
 
-#if	defined(__cplusplus)
+#if defined(__cplusplus)
 extern "C" {
 #endif
 
 typedef NSUInteger NSCompoundPredicateType;
 
-@interface NSCompoundPredicate : NSPredicate
-{
-#if	GS_EXPOSE(NSCompoundPredicate)
-  NSArray	*_subs;
+@interface NSCompoundPredicate : NSPredicate {
+#if GS_EXPOSE(NSCompoundPredicate)
+  NSArray *_subs;
 #endif
 }
 
-+ (NSPredicate *) andPredicateWithSubpredicates: (NSArray *)list;
-+ (NSPredicate *) notPredicateWithSubpredicate: (NSPredicate *)predicate;
-+ (NSPredicate *) orPredicateWithSubpredicates: (NSArray *)list;
++ (NSPredicate *)andPredicateWithSubpredicates:(NSArray *)list;
++ (NSPredicate *)notPredicateWithSubpredicate:(NSPredicate *)predicate;
++ (NSPredicate *)orPredicateWithSubpredicates:(NSArray *)list;
 
-- (NSArray *) subpredicates;
+- (NSArray *)subpredicates;
 
 @end
 
-#if	defined(__cplusplus)
+#if defined(__cplusplus)
 }
 #endif
 
-#endif	/* 100400 */
+#endif /* 100400 */
 #endif

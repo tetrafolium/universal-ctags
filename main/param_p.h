@@ -13,24 +13,25 @@
 #define CTAGS_MAIN_PARAM_PRIVATE_H
 
 /*
-*   INCLUDE FILES
-*/
+ *   INCLUDE FILES
+ */
 #include "general.h"
 
-#include "types.h"
 #include "colprint_p.h"
-
+#include "types.h"
 
 /*
-*   FUNCTION PROTOTYPES
-*/
-extern void applyParameter (const langType language, const char *name, const char *args);
+ *   FUNCTION PROTOTYPES
+ */
+extern void applyParameter(const langType language, const char *name,
+                           const char *args);
 
-extern struct colprintTable * paramColprintTableNew (void);
-extern void paramColprintAddParameter (struct colprintTable *table,
-									   langType language,
-									   const parameterHandlerTable *const paramHandler);
-extern void paramColprintTablePrint (struct colprintTable *table, bool noparser,
-									bool withListHeader, bool machinable, FILE *fp);
+extern struct colprintTable *paramColprintTableNew(void);
+extern void
+paramColprintAddParameter(struct colprintTable *table, langType language,
+                          const parameterHandlerTable *const paramHandler);
+extern void paramColprintTablePrint(struct colprintTable *table, bool noparser,
+                                    bool withListHeader, bool machinable,
+                                    FILE *fp);
 
-#endif	/* CTAGS_MAIN_PARAM_PRIVATE_H */
+#endif /* CTAGS_MAIN_PARAM_PRIVATE_H */

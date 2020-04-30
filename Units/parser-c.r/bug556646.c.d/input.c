@@ -1,6 +1,6 @@
 /*
 Bugs item #556646, was opened at 2002-05-16 14:36
-You can respond by visiting: 
+You can respond by visiting:
 http://sourceforge.net/tracker/?func=detail&atid=106556&aid=556646&group_id=6556
 
 Category: None
@@ -15,8 +15,8 @@ Summary: Some typedef can not be tagged in C code
 Initial Comment:
 My Ctags version: 5.2.3
 */
-typedef enum{
-  INDX_NIL =   0x00,
+typedef enum {
+  INDX_NIL = 0x00,
   INDX_P,
   INDX_S,
   INDX_M,

@@ -8,8 +8,4 @@ struct Y {
   struct X x;
 };
 
-int main(void)
-{
-  return 0;
-}
-
+int main(void) { return 0; }

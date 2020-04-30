@@ -1,16 +1,10 @@
 // Bug reported by akrzyz on github.
 
-namespace Foo
-{
-template <class T>
-T bar() 
-{
-    return T{};
-};
-}
+namespace Foo {
+template <class T> T bar() { return T{}; };
+} // namespace Foo
 
-int main()
-{
-    auto l = []{return Foo::template bar<int>();};
-    return l();
+int main() {
+  auto l = [] { return Foo::template bar<int>(); };
+  return l();
 }

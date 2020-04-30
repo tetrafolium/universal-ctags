@@ -1,4 +1,4 @@
 public @interface bug1777340 {
-    String n() default "ninjas; monkeys!";
-    String m();
+  String n() default "ninjas; monkeys!";
+  String m();
 }

@@ -11,10 +11,6 @@ This test checks the C++ parser capabilities to guess such occurences.
 */
 
 extern int private;
-static inline int public(void)
-{
-	return private;
-}
+static inline int public(void) { return private; }
 
 typedef int protected;
-

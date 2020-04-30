@@ -1,14 +1,16 @@
-enum Color { Red Green Blue }
+enum Color {
+  Red Green Blue
+}
 enum Test {
   A
-  B
-  C = Math.floor(Math.random() * 1000)
-  D = 10
+B
+C = Math.floor(Math.random() * 1000)
+D = 10
   E
 }
 
-export enum Style {
-  None = 0
+  export enum Style {
+    None = 0
   Bold = 1
   Italic = 2
   Underline = 4
@@ -16,8 +18,8 @@ export enum Style {
   Hyperlink = Bold | Underline
 }
 
-const enum Comparison {
-  LessThan = -1
+  const enum Comparison {
+    LessThan = -1
   EqualTo = 0
   GreaterThan = 1
 }

@@ -1,5 +1,6 @@
 enum {
-  A, B,
+  A,
+  B,
 } x;
 
 struct {

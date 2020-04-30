@@ -28,78 +28,86 @@
 #include <string.h>
 
 #if defined HAVE_LANGINFO_H || defined HAVE_LANGINFO_CODESET || defined _LIBC
-# include <langinfo.h>
+#include <langinfo.h>
 #endif
 #if defined HAVE_LOCALE_H || defined _LIBC
-# include <locale.h>
+#include <locale.h>
 #endif
 #if defined HAVE_WCHAR_H || defined _LIBC
-# include <wchar.h>
+#include <wchar.h>
 #endif /* HAVE_WCHAR_H || _LIBC */
 #if defined HAVE_WCTYPE_H || defined _LIBC
-# include <wctype.h>
+#include <wctype.h>
 #endif /* HAVE_WCTYPE_H || _LIBC */
 #if defined HAVE_STDBOOL_H || defined _LIBC
-# include <stdbool.h>
+#include <stdbool.h>
 #endif /* HAVE_STDBOOL_H || _LIBC */
 #if defined HAVE_STDINT_H || defined _LIBC
-# include <stdint.h>
+#include <stdint.h>
 #endif /* HAVE_STDINT_H || _LIBC */
 #if defined _LIBC
-# include <bits/libc-lock.h>
+#include <bits/libc-lock.h>
 #else
-# define __libc_lock_define(CLASS,NAME)
-# define __libc_lock_init(NAME) do { } while (0)
-# define __libc_lock_lock(NAME) do { } while (0)
-# define __libc_lock_unlock(NAME) do { } while (0)
+#define __libc_lock_define(CLASS, NAME)
+#define __libc_lock_init(NAME)                                                 \
+  do {                                                                         \
+  } while (0)
+#define __libc_lock_lock(NAME)                                                 \
+  do {                                                                         \
+  } while (0)
+#define __libc_lock_unlock(NAME)                                               \
+  do {                                                                         \
+  } while (0)
 #endif
 
 /* In case that the system doesn't have isblank().  */
 #if !defined _LIBC && !defined HAVE_ISBLANK && !defined isblank
-# define isblank(ch) ((ch) == ' ' || (ch) == '\t')
+#define isblank(ch) ((ch) == ' ' || (ch) == '\t')
 #endif
 
 #ifdef _LIBC
-# ifndef _RE_DEFINE_LOCALE_FUNCTIONS
-#  define _RE_DEFINE_LOCALE_FUNCTIONS 1
-#   include <locale/localeinfo.h>
-#   include <locale/elem-hash.h>
-#   include <locale/coll-lookup.h>
-# endif
+#ifndef _RE_DEFINE_LOCALE_FUNCTIONS
+#define _RE_DEFINE_LOCALE_FUNCTIONS 1
+#include <locale/coll-lookup.h>
+#include <locale/elem-hash.h>
+#include <locale/localeinfo.h>
+#endif
 #endif
 
 /* This is for other GNU distributions with internationalized messages.  */
 #if (HAVE_LIBINTL_H && ENABLE_NLS) || defined _LIBC
-# include <libintl.h>
-# ifdef _LIBC
-#  undef gettext
-#  define gettext(msgid) \
-  INTUSE(__dcgettext) (_libc_intl_domainname, msgid, LC_MESSAGES)
-# endif
+#include <libintl.h>
+#ifdef _LIBC
+#undef gettext
+#define gettext(msgid)                                                         \
+  INTUSE(__dcgettext)(_libc_intl_domainname, msgid, LC_MESSAGES)
+#endif
 #else
-# define gettext(msgid) (msgid)
+#define gettext(msgid) (msgid)
 #endif
 
 #ifndef gettext_noop
 /* This define is so xgettext can find the internationalizable
    strings.  */
-# define gettext_noop(String) String
+#define gettext_noop(String) String
 #endif
 
 /* For loser systems without the definition.  */
 #ifndef SIZE_MAX
-# define SIZE_MAX ((size_t) -1)
+#define SIZE_MAX ((size_t)-1)
 #endif
 
-#if (defined MB_CUR_MAX && HAVE_LOCALE_H && HAVE_WCTYPE_H && HAVE_WCHAR_H && HAVE_WCRTOMB && HAVE_MBRTOWC && HAVE_WCSCOLL) || _LIBC
-# define RE_ENABLE_I18N
+#if (defined MB_CUR_MAX && HAVE_LOCALE_H && HAVE_WCTYPE_H && HAVE_WCHAR_H &&   \
+     HAVE_WCRTOMB && HAVE_MBRTOWC && HAVE_WCSCOLL) ||                          \
+    _LIBC
+#define RE_ENABLE_I18N
 #endif
 
 #if __GNUC__ >= 3
-# define BE(expr, val) __builtin_expect (expr, val)
+#define BE(expr, val) __builtin_expect(expr, val)
 #else
-# define BE(expr, val) (expr)
-# define inline
+#define BE(expr, val) (expr)
+#define inline
 #endif
 
 /* Number of single byte character.  */
@@ -113,20 +121,20 @@
 
 /* Rename to standard API for using out of glibc.  */
 #ifndef _LIBC
-# define __wctype wctype
-# define __iswctype iswctype
-# define __btowc btowc
-# define __mbrtowc mbrtowc
-# define __mempcpy mempcpy
-# define __wcrtomb wcrtomb
-# define __regfree regfree
-# define attribute_hidden
+#define __wctype wctype
+#define __iswctype iswctype
+#define __btowc btowc
+#define __mbrtowc mbrtowc
+#define __mempcpy mempcpy
+#define __wcrtomb wcrtomb
+#define __regfree regfree
+#define attribute_hidden
 #endif /* not _LIBC */
 
 #ifdef __GNUC__
-# define __attribute(arg) __attribute__ (arg)
+#define __attribute(arg) __attribute__(arg)
 #else
-# define __attribute(arg)
+#define __attribute(arg)
 #endif
 
 extern const char __re_error_msgid[] attribute_hidden;
@@ -138,22 +146,22 @@ typedef unsigned long int bitset_word_t;
 /* All bits set in a bitset_word_t.  */
 #define BITSET_WORD_MAX ULONG_MAX
 /* Number of bits in a bitset_word_t.  */
-#define BITSET_WORD_BITS (sizeof (bitset_word_t) * CHAR_BIT)
+#define BITSET_WORD_BITS (sizeof(bitset_word_t) * CHAR_BIT)
 /* Number of bitset_word_t in a bit_set.  */
 #define BITSET_WORDS (SBC_MAX / BITSET_WORD_BITS)
 typedef bitset_word_t bitset_t[BITSET_WORDS];
 typedef bitset_word_t *re_bitset_ptr_t;
 typedef const bitset_word_t *re_const_bitset_ptr_t;
 
-#define bitset_set(set,i) \
-  (set[i / BITSET_WORD_BITS] |= (bitset_word_t) 1 << i % BITSET_WORD_BITS)
-#define bitset_clear(set,i) \
-  (set[i / BITSET_WORD_BITS] &= ~((bitset_word_t) 1 << i % BITSET_WORD_BITS))
-#define bitset_contain(set,i) \
-  (set[i / BITSET_WORD_BITS] & ((bitset_word_t) 1 << i % BITSET_WORD_BITS))
-#define bitset_empty(set) memset (set, '\0', sizeof (bitset_t))
-#define bitset_set_all(set) memset (set, '\xff', sizeof (bitset_t))
-#define bitset_copy(dest,src) memcpy (dest, src, sizeof (bitset_t))
+#define bitset_set(set, i)                                                     \
+  (set[i / BITSET_WORD_BITS] |= (bitset_word_t)1 << i % BITSET_WORD_BITS)
+#define bitset_clear(set, i)                                                   \
+  (set[i / BITSET_WORD_BITS] &= ~((bitset_word_t)1 << i % BITSET_WORD_BITS))
+#define bitset_contain(set, i)                                                 \
+  (set[i / BITSET_WORD_BITS] & ((bitset_word_t)1 << i % BITSET_WORD_BITS))
+#define bitset_empty(set) memset(set, '\0', sizeof(bitset_t))
+#define bitset_set_all(set) memset(set, '\xff', sizeof(bitset_t))
+#define bitset_copy(dest, src) memcpy(dest, src, sizeof(bitset_t))
 
 #define PREV_WORD_CONSTRAINT 0x0001
 #define PREV_NOTWORD_CONSTRAINT 0x0002
@@ -166,8 +174,7 @@ typedef const bitset_word_t *re_const_bitset_ptr_t;
 #define WORD_DELIM_CONSTRAINT 0x0100
 #define NOT_WORD_DELIM_CONSTRAINT 0x0200
 
-typedef enum
-{
+typedef enum {
   INSIDE_WORD = PREV_WORD_CONSTRAINT | NEXT_WORD_CONSTRAINT,
   WORD_FIRST = PREV_NOTWORD_CONSTRAINT | NEXT_WORD_CONSTRAINT,
   WORD_LAST = PREV_WORD_CONSTRAINT | NEXT_NOTWORD_CONSTRAINT,
@@ -180,15 +187,13 @@ typedef enum
   NOT_WORD_DELIM = NOT_WORD_DELIM_CONSTRAINT
 } re_context_type;
 
-typedef struct
-{
+typedef struct {
   int alloc;
   int nelem;
   int *elems;
 } re_node_set;
 
-typedef enum
-{
+typedef enum {
   NON_TYPE = 0,
 
   /* Node type, These are used by token, node, tree.  */
@@ -202,8 +207,8 @@ typedef enum
   OP_UTF8_PERIOD = 7,
 #endif /* RE_ENABLE_I18N */
 
-  /* We define EPSILON_BIT as a macro so that OP_OPEN_SUBEXP is used
-     when the debugger shows values of this enum type.  */
+/* We define EPSILON_BIT as a macro so that OP_OPEN_SUBEXP is used
+   when the debugger shows values of this enum type.  */
 #define EPSILON_BIT 8
   OP_OPEN_SUBEXP = EPSILON_BIT | 0,
   OP_CLOSE_SUBEXP = EPSILON_BIT | 1,
@@ -239,29 +244,28 @@ typedef enum
 } re_token_type_t;
 
 #ifdef RE_ENABLE_I18N
-typedef struct
-{
+typedef struct {
   /* Multibyte characters.  */
   wchar_t *mbchars;
 
   /* Collating symbols.  */
-# ifdef _LIBC
+#ifdef _LIBC
   int32_t *coll_syms;
-# endif
+#endif
 
   /* Equivalence classes. */
-# ifdef _LIBC
+#ifdef _LIBC
   int32_t *equiv_classes;
-# endif
+#endif
 
   /* Range expressions. */
-# ifdef _LIBC
+#ifdef _LIBC
   uint32_t *range_starts;
   uint32_t *range_ends;
-# else /* not _LIBC */
+#else  /* not _LIBC */
   wchar_t *range_starts;
   wchar_t *range_ends;
-# endif /* not _LIBC */
+#endif /* not _LIBC */
 
   /* Character classes. */
   wctype_t *char_classes;
@@ -286,24 +290,22 @@ typedef struct
 } re_charset_t;
 #endif /* RE_ENABLE_I18N */
 
-typedef struct
-{
-  union
-  {
-    unsigned char c;		/* for CHARACTER */
-    re_bitset_ptr_t sbcset;	/* for SIMPLE_BRACKET */
+typedef struct {
+  union {
+    unsigned char c;        /* for CHARACTER */
+    re_bitset_ptr_t sbcset; /* for SIMPLE_BRACKET */
 #ifdef RE_ENABLE_I18N
-    re_charset_t *mbcset;	/* for COMPLEX_BRACKET */
-#endif /* RE_ENABLE_I18N */
-    int idx;			/* for BACK_REF */
-    re_context_type ctx_type;	/* for ANCHOR */
+    re_charset_t *mbcset;     /* for COMPLEX_BRACKET */
+#endif                        /* RE_ENABLE_I18N */
+    int idx;                  /* for BACK_REF */
+    re_context_type ctx_type; /* for ANCHOR */
   } opr;
 #if __GNUC__ >= 2
   re_token_type_t type : 8;
 #else
   re_token_type_t type;
 #endif
-  unsigned int constraint : 10;	/* context constraint */
+  unsigned int constraint : 10; /* context constraint */
   unsigned int duplicated : 1;
   unsigned int opt_subexp : 1;
 #ifdef RE_ENABLE_I18N
@@ -315,10 +317,9 @@ typedef struct
   unsigned int word_char : 1;
 } re_token_t;
 
-#define IS_EPSILON_NODE(type) ((type) & EPSILON_BIT)
+#define IS_EPSILON_NODE(type) ((type)&EPSILON_BIT)
 
-struct re_string_t
-{
+struct re_string_t {
   /* Indicate the raw buffer which is the original string passed as an
      argument of regexec(), re_search(), etc..  */
   const unsigned char *raw_mbs;
@@ -374,75 +375,71 @@ struct re_string_t
 };
 typedef struct re_string_t re_string_t;
 
-
 struct re_dfa_t;
 typedef struct re_dfa_t re_dfa_t;
 
 #ifndef _LIBC
-# ifdef __i386__
-#  define internal_function   __attribute ((regparm (3), stdcall))
-# else
-#  define internal_function
-# endif
+#ifdef __i386__
+#define internal_function __attribute((regparm(3), stdcall))
+#else
+#define internal_function
+#endif
 #endif
 
 #ifndef NOT_IN_libc
-static reg_errcode_t re_string_realloc_buffers (re_string_t *pstr,
-						int new_buf_len)
-     internal_function;
-# ifdef RE_ENABLE_I18N
-static void build_wcs_buffer (re_string_t *pstr) internal_function;
-static reg_errcode_t build_wcs_upper_buffer (re_string_t *pstr)
-  internal_function;
-# endif /* RE_ENABLE_I18N */
-static void build_upper_buffer (re_string_t *pstr) internal_function;
-static void re_string_translate_buffer (re_string_t *pstr) internal_function;
-static unsigned int re_string_context_at (const re_string_t *input, int idx,
-					  int eflags)
-     internal_function __attribute ((pure));
+static reg_errcode_t
+re_string_realloc_buffers(re_string_t *pstr, int new_buf_len) internal_function;
+#ifdef RE_ENABLE_I18N
+static void build_wcs_buffer(re_string_t *pstr) internal_function;
+static reg_errcode_t
+build_wcs_upper_buffer(re_string_t *pstr) internal_function;
+#endif /* RE_ENABLE_I18N */
+static void build_upper_buffer(re_string_t *pstr) internal_function;
+static void re_string_translate_buffer(re_string_t *pstr) internal_function;
+static unsigned int re_string_context_at(const re_string_t *input, int idx,
+                                         int eflags) internal_function
+    __attribute((pure));
 #endif
-#define re_string_peek_byte(pstr, offset) \
+#define re_string_peek_byte(pstr, offset)                                      \
   ((pstr)->mbs[(pstr)->cur_idx + offset])
-#define re_string_fetch_byte(pstr) \
-  ((pstr)->mbs[(pstr)->cur_idx++])
-#define re_string_first_byte(pstr, idx) \
+#define re_string_fetch_byte(pstr) ((pstr)->mbs[(pstr)->cur_idx++])
+#define re_string_first_byte(pstr, idx)                                        \
   ((idx) == (pstr)->valid_len || (pstr)->wcs[idx] != WEOF)
-#define re_string_is_single_byte_char(pstr, idx) \
-  ((pstr)->wcs[idx] != WEOF && ((pstr)->valid_len == (idx) + 1 \
-				|| (pstr)->wcs[(idx) + 1] != WEOF))
+#define re_string_is_single_byte_char(pstr, idx)                               \
+  ((pstr)->wcs[idx] != WEOF &&                                                 \
+   ((pstr)->valid_len == (idx) + 1 || (pstr)->wcs[(idx) + 1] != WEOF))
 #define re_string_eoi(pstr) ((pstr)->stop <= (pstr)->cur_idx)
 #define re_string_cur_idx(pstr) ((pstr)->cur_idx)
 #define re_string_get_buffer(pstr) ((pstr)->mbs)
 #define re_string_length(pstr) ((pstr)->len)
-#define re_string_byte_at(pstr,idx) ((pstr)->mbs[idx])
-#define re_string_skip_bytes(pstr,idx) ((pstr)->cur_idx += (idx))
-#define re_string_set_index(pstr,idx) ((pstr)->cur_idx = (idx))
+#define re_string_byte_at(pstr, idx) ((pstr)->mbs[idx])
+#define re_string_skip_bytes(pstr, idx) ((pstr)->cur_idx += (idx))
+#define re_string_set_index(pstr, idx) ((pstr)->cur_idx = (idx))
 
 #ifdef WIN32
-# include <malloc.h>
+#include <malloc.h>
 #else
-# include <alloca.h>
+#include <alloca.h>
 #endif
 
 #ifndef _LIBC
-# if HAVE_ALLOCA
+#if HAVE_ALLOCA
 /* The OS usually guarantees only one guard page at the bottom of the stack,
    and a page size can be as small as 4096 bytes.  So we cannot safely
    allocate anything larger than 4096 bytes.  Also care for the possibility
    of a few compiler-allocated temporary stack slots.  */
-#  define __libc_use_alloca(n) ((n) < 4032)
-# else
+#define __libc_use_alloca(n) ((n) < 4032)
+#else
 /* alloca is implemented with malloc, so just use malloc.  */
-#  define __libc_use_alloca(n) 0
-# endif
+#define __libc_use_alloca(n) 0
+#endif
 #endif
 
-#define re_malloc(t,n) ((t *) malloc ((n) * sizeof (t)))
-#define re_realloc(p,t,n) ((t *) realloc (p, (n) * sizeof (t)))
-#define re_free(p) free (p)
+#define re_malloc(t, n) ((t *)malloc((n) * sizeof(t)))
+#define re_realloc(p, t, n) ((t *)realloc(p, (n) * sizeof(t)))
+#define re_free(p) free(p)
 
-struct bin_tree_t
-{
+struct bin_tree_t {
   struct bin_tree_t *parent;
   struct bin_tree_t *left;
   struct bin_tree_t *right;
@@ -457,11 +454,9 @@ struct bin_tree_t
 };
 typedef struct bin_tree_t bin_tree_t;
 
-#define BIN_TREE_STORAGE_SIZE \
-  ((1024 - sizeof (void *)) / sizeof (bin_tree_t))
+#define BIN_TREE_STORAGE_SIZE ((1024 - sizeof(void *)) / sizeof(bin_tree_t))
 
-struct bin_tree_storage_t
-{
+struct bin_tree_storage_t {
   struct bin_tree_storage_t *next;
   bin_tree_t data[BIN_TREE_STORAGE_SIZE];
 };
@@ -472,31 +467,30 @@ typedef struct bin_tree_storage_t bin_tree_storage_t;
 #define CONTEXT_BEGBUF (CONTEXT_NEWLINE << 1)
 #define CONTEXT_ENDBUF (CONTEXT_BEGBUF << 1)
 
-#define IS_WORD_CONTEXT(c) ((c) & CONTEXT_WORD)
-#define IS_NEWLINE_CONTEXT(c) ((c) & CONTEXT_NEWLINE)
-#define IS_BEGBUF_CONTEXT(c) ((c) & CONTEXT_BEGBUF)
-#define IS_ENDBUF_CONTEXT(c) ((c) & CONTEXT_ENDBUF)
+#define IS_WORD_CONTEXT(c) ((c)&CONTEXT_WORD)
+#define IS_NEWLINE_CONTEXT(c) ((c)&CONTEXT_NEWLINE)
+#define IS_BEGBUF_CONTEXT(c) ((c)&CONTEXT_BEGBUF)
+#define IS_ENDBUF_CONTEXT(c) ((c)&CONTEXT_ENDBUF)
 #define IS_ORDINARY_CONTEXT(c) ((c) == 0)
 
-#define IS_WORD_CHAR(ch) (isalnum (ch) || (ch) == '_')
+#define IS_WORD_CHAR(ch) (isalnum(ch) || (ch) == '_')
 #define IS_NEWLINE(ch) ((ch) == NEWLINE_CHAR)
-#define IS_WIDE_WORD_CHAR(ch) (iswalnum (ch) || (ch) == L'_')
+#define IS_WIDE_WORD_CHAR(ch) (iswalnum(ch) || (ch) == L'_')
 #define IS_WIDE_NEWLINE(ch) ((ch) == WIDE_NEWLINE_CHAR)
 
-#define NOT_SATISFY_PREV_CONSTRAINT(constraint,context) \
- ((((constraint) & PREV_WORD_CONSTRAINT) && !IS_WORD_CONTEXT (context)) \
-  || ((constraint & PREV_NOTWORD_CONSTRAINT) && IS_WORD_CONTEXT (context)) \
-  || ((constraint & PREV_NEWLINE_CONSTRAINT) && !IS_NEWLINE_CONTEXT (context))\
-  || ((constraint & PREV_BEGBUF_CONSTRAINT) && !IS_BEGBUF_CONTEXT (context)))
+#define NOT_SATISFY_PREV_CONSTRAINT(constraint, context)                       \
+  ((((constraint)&PREV_WORD_CONSTRAINT) && !IS_WORD_CONTEXT(context)) ||       \
+   ((constraint & PREV_NOTWORD_CONSTRAINT) && IS_WORD_CONTEXT(context)) ||     \
+   ((constraint & PREV_NEWLINE_CONSTRAINT) && !IS_NEWLINE_CONTEXT(context)) || \
+   ((constraint & PREV_BEGBUF_CONSTRAINT) && !IS_BEGBUF_CONTEXT(context)))
 
-#define NOT_SATISFY_NEXT_CONSTRAINT(constraint,context) \
- ((((constraint) & NEXT_WORD_CONSTRAINT) && !IS_WORD_CONTEXT (context)) \
-  || (((constraint) & NEXT_NOTWORD_CONSTRAINT) && IS_WORD_CONTEXT (context)) \
-  || (((constraint) & NEXT_NEWLINE_CONSTRAINT) && !IS_NEWLINE_CONTEXT (context)) \
-  || (((constraint) & NEXT_ENDBUF_CONSTRAINT) && !IS_ENDBUF_CONTEXT (context)))
+#define NOT_SATISFY_NEXT_CONSTRAINT(constraint, context)                       \
+  ((((constraint)&NEXT_WORD_CONSTRAINT) && !IS_WORD_CONTEXT(context)) ||       \
+   (((constraint)&NEXT_NOTWORD_CONSTRAINT) && IS_WORD_CONTEXT(context)) ||     \
+   (((constraint)&NEXT_NEWLINE_CONSTRAINT) && !IS_NEWLINE_CONTEXT(context)) || \
+   (((constraint)&NEXT_ENDBUF_CONSTRAINT) && !IS_ENDBUF_CONTEXT(context)))
 
-struct re_dfastate_t
-{
+struct re_dfastate_t {
   unsigned int hash;
   re_node_set nodes;
   re_node_set non_eps_nodes;
@@ -515,8 +509,7 @@ struct re_dfastate_t
 };
 typedef struct re_dfastate_t re_dfastate_t;
 
-struct re_state_table_entry
-{
+struct re_state_table_entry {
   int num;
   int alloc;
   re_dfastate_t **array;
@@ -524,8 +517,7 @@ struct re_state_table_entry
 
 /* Array type used in re_sub_match_last_t and re_sub_match_top_t.  */
 
-typedef struct
-{
+typedef struct {
   int next_idx;
   int alloc;
   re_dfastate_t **array;
@@ -533,8 +525,7 @@ typedef struct
 
 /* Store information about the node NODE whose type is OP_CLOSE_SUBEXP.  */
 
-typedef struct
-{
+typedef struct {
   int node;
   int str_idx; /* The position NODE match at.  */
   state_array_t path;
@@ -544,8 +535,7 @@ typedef struct
    And information about the node, whose type is OP_CLOSE_SUBEXP,
    corresponding to NODE is stored in LASTS.  */
 
-typedef struct
-{
+typedef struct {
   int str_idx;
   int node;
   state_array_t *path;
@@ -554,8 +544,7 @@ typedef struct
   re_sub_match_last_t **lasts;
 } re_sub_match_top_t;
 
-struct re_backref_cache_entry
-{
+struct re_backref_cache_entry {
   int node;
   int str_idx;
   int subexp_from;
@@ -565,8 +554,7 @@ struct re_backref_cache_entry
   unsigned short int eps_reachable_subexps_map;
 };
 
-typedef struct
-{
+typedef struct {
   /* The string object corresponding to the input string.  */
   re_string_t input;
 #if defined _LIBC || (defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L)
@@ -592,8 +580,7 @@ typedef struct
   re_sub_match_top_t **sub_tops;
 } re_match_context_t;
 
-typedef struct
-{
+typedef struct {
   re_dfastate_t **sifted_states;
   re_dfastate_t **limited_states;
   int last_node;
@@ -601,23 +588,20 @@ typedef struct
   re_node_set limits;
 } re_sift_context_t;
 
-struct re_fail_stack_ent_t
-{
+struct re_fail_stack_ent_t {
   int idx;
   int node;
   regmatch_t *regs;
   re_node_set eps_via_nodes;
 };
 
-struct re_fail_stack_t
-{
+struct re_fail_stack_t {
   int num;
   int alloc;
   struct re_fail_stack_ent_t *stack;
 };
 
-struct re_dfa_t
-{
+struct re_dfa_t {
   re_token_t *nodes;
   size_t nodes_alloc;
   size_t nodes_len;
@@ -658,20 +642,18 @@ struct re_dfa_t
   reg_syntax_t syntax;
   int *subexp_map;
 #ifdef DEBUG
-  char* re_str;
+  char *re_str;
 #endif
-  __libc_lock_define (, lock)
+  __libc_lock_define(, lock)
 };
 
-#define re_node_set_init_empty(set) memset (set, '\0', sizeof (re_node_set))
-#define re_node_set_remove(set,id) \
-  (re_node_set_remove_at (set, re_node_set_contains (set, id) - 1))
+#define re_node_set_init_empty(set) memset(set, '\0', sizeof(re_node_set))
+#define re_node_set_remove(set, id)                                            \
+  (re_node_set_remove_at(set, re_node_set_contains(set, id) - 1))
 #define re_node_set_empty(p) ((p)->nelem = 0)
-#define re_node_set_free(set) re_free ((set)->elems)
-
+#define re_node_set_free(set) re_free((set)->elems)
 
-typedef enum
-{
+typedef enum {
   SB_CHAR,
   MB_CHAR,
   EQUIV_CLASS,
@@ -679,38 +661,29 @@ typedef enum
   CHAR_CLASS
 } bracket_elem_type;
 
-typedef struct
-{
+typedef struct {
   bracket_elem_type type;
-  union
-  {
+  union {
     unsigned char ch;
     unsigned char *name;
     wchar_t wch;
   } opr;
 } bracket_elem_t;
 
-
 /* Inline functions for bitset operation.  */
-static inline void
-bitset_not (bitset_t set)
-{
+static inline void bitset_not(bitset_t set) {
   int bitset_i;
   for (bitset_i = 0; bitset_i < BITSET_WORDS; ++bitset_i)
     set[bitset_i] = ~set[bitset_i];
 }
 
-static inline void
-bitset_merge (bitset_t dest, const bitset_t src)
-{
+static inline void bitset_merge(bitset_t dest, const bitset_t src) {
   int bitset_i;
   for (bitset_i = 0; bitset_i < BITSET_WORDS; ++bitset_i)
     dest[bitset_i] |= src[bitset_i];
 }
 
-static inline void
-bitset_mask (bitset_t dest, const bitset_t src)
-{
+static inline void bitset_mask(bitset_t dest, const bitset_t src) {
   int bitset_i;
   for (bitset_i = 0; bitset_i < BITSET_WORDS; ++bitset_i)
     dest[bitset_i] &= src[bitset_i];
@@ -718,10 +691,8 @@ bitset_mask (bitset_t dest, const bitset_t src)
 
 #ifdef RE_ENABLE_I18N
 /* Inline functions for re_string.  */
-static inline int
-internal_function __attribute ((pure))
-re_string_char_size_at (const re_string_t *pstr, int idx)
-{
+static inline int internal_function __attribute((pure))
+re_string_char_size_at(const re_string_t *pstr, int idx) {
   int byte_idx;
   if (pstr->mb_cur_max == 1)
     return 1;
@@ -731,43 +702,35 @@ re_string_char_size_at (const re_string_t *pstr, int idx)
   return byte_idx;
 }
 
-static inline wint_t
-internal_function __attribute ((pure))
-re_string_wchar_at (const re_string_t *pstr, int idx)
-{
+static inline wint_t internal_function __attribute((pure))
+re_string_wchar_at(const re_string_t *pstr, int idx) {
   if (pstr->mb_cur_max == 1)
-    return (wint_t) pstr->mbs[idx];
-  return (wint_t) pstr->wcs[idx];
+    return (wint_t)pstr->mbs[idx];
+  return (wint_t)pstr->wcs[idx];
 }
 
-# ifndef NOT_IN_libc
-static int
-internal_function __attribute ((pure))
-re_string_elem_size_at (const re_string_t *pstr, int idx)
-{
-#  ifdef _LIBC
+#ifndef NOT_IN_libc
+static int internal_function __attribute((pure))
+re_string_elem_size_at(const re_string_t *pstr, int idx) {
+#ifdef _LIBC
   const unsigned char *p, *extra;
   const int32_t *table, *indirect;
   int32_t tmp;
-#   include <locale/weight.h>
-  uint_fast32_t nrules = _NL_CURRENT_WORD (LC_COLLATE, _NL_COLLATE_NRULES);
+#include <locale/weight.h>
+  uint_fast32_t nrules = _NL_CURRENT_WORD(LC_COLLATE, _NL_COLLATE_NRULES);
 
-  if (nrules != 0)
-    {
-      table = (const int32_t *) _NL_CURRENT (LC_COLLATE, _NL_COLLATE_TABLEMB);
-      extra = (const unsigned char *)
-	_NL_CURRENT (LC_COLLATE, _NL_COLLATE_EXTRAMB);
-      indirect = (const int32_t *) _NL_CURRENT (LC_COLLATE,
-						_NL_COLLATE_INDIRECTMB);
-      p = pstr->mbs + idx;
-      tmp = findidx (&p);
-      return p - pstr->mbs - idx;
-    }
-  else
-#  endif /* _LIBC */
+  if (nrules != 0) {
+    table = (const int32_t *)_NL_CURRENT(LC_COLLATE, _NL_COLLATE_TABLEMB);
+    extra = (const unsigned char *)_NL_CURRENT(LC_COLLATE, _NL_COLLATE_EXTRAMB);
+    indirect = (const int32_t *)_NL_CURRENT(LC_COLLATE, _NL_COLLATE_INDIRECTMB);
+    p = pstr->mbs + idx;
+    tmp = findidx(&p);
+    return p - pstr->mbs - idx;
+  } else
+#endif /* _LIBC */
     return 1;
 }
-# endif
+#endif
 #endif /* RE_ENABLE_I18N */
 
 #endif /*  _REGEX_INTERNAL_H */

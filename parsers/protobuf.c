@@ -13,11 +13,10 @@
   Masatake YAMATO takes this from https://sourceforge.net/p/ctags/patches/74/
   after getting following approval:
   ===============================================================================
-  Message-ID: <CALPttHe+hSa_kjwx6GoWS6CsDf_OG0bcmhmPahb4shnKb8tkWg@mail.gmail.com>
-  Subject: Re: your protobuf.patch
-  From: Ivan Krasilnikov <infnty@gmail.com>
-  To: m_yamato@users.sf.net
-  Date: Fri, 8 Jul 2016 15:37:07 +0200
+  Message-ID:
+  <CALPttHe+hSa_kjwx6GoWS6CsDf_OG0bcmhmPahb4shnKb8tkWg@mail.gmail.com> Subject:
+  Re: your protobuf.patch From: Ivan Krasilnikov <infnty@gmail.com> To:
+  m_yamato@users.sf.net Date: Fri, 8 Jul 2016 15:37:07 +0200
 
   Hi, yes, it's fine, no problem.
 
@@ -45,10 +44,10 @@
 /*
  *   INCLUDE FILES
  */
-#include "general.h"  /* must always come first */
+#include "general.h" /* must always come first */
 
-#include <string.h>
 #include <ctype.h>
+#include <string.h>
 
 #include "cpreprocessor.h"
 
@@ -63,293 +62,260 @@
 static langType Lang_protobuf;
 
 typedef enum {
-	PK_PACKAGE,
-	PK_MESSAGE,
-	PK_FIELD,
-	PK_ENUMERATOR,
-	PK_ENUM,
-	PK_SERVICE,
-	PK_RPC
+  PK_PACKAGE,
+  PK_MESSAGE,
+  PK_FIELD,
+  PK_ENUMERATOR,
+  PK_ENUM,
+  PK_SERVICE,
+  PK_RPC
 } protobufKind;
 
-static kindDefinition ProtobufKinds [] = {
-	{ true,  'p', "package",    "packages" },
-	{ true,  'm', "message",    "messages" },
-	{ true,  'f', "field",      "fields" },
-	{ true,  'e', "enumerator", "enum constants" },
-	{ true,  'g', "enum",       "enum types" },
-	{ true,  's', "service",    "services" },
-	{ true, 'r', "rpc",         "RPC methods" }
-};
+static kindDefinition ProtobufKinds[] = {
+    {true, 'p', "package", "packages"},
+    {true, 'm', "message", "messages"},
+    {true, 'f', "field", "fields"},
+    {true, 'e', "enumerator", "enum constants"},
+    {true, 'g', "enum", "enum types"},
+    {true, 's', "service", "services"},
+    {true, 'r', "rpc", "RPC methods"}};
 
 typedef enum eKeywordId {
-	KEYWORD_OPTION,
-	KEYWORD_PACKAGE,
-	KEYWORD_MESSAGE,
-	KEYWORD_ENUM,
-	KEYWORD_REPEATED,
-	KEYWORD_OPTIONAL,
-	KEYWORD_REQUIRED,
-	KEYWORD_SERVICE,
-	KEYWORD_RPC,
-	KEYWORD_STREAM,
-	KEYWORD_RETURNS,
+  KEYWORD_OPTION,
+  KEYWORD_PACKAGE,
+  KEYWORD_MESSAGE,
+  KEYWORD_ENUM,
+  KEYWORD_REPEATED,
+  KEYWORD_OPTIONAL,
+  KEYWORD_REQUIRED,
+  KEYWORD_SERVICE,
+  KEYWORD_RPC,
+  KEYWORD_STREAM,
+  KEYWORD_RETURNS,
 } keywordId;
 
-static const keywordTable ProtobufKeywordTable [] = {
-	{ "option",   KEYWORD_OPTION   },
-	{ "package",  KEYWORD_PACKAGE  },
-	{ "message",  KEYWORD_MESSAGE  },
-	{ "enum",     KEYWORD_ENUM     },
-	{ "repeated", KEYWORD_REPEATED },
-	{ "optional", KEYWORD_OPTIONAL },
-	{ "required", KEYWORD_REQUIRED },
-	{ "service",  KEYWORD_SERVICE  },
-	{ "rpc",      KEYWORD_RPC      },
-	{ "stream",   KEYWORD_STREAM   },
-	{ "returns",  KEYWORD_RETURNS  },
+static const keywordTable ProtobufKeywordTable[] = {
+    {"option", KEYWORD_OPTION},     {"package", KEYWORD_PACKAGE},
+    {"message", KEYWORD_MESSAGE},   {"enum", KEYWORD_ENUM},
+    {"repeated", KEYWORD_REPEATED}, {"optional", KEYWORD_OPTIONAL},
+    {"required", KEYWORD_REQUIRED}, {"service", KEYWORD_SERVICE},
+    {"rpc", KEYWORD_RPC},           {"stream", KEYWORD_STREAM},
+    {"returns", KEYWORD_RETURNS},
 };
 
-#define TOKEN_EOF   0
-#define TOKEN_ID    'i'
+#define TOKEN_EOF 0
+#define TOKEN_ID 'i'
 
 static struct sTokenInfo {
-	int type;         /* one of TOKEN_* constants or punctuation characters */
-	keywordId keyword;
-	vString *value;
+  int type; /* one of TOKEN_* constants or punctuation characters */
+  keywordId keyword;
+  vString *value;
 } token;
 
 /*
  *   FUNCTION DEFINITIONS
  */
 
-static void nextToken (void)
-{
-	int c;
+static void nextToken(void) {
+  int c;
 
 repeat:
-	/*
-	 * .proto files may contain C and C++ style comments and
-	 * quoted strings. cppGetc() takes care of them.
-	 */
-	c = cppGetc ();
+  /*
+   * .proto files may contain C and C++ style comments and
+   * quoted strings. cppGetc() takes care of them.
+   */
+  c = cppGetc();
 
-	token.keyword = KEYWORD_NONE;
-	if (c <= 0)
-		token.type = TOKEN_EOF;
-	else if (c == '{' || c == '}' || c == ';' || c == '.' || c == '=')
-		token.type = c;
-	else if (cppIsalnum (c) || c == '_')
-	{
-		token.type = TOKEN_ID;
-		vStringClear (token.value);
-		while (c > 0 && (cppIsalnum (c) || c == '_')) {
-			vStringPut (token.value, c);
-			c = cppGetc ();
-		}
-		token.keyword = lookupCaseKeyword (vStringValue (token.value), Lang_protobuf);
-		cppUngetc (c);
-	}
-	else
-		goto repeat;  /* anything else is not important for this parser */
+  token.keyword = KEYWORD_NONE;
+  if (c <= 0)
+    token.type = TOKEN_EOF;
+  else if (c == '{' || c == '}' || c == ';' || c == '.' || c == '=')
+    token.type = c;
+  else if (cppIsalnum(c) || c == '_') {
+    token.type = TOKEN_ID;
+    vStringClear(token.value);
+    while (c > 0 && (cppIsalnum(c) || c == '_')) {
+      vStringPut(token.value, c);
+      c = cppGetc();
+    }
+    token.keyword = lookupCaseKeyword(vStringValue(token.value), Lang_protobuf);
+    cppUngetc(c);
+  } else
+    goto repeat; /* anything else is not important for this parser */
 }
 
-static void skipUntil (const char *punctuation)
-{
-	while (token.type != TOKEN_EOF && strchr (punctuation, token.type) == NULL)
-		nextToken ();
+static void skipUntil(const char *punctuation) {
+  while (token.type != TOKEN_EOF && strchr(punctuation, token.type) == NULL)
+    nextToken();
 }
 
-static int tokenIsKeyword(keywordId keyword)
-{
-	return token.type == TOKEN_ID && token.keyword == keyword;
+static int tokenIsKeyword(keywordId keyword) {
+  return token.type == TOKEN_ID && token.keyword == keyword;
 }
 
-static int createProtobufTag (const vString *name, int kind)
-{
-	static tagEntryInfo tag;
-	int corkIndex = CORK_NIL;
+static int createProtobufTag(const vString *name, int kind) {
+  static tagEntryInfo tag;
+  int corkIndex = CORK_NIL;
 
-	if (ProtobufKinds [kind].enabled)
-	{
-		initTagEntry (&tag, vStringValue (name), kind);
-		corkIndex = makeTagEntry (&tag);
-	}
+  if (ProtobufKinds[kind].enabled) {
+    initTagEntry(&tag, vStringValue(name), kind);
+    corkIndex = makeTagEntry(&tag);
+  }
 
-	return corkIndex;
+  return corkIndex;
 }
 
-static void parseEnumConstants (void)
-{
-	if (token.type != '{')
-		return;
-	nextToken ();
+static void parseEnumConstants(void) {
+  if (token.type != '{')
+    return;
+  nextToken();
 
-	while (token.type != TOKEN_EOF && token.type != '}')
-	{
-		if (token.type == TOKEN_ID && !tokenIsKeyword (KEYWORD_OPTION))
-		{
-			nextToken ();  /* doesn't clear token.value if it's punctuation */
-			if (token.type == '=')
-				createProtobufTag (token.value, PK_ENUMERATOR);
-		}
+  while (token.type != TOKEN_EOF && token.type != '}') {
+    if (token.type == TOKEN_ID && !tokenIsKeyword(KEYWORD_OPTION)) {
+      nextToken(); /* doesn't clear token.value if it's punctuation */
+      if (token.type == '=')
+        createProtobufTag(token.value, PK_ENUMERATOR);
+    }
 
-		skipUntil (";}");
+    skipUntil(";}");
 
-		if (token.type == ';')
-			nextToken ();
-	}
+    if (token.type == ';')
+      nextToken();
+  }
 }
 
-#define gatherTypeinfo(VSTRING,CONDITION)			\
-	while (CONDITION)								\
-	{												\
-		if (token.type == TOKEN_ID)					\
-			vStringCat (VSTRING, token.value);		\
-		else if (tokenIsKeyword (KEYWORD_STREAM))	\
-		{											\
-			vStringCat (VSTRING, token.value);		\
-			vStringPut (VSTRING, ' ');				\
-		}											\
-		else										\
-			vStringPut (VSTRING, token.type);		\
-		nextToken ();								\
-	}
+#define gatherTypeinfo(VSTRING, CONDITION)                                     \
+  while (CONDITION) {                                                          \
+    if (token.type == TOKEN_ID)                                                \
+      vStringCat(VSTRING, token.value);                                        \
+    else if (tokenIsKeyword(KEYWORD_STREAM)) {                                 \
+      vStringCat(VSTRING, token.value);                                        \
+      vStringPut(VSTRING, ' ');                                                \
+    } else                                                                     \
+      vStringPut(VSTRING, token.type);                                         \
+    nextToken();                                                               \
+  }
 
-static void parseRPCTypeinfos (int corkIndex)
-{
-	tagEntryInfo *e = getEntryInCorkQueue (corkIndex);
+static void parseRPCTypeinfos(int corkIndex) {
+  tagEntryInfo *e = getEntryInCorkQueue(corkIndex);
 
-	vString *signature = vStringNew ();
-	gatherTypeinfo(signature,
-				   (token.type != TOKEN_EOF
-					&& token.type != '{' && token.type != ';'
-					&& !tokenIsKeyword (KEYWORD_RETURNS)));
-	if (!vStringIsEmpty(signature))
-		e->extensionFields.signature = vStringDeleteUnwrap (signature);
-	else
-		vStringDelete (signature);
+  vString *signature = vStringNew();
+  gatherTypeinfo(signature,
+                 (token.type != TOKEN_EOF && token.type != '{' &&
+                  token.type != ';' && !tokenIsKeyword(KEYWORD_RETURNS)));
+  if (!vStringIsEmpty(signature))
+    e->extensionFields.signature = vStringDeleteUnwrap(signature);
+  else
+    vStringDelete(signature);
 
-	if (!tokenIsKeyword (KEYWORD_RETURNS))
-		return;
-	nextToken ();
+  if (!tokenIsKeyword(KEYWORD_RETURNS))
+    return;
+  nextToken();
 
-	vString *typeref = vStringNew ();
-	gatherTypeinfo(typeref, (token.type != EOF
-							 && token.type != '{' && token.type != ';'));
-	if (!vStringIsEmpty(typeref))
-	{
-		e->extensionFields.typeRef [0] = eStrdup ("typename"); /* As C++ parser does */
-		e->extensionFields.typeRef [1] = vStringDeleteUnwrap (typeref);
-	}
-	else
-		vStringDelete (typeref);
+  vString *typeref = vStringNew();
+  gatherTypeinfo(typeref,
+                 (token.type != EOF && token.type != '{' && token.type != ';'));
+  if (!vStringIsEmpty(typeref)) {
+    e->extensionFields.typeRef[0] =
+        eStrdup("typename"); /* As C++ parser does */
+    e->extensionFields.typeRef[1] = vStringDeleteUnwrap(typeref);
+  } else
+    vStringDelete(typeref);
 }
 
-static void parseStatement (int kind)
-{
-	nextToken ();
+static void parseStatement(int kind) {
+  nextToken();
 
-	if (kind == PK_FIELD)
-	{
-		/* skip field's type */
-		do
-		{
-			if (token.type == '.')
-				nextToken ();
-			if (token.type != TOKEN_ID)
-				return;
-			nextToken ();
-		} while (token.type == '.');
-	}
+  if (kind == PK_FIELD) {
+    /* skip field's type */
+    do {
+      if (token.type == '.')
+        nextToken();
+      if (token.type != TOKEN_ID)
+        return;
+      nextToken();
+    } while (token.type == '.');
+  }
 
-	if (token.type != TOKEN_ID)
-		return;
+  if (token.type != TOKEN_ID)
+    return;
 
-	int corkIndex = createProtobufTag (token.value, kind);
-	nextToken ();
+  int corkIndex = createProtobufTag(token.value, kind);
+  nextToken();
 
-	if (kind == PK_RPC && corkIndex != CORK_NIL)
-		parseRPCTypeinfos (corkIndex);
+  if (kind == PK_RPC && corkIndex != CORK_NIL)
+    parseRPCTypeinfos(corkIndex);
 
-	if (kind == PK_ENUM)
-		parseEnumConstants ();
+  if (kind == PK_ENUM)
+    parseEnumConstants();
 }
 
-static void parsePackage (void)
-{
-	vString *pkg = vStringNew ();
+static void parsePackage(void) {
+  vString *pkg = vStringNew();
 
-	while (true)
-	{
-		nextToken ();
+  while (true) {
+    nextToken();
 
-		if (token.type == TOKEN_ID)
-			vStringCat (pkg, token.value);
-		else if (token.type == '.')
-			vStringPut (pkg, '.');
-		else
-			break;
-	}
+    if (token.type == TOKEN_ID)
+      vStringCat(pkg, token.value);
+    else if (token.type == '.')
+      vStringPut(pkg, '.');
+    else
+      break;
+  }
 
-	if (vStringLength (pkg) > 0)
-		createProtobufTag (pkg, PK_PACKAGE);
-	vStringDelete (pkg);
+  if (vStringLength(pkg) > 0)
+    createProtobufTag(pkg, PK_PACKAGE);
+  vStringDelete(pkg);
 }
 
-static void findProtobufTags (void)
-{
-	cppInit (false, false, false, false,
-			 KIND_GHOST_INDEX, 0, KIND_GHOST_INDEX,
-			 KIND_GHOST_INDEX, 0, 0,
-			 FIELD_UNKNOWN);
-	token.value = vStringNew ();
+static void findProtobufTags(void) {
+  cppInit(false, false, false, false, KIND_GHOST_INDEX, 0, KIND_GHOST_INDEX,
+          KIND_GHOST_INDEX, 0, 0, FIELD_UNKNOWN);
+  token.value = vStringNew();
 
-	nextToken ();
+  nextToken();
 
-	while (token.type != TOKEN_EOF)
-	{
-		if (tokenIsKeyword (KEYWORD_PACKAGE))
-			parsePackage ();
-		else if (tokenIsKeyword (KEYWORD_MESSAGE))
-			parseStatement (PK_MESSAGE);
-		else if (tokenIsKeyword (KEYWORD_ENUM))
-			parseStatement (PK_ENUM);
-		else if (tokenIsKeyword (KEYWORD_REPEATED) || tokenIsKeyword (KEYWORD_OPTIONAL) || tokenIsKeyword (KEYWORD_REQUIRED))
-			parseStatement (PK_FIELD);
-		else if (tokenIsKeyword (KEYWORD_SERVICE))
-			parseStatement (PK_SERVICE);
-		else if (tokenIsKeyword (KEYWORD_RPC))
-			parseStatement (PK_RPC);
+  while (token.type != TOKEN_EOF) {
+    if (tokenIsKeyword(KEYWORD_PACKAGE))
+      parsePackage();
+    else if (tokenIsKeyword(KEYWORD_MESSAGE))
+      parseStatement(PK_MESSAGE);
+    else if (tokenIsKeyword(KEYWORD_ENUM))
+      parseStatement(PK_ENUM);
+    else if (tokenIsKeyword(KEYWORD_REPEATED) ||
+             tokenIsKeyword(KEYWORD_OPTIONAL) ||
+             tokenIsKeyword(KEYWORD_REQUIRED))
+      parseStatement(PK_FIELD);
+    else if (tokenIsKeyword(KEYWORD_SERVICE))
+      parseStatement(PK_SERVICE);
+    else if (tokenIsKeyword(KEYWORD_RPC))
+      parseStatement(PK_RPC);
 
-		skipUntil (";{}");
-		nextToken ();
-	}
+    skipUntil(";{}");
+    nextToken();
+  }
 
-	vStringDelete (token.value);
-	cppTerminate ();
+  vStringDelete(token.value);
+  cppTerminate();
 }
 
-static void initialize (const langType language)
-{
-	Lang_protobuf = language;
-}
+static void initialize(const langType language) { Lang_protobuf = language; }
 
-extern parserDefinition* ProtobufParser (void)
-{
-	static const char *const extensions [] = { "proto", NULL };
-	parserDefinition* def = parserNew ("Protobuf");
+extern parserDefinition *ProtobufParser(void) {
+  static const char *const extensions[] = {"proto", NULL};
+  parserDefinition *def = parserNew("Protobuf");
 
-	def->extensions = extensions;
-	def->kindTable      = ProtobufKinds;
-	def->initialize = initialize;
-	def->kindCount  = ARRAY_SIZE (ProtobufKinds);
-	def->parser     = findProtobufTags;
-	def->keywordTable = ProtobufKeywordTable;
-	def->keywordCount = ARRAY_SIZE (ProtobufKeywordTable);
+  def->extensions = extensions;
+  def->kindTable = ProtobufKinds;
+  def->initialize = initialize;
+  def->kindCount = ARRAY_SIZE(ProtobufKinds);
+  def->parser = findProtobufTags;
+  def->keywordTable = ProtobufKeywordTable;
+  def->keywordCount = ARRAY_SIZE(ProtobufKeywordTable);
 
-	/* cpreprocessor wants corkQueue. */
-	def->useCork    = true;
+  /* cpreprocessor wants corkQueue. */
+  def->useCork = true;
 
-	return def;
+  return def;
 }

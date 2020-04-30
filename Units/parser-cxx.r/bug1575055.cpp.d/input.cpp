@@ -1,4 +1,4 @@
 namespace TheNamespace {
-	class MyClass { };
-	int variable;
-}
+class MyClass {};
+int variable;
+} // namespace TheNamespace

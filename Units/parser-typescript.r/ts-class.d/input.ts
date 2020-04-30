@@ -16,26 +16,19 @@ class BankAccount {
 }
 
 class CheckingAccount extends BankAccount {
-  constructor(balance: number) {
-    super(balance);
-  }
-  writeCheck(debit: number) {
-    this.balance -= debit;
-  }
+  constructor(balance: number) { super(balance); }
+  writeCheck(debit: number) { this.balance -= debit; }
 }
 
 class List<T extends NamedItem> {
   next: List<T> = null;
-  constructor(public item: T) {
-  }
+  constructor(public item: T) {}
   insertAfter(item: T) {
     var temp = this.next;
     this.next = new List(item);
     this.next.next = temp;
   }
-  log() {
-    console.log(this.item.name);
-  }
+  log() { console.log(this.item.name); }
   // ...
 }
 
@@ -53,7 +46,7 @@ class Messenger {
 };
 
 class D {
-  data: string | string[];
+  data: string|string[];
   getData() {
     var data = this.data;
     return typeof data === "string" ? data : data.join(" ");
@@ -62,7 +55,7 @@ class D {
 
 class Point {
   protected fakePointBuilder: () => { x: number, y: number };
-  constructor(public x: number, public y: number) { }
+  constructor(public x: number, public y: number) {}
   public length() { return Math.sqrt(this.x * this.x + this.y * this.y); }
   static origin = new Point(0, 0);
 }
@@ -70,7 +63,7 @@ class Point {
 class A {
   private x: number;
   protected y: number;
-  public fun: (a: 22 | 30, b: CPoint) => number | string;
+  public fun: (a: 22|30, b: CPoint) => number | string;
 
   static f(a: A, b: B) {
     a.x = 1; // Ok
@@ -79,48 +72,35 @@ class A {
     b.y = 1; // Ok
   }
 
-  getXAsT<T = any>(): T {
-    return this.x as T;
-  }
+  getXAsT<T = any>(): T { return this.x as T; }
 
-  register(...args) {
-    return this.f(...args);
-  }
+  register(...args) { return this.f(...args); }
 
-  longArgsFun(options: {
-    root: string;
-    prefix?: string;
-    setHeaders?: Function;
-    send?: any;
-  }) {
+  longArgsFun(
+      options:
+          {root: string; prefix?: string; setHeaders?: Function; send?: any;}) {
     return this.f(options);
   }
 
   closure(
-    x: number,
-  ): (path: string, callback: Function) => any {
+      x: number,
+      ): (path: string, callback: Function) => any {
     const normalizedPath = path === '/*' ? '' : path;
   }
 }
 
 class X {
-    public f(a: T): number {
-        return g({ a: a});
-    }
+  public f(a: T): number { return g({a : a}); }
 
-    public g(a: T): number {
-        return 1;
-    }
+  public g(a: T): number { return 1; }
 }
 
 class C extends A implements B, D {
-    x: number;
+  x: number;
 }
 
 class Ct<T> extends A<T> implements B<T>, D, E<T> {
-    x: number;
+  x: number;
 }
 
-class A<T> implements I<T>
-{
-}
+class A<T> implements I<T> {}

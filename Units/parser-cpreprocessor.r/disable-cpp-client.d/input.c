@@ -1,7 +1,3 @@
 #define X 1
 
-int
-main(int argc)
-{
-       return X;
-}
+int main(int argc) { return X; }

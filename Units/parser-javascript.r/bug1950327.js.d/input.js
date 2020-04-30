@@ -12,30 +12,22 @@
 //     TabChrome.init
 //
 TabChrome.prototype = {
-	init: function() 
-	{
-		this.browserMap = new Object();
-	},
-	createTabTile: function(browser) 
-	{
-		//container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
-		return container;
-	},
-	destroyTabTile: function(tile)
-	{
-	}
-}
-Different.prototype = {
-	init: function() 
-	{
-		this.browserMap = new Object();
-	},
-	createTabTile: function(browser) 
-	{
-		container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*': false}		
-		return container;
-	},
-	destroyTabTile: function(tile)
-	{
-	}
+  init : function() { this.browserMap = new Object(); },
+  createTabTile : function(browser) {
+    // container.dirtyTab = {'url': false, 'title':false, 'snapshot':false, '*':
+    // false}
+    return container;
+  },
+  destroyTabTile : function(tile) {}
+} Different.prototype = {
+  init : function() { this.browserMap = new Object(); },
+  createTabTile : function(browser) {
+    container.dirtyTab = {
+      'url' : false,
+      'title' : false,
+      'snapshot' : false,
+      '*' : false
+    } return container;
+  },
+  destroyTabTile : function(tile) {}
 }

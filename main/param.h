@@ -13,26 +13,25 @@
 #define CTAGS_MAIN_PARAM_H
 
 /*
-*   INCLUDE FILES
-*/
+ *   INCLUDE FILES
+ */
 #include "general.h"
 
 #include "types.h"
 
-
 /*
-*   DATA DECLARATIONS
-*/
+ *   DATA DECLARATIONS
+ */
 struct sParameterHandlerTable {
-	const char *name;
-	const char *desc;
-	void  (* handleParameter) (langType lang, const char *name, const char *arg);
+  const char *name;
+  const char *desc;
+  void (*handleParameter)(langType lang, const char *name, const char *arg);
 };
 
 /*
-*   FUNCTION PROTOTYPES
-*/
-extern bool paramParserBool (const char *value, bool fallback,
-							 const char *errWhat, const char *errCategory);
+ *   FUNCTION PROTOTYPES
+ */
+extern bool paramParserBool(const char *value, bool fallback,
+                            const char *errWhat, const char *errCategory);
 
-#endif	/* CTAGS_MAIN_PARAM_H */
+#endif /* CTAGS_MAIN_PARAM_H */

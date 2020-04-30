@@ -1,4 +1,2 @@
- ABC();
-int main(void)
-{
-}
+ABC();
+int main(void) {}

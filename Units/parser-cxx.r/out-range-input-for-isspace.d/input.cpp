@@ -1,4 +1,3 @@
-extern "C"{
-};
+extern "C" {};
 
 int main() {}

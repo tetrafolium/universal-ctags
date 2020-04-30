@@ -1,7 +1,7 @@
 /*
 Bugs item #1085585, was opened at 2004-12-14 20:55
 Message generated for change (Tracker Item Submitted) made by Item Submitter
-You can respond by visiting: 
+You can respond by visiting:
 https://sourceforge.net/tracker/?func=detail&atid=106556&aid=1085585&group_id=6556
 
 Category: None
@@ -33,5 +33,5 @@ Why does ctags fail on the 1.3 version of the file ?
 */
 
 /* relevant portion from file */
-static int check_parity(des_cblock (*key));
-int des_check_key=0;
+static int check_parity(des_cblock(*key));
+int des_check_key = 0;

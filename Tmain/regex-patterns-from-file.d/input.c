@@ -1,2 +1,2 @@
-DEFINE(x,1);
+DEFINE(x, 1);
 REGISTER(y);

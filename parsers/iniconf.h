@@ -1,12 +1,12 @@
 /*
-*
-*   Copyright (c) 2000-2001, Darren Hiebert
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License version 2 or (at your option) any later version.
-*
-*   This module contains functions for generating tags for ini/config files.
-*/
+ *
+ *   Copyright (c) 2000-2001, Darren Hiebert
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License version 2 or (at your option) any later version.
+ *
+ *   This module contains functions for generating tags for ini/config files.
+ */
 
 /*
  *  This is based on geany's conf.c:
@@ -18,7 +18,8 @@
  * added tag support for filetype Conf
 lang *
  *
- * git-svn-id: https://geany.svn.sourceforge.net/svnroot/geany/trunk@15 ea778897-0a13-0410-b9d1-a72fbfd435f5
+ * git-svn-id: https://geany.svn.sourceforge.net/svnroot/geany/trunk@15
+ea778897-0a13-0410-b9d1-a72fbfd435f5
  *
  */
 
@@ -31,11 +32,12 @@ lang *
 
 typedef struct sIniconfSubparser iniconfSubparser;
 struct sIniconfSubparser {
-	subparser subparser;
+  subparser subparser;
 
-	bool  (* probeLanguage)  (const char *section, const char *key, const char *value);
-	void  (* newDataNotify)  (iniconfSubparser *s,
-							  const char *section, const char *key, const char *value);
+  bool (*probeLanguage)(const char *section, const char *key,
+                        const char *value);
+  void (*newDataNotify)(iniconfSubparser *s, const char *section,
+                        const char *key, const char *value);
 };
 
 #endif

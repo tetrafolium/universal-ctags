@@ -1,27 +1,22 @@
 
 // In real world this would have a (rather complex) implementation.
 // See Q_FOREACH() and foreach() macros in Qt as example.
-#define foreach(_a,_b)
+#define foreach(_a, _b)
 
-char * pointers[10];
-int a,b;
+char *pointers[10];
+int a, b;
 
-int main(int,char **)
-{
-	
-	//...
-	
-	// p is declared inside foreach() parenthesis.
-	// pointers is NOT declared here
-	foreach(char * p,pointers)
-	{
+int main(int, char **) {
 
-	}
+  //...
 
-	// This is not a variable declaration.
-	if(a * b)
-	{
-	}
+  // p is declared inside foreach() parenthesis.
+  // pointers is NOT declared here
+  foreach (char *p, pointers) {}
 
-	return 0;
+  // This is not a variable declaration.
+  if (a * b) {
+  }
+
+  return 0;
 }

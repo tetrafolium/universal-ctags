@@ -1,28 +1,21 @@
-var Cls = function() {
-  this.init = function() {
-    print("hello")
-  }
-}
+var Cls = function() { this.init = function() { print("hello") } }
 
-function extend() {
+function
+extend() {
   /* this extends 'Cls' at the root scope */
-  Cls.prototype.extended = function() {
-    print("extended")
-  }
+  Cls.prototype.extended = function() { print("extended") }
 }
 
-function doesnt_extend() {
+function
+doesnt_extend() {
   /* this extends the local Cls class */
   var Cls = function() {
     // just so the parser sees a class
     this.dummy1 = function() {}
-  }
-  Cls.prototype.dummy2 = function() {
-    print("dummy")
-  }
+  } Cls.prototype.dummy2 = function() { print("dummy") }
 }
 
-//function extend_dyn(cls) {
+// function extend_dyn(cls) {
 //  /* here it's just not possible to figure it out, as it's extending a class
 //   * dynamically -- cls is the function's argument.  The only way is to
 //   * actually run the code and see on which class(es) this was called.  */
@@ -33,9 +26,10 @@ function doesnt_extend() {
 
 /*----------------*/
 
-function main() {
+function
+main() {
   function assert(expr, message) {
-    if (! expr) {
+    if (!expr) {
       throw new Error(message || "Assertion failed");
     }
   }
@@ -51,8 +45,7 @@ function main() {
   doesnt_extend()
   assert(ci.dummy == undefined)
 
-  //assert(ci.dynamic == undefined)
-  //extend_dyn(Cls)
-  //assert(ci.dynamic != undefined)
-}
-main()
+  // assert(ci.dynamic == undefined)
+  // extend_dyn(Cls)
+  // assert(ci.dynamic != undefined)
+} main()

@@ -2,14 +2,14 @@
 
 struct {
   int a;
-} b = { 1 };
+} b = {1};
 
 int c;
 
 int d(int e) {
   struct {
     int f;
-  } g = { 1 };
+  } g = {1};
   int h;
-  g = (typeof(g)){ 2 };
+  g = (typeof(g)){2};
 }

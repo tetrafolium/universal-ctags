@@ -97,5 +97,3 @@ while fn > fc+cDDfnc,
                 break
         end
 end
-
-

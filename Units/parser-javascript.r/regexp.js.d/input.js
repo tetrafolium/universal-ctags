@@ -1,11 +1,11 @@
 /*
  * ctags should return the following for parsing this file using:
  * ctags -f - simple.js
- * 
+ *
  * functions:
  *    func1
  *    func2
- * 
+ *
  * variables:
  *    no_re1
  *    no_re2
@@ -25,8 +25,9 @@
 
 var no_re1 = 1 / 2;
 var no_re2 = 1 + (1 + 2) / 3;
-var no_re3 = 1 + {0:1}[0] / 2;
-var no_re4 = 1 + {0:1} / 8; // gives NaN
+var no_re3 = 1 + {0 : 1}[0] / 2;
+var no_re4 = 1 + { 0: 1 }
+/ 8; / / gives NaN
 var no_re5 = "foo" / 2; // so does this
 var no_re6 = no_re1 / 2;
 
@@ -40,10 +41,6 @@ var re6 = /\(([a-z]*_)+/;
 var str1 = "a/b/c".replace(/\//g, '-');
 var str2 = "Hello".replace(/O/ig, 'O');
 
-function func1() {
-  return /function bug1(foo){/;
-}
+function func1() { return /function bug1(foo){/; }
 
-function func2() {
-  return /\(/;
-}
+function func2() { return /\(/; }

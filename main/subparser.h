@@ -18,51 +18,53 @@
 #include "types.h"
 
 /*
-*   MACROS
-*/
-#define foreachSubparser(VAR, INCLUDING_NONE_CRAFTED_PARSER)\
-	VAR = NULL;								\
-	while ((VAR = getNextSubparser (VAR, INCLUDING_NONE_CRAFTED_PARSER)) != NULL)
+ *   MACROS
+ */
+#define foreachSubparser(VAR, INCLUDING_NONE_CRAFTED_PARSER)                   \
+  VAR = NULL;                                                                  \
+  while ((VAR = getNextSubparser(VAR, INCLUDING_NONE_CRAFTED_PARSER)) != NULL)
 
 /*
-*   DATA DECLARATIONS
-*/
+ *   DATA DECLARATIONS
+ */
 typedef enum eSubparserRunDirection {
-	SUBPARSER_UNKNOWN_DIRECTION =  0,
-	SUBPARSER_BASE_RUNS_SUB = 1 << 0,
-	SUBPARSER_SUB_RUNS_BASE = 1 << 1,
-	SUBPARSER_BI_DIRECTION  = SUBPARSER_BASE_RUNS_SUB|SUBPARSER_SUB_RUNS_BASE,
+  SUBPARSER_UNKNOWN_DIRECTION = 0,
+  SUBPARSER_BASE_RUNS_SUB = 1 << 0,
+  SUBPARSER_SUB_RUNS_BASE = 1 << 1,
+  SUBPARSER_BI_DIRECTION = SUBPARSER_BASE_RUNS_SUB | SUBPARSER_SUB_RUNS_BASE,
 } subparserRunDirection;
 
 struct sSubparser {
-	/* private in the main part */
-	slaveParser *slaveParser;
-	subparser *next;
-	bool schedulingBaseparserExplicitly;
-	bool chosenAsExclusiveSubparser;
+  /* private in the main part */
+  slaveParser *slaveParser;
+  subparser *next;
+  bool schedulingBaseparserExplicitly;
+  bool chosenAsExclusiveSubparser;
 
-	/* public to the parser */
-	subparserRunDirection direction;
+  /* public to the parser */
+  subparserRunDirection direction;
 
-	void (* inputStart) (subparser *s);
-	void (* inputEnd) (subparser *s);
-	void (* exclusiveSubparserChosenNotify) (subparser *s, void *data);
-	void (* makeTagEntryNotify) (subparser *s, const tagEntryInfo *tag, int corkIndex);
+  void (*inputStart)(subparser *s);
+  void (*inputEnd)(subparser *s);
+  void (*exclusiveSubparserChosenNotify)(subparser *s, void *data);
+  void (*makeTagEntryNotify)(subparser *s, const tagEntryInfo *tag,
+                             int corkIndex);
 };
 
 /*
-*   FUNCTION PROTOTYPES
-*/
+ *   FUNCTION PROTOTYPES
+ */
 
 /* Interface for Baseparser */
-extern subparser *getNextSubparser(subparser *last, bool includingNoneCraftedParser);
+extern subparser *getNextSubparser(subparser *last,
+                                   bool includingNoneCraftedParser);
 extern void enterSubparser(subparser *subparser);
 extern void leaveSubparser(void);
-extern subparser* getSubparserRunningBaseparser (void);
-extern void chooseExclusiveSubparser (subparser *s, void *data);
+extern subparser *getSubparserRunningBaseparser(void);
+extern void chooseExclusiveSubparser(subparser *s, void *data);
 
 /* Interface for Subparsers   */
 #define RUN_DEFAULT_SUBPARSERS -1
-extern void scheduleRunningBaseparser (int dependencyIndex);
+extern void scheduleRunningBaseparser(int dependencyIndex);
 
-#endif	/* CTAGS_MAIN_SUBPARSER_H */
+#endif /* CTAGS_MAIN_SUBPARSER_H */

@@ -4,15 +4,13 @@ using namespace std;
 using std::string;
 using x = std::string;
 
-class A
-{
+class A {
 public:
-	void test();
+  void test();
 };
 
-class B : public A
-{
+class B : public A {
 public:
-	void test(x t);
-	using A::test;
+  void test(x t);
+  using A::test;
 };

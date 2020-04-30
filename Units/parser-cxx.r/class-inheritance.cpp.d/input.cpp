@@ -1,42 +1,21 @@
 
 
-class A
-{
-};
+class A {};
 
-class B
-{
-};
+class B {};
 
-template<typename X,typename Y> class C
-{
-};
+template <typename X, typename Y> class C {};
 
-class D : public A
-{
-};
+class D : public A {};
 
-class E : public A, public B
-{
-};
+class E : public A, public B {};
 
-class F : private A, public B
-{
-};
+class F : private A, public B {};
 
-class G : virtual D
-{
-};
+class G : virtual D {};
 
-class H : public A, virtual B
-{
-};
+class H : public A, virtual B {};
 
-class I : public C<A,B>
-{
-};
+class I : public C<A, B> {};
 
-class J : private A, public C<A,B>
-{
-};
-
+class J : private A, public C<A, B> {};

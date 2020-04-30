@@ -7,7 +7,7 @@
  *   This module contains functions for generating tags for Autoconf files.
  */
 
-#include "general.h"	/* must always come first */
+#include "general.h" /* must always come first */
 
 #include <string.h>
 
@@ -15,182 +15,204 @@
 
 #include "debug.h"
 #include "entry.h"
-#include "read.h"
 #include "keyword.h"
 #include "kind.h"
 #include "parse.h"
+#include "read.h"
 
 enum {
-	PACKAGE_KIND,
-	TEMPLATE_KIND,
-	MACRO_KIND,
-	OPTWITH_KIND,
-	OPTENABLE_KIND,
-	SUBST_KIND,
-	CONDITION_KIND,
-	DEFINITION_KIND,
+  PACKAGE_KIND,
+  TEMPLATE_KIND,
+  MACRO_KIND,
+  OPTWITH_KIND,
+  OPTENABLE_KIND,
+  SUBST_KIND,
+  CONDITION_KIND,
+  DEFINITION_KIND,
 };
 
 static kindDefinition AutoconfKinds[] = {
-	{ true, 'p', "package", "packages" },
-	{ true, 't', "template", "templates" },
-	{ true, 'm', "macro", "autoconf macros" },
-	{ true, 'w', "optwith", "options specified with --with-..."},
-	{ true, 'e', "optenable", "options specified with --enable-..."},
-	{ true, 's', "subst", "substitution keys"},
-	{ true, 'c', "condition", "automake conditions" },
-	{ true, 'd', "definition", "definitions" },
+    {true, 'p', "package", "packages"},
+    {true, 't', "template", "templates"},
+    {true, 'm', "macro", "autoconf macros"},
+    {true, 'w', "optwith", "options specified with --with-..."},
+    {true, 'e', "optenable", "options specified with --enable-..."},
+    {true, 's', "subst", "substitution keys"},
+    {true, 'c', "condition", "automake conditions"},
+    {true, 'd', "definition", "definitions"},
 };
 
 typedef enum {
-	KEYWORD_init,
-	KEYWORD_template,
-	KEYWORD_defun,
-	KEYWORD_argwith,
-	KEYWORD_argenable,
-	KEYWORD_subst,
-	KEYWORD_conditional,
-	KEYWORD_define,
+  KEYWORD_init,
+  KEYWORD_template,
+  KEYWORD_defun,
+  KEYWORD_argwith,
+  KEYWORD_argenable,
+  KEYWORD_subst,
+  KEYWORD_conditional,
+  KEYWORD_define,
 } autoconfKeywordId;
 
 static const keywordTable autoconfKeywordTable[] = {
-	{ "AC_INIT",            KEYWORD_init, },
-	{ "AH_TEMPLATE",        KEYWORD_template, },
-	{ "AC_DEFUN",           KEYWORD_defun, },
-	{ "AC_DEFUN_ONCE",      KEYWORD_defun, },
-	{ "AC_ARG_WITH",        KEYWORD_argwith, },
-	{ "AC_ARG_ENABLE",      KEYWORD_argenable, },
-	{ "AC_SUBST",           KEYWORD_subst, },
-	{ "AM_CONDITIONAL",     KEYWORD_conditional, },
-	{ "AC_DEFINE",          KEYWORD_define, },
-	{ "AC_DEFINE_UNQUOTED", KEYWORD_define, },
+    {
+        "AC_INIT",
+        KEYWORD_init,
+    },
+    {
+        "AH_TEMPLATE",
+        KEYWORD_template,
+    },
+    {
+        "AC_DEFUN",
+        KEYWORD_defun,
+    },
+    {
+        "AC_DEFUN_ONCE",
+        KEYWORD_defun,
+    },
+    {
+        "AC_ARG_WITH",
+        KEYWORD_argwith,
+    },
+    {
+        "AC_ARG_ENABLE",
+        KEYWORD_argenable,
+    },
+    {
+        "AC_SUBST",
+        KEYWORD_subst,
+    },
+    {
+        "AM_CONDITIONAL",
+        KEYWORD_conditional,
+    },
+    {
+        "AC_DEFINE",
+        KEYWORD_define,
+    },
+    {
+        "AC_DEFINE_UNQUOTED",
+        KEYWORD_define,
+    },
 };
 
-static bool doesLineCommentStart (m4Subparser *m4 CTAGS_ATTR_UNUSED, int c, const char* token CTAGS_ATTR_UNUSED)
-{
-	return (c == '#');
+static bool doesLineCommentStart(m4Subparser *m4 CTAGS_ATTR_UNUSED, int c,
+                                 const char *token CTAGS_ATTR_UNUSED) {
+  return (c == '#');
 }
 
-static bool doesStringLiteralStart (m4Subparser *m4 CTAGS_ATTR_UNUSED, int c CTAGS_ATTR_UNUSED)
-{
-	// return (c == '"') || (c == '\'') || (c == '`');
-	return false;
+static bool doesStringLiteralStart(m4Subparser *m4 CTAGS_ATTR_UNUSED,
+                                   int c CTAGS_ATTR_UNUSED) {
+  // return (c == '"') || (c == '\'') || (c == '`');
+  return false;
 }
 
-static bool probeLanguage (m4Subparser *m4 CTAGS_ATTR_UNUSED, const char* token)
-{
-	return strncmp (token, "m4_", 3) == 0
-		|| strncmp (token, "AC_", 3) == 0
-		|| strncmp (token, "AM_", 3) == 0
-		|| strncmp (token, "AS_", 3) == 0
-		|| strncmp (token, "AH_", 3) == 0
-		;
+static bool probeLanguage(m4Subparser *m4 CTAGS_ATTR_UNUSED,
+                          const char *token) {
+  return strncmp(token, "m4_", 3) == 0 || strncmp(token, "AC_", 3) == 0 ||
+         strncmp(token, "AM_", 3) == 0 || strncmp(token, "AS_", 3) == 0 ||
+         strncmp(token, "AH_", 3) == 0;
 }
 
-static int makeAutoconfTag (int kind)
-{
-	int index = CORK_NIL;
-	vString * name;
+static int makeAutoconfTag(int kind) {
+  int index = CORK_NIL;
+  vString *name;
 
-	name = vStringNew();
-	readM4MacroArgument(name);
-	if (vStringLength (name) > 0)
-	{
-		tagEntryInfo e;
-		initTagEntry (&e, vStringValue(name), kind);
-		index = makeTagEntry(&e);
-	}
-	vStringDelete (name);
+  name = vStringNew();
+  readM4MacroArgument(name);
+  if (vStringLength(name) > 0) {
+    tagEntryInfo e;
+    initTagEntry(&e, vStringValue(name), kind);
+    index = makeTagEntry(&e);
+  }
+  vStringDelete(name);
 
-	return index;
+  return index;
 }
 
-static int newMacroCallback (m4Subparser *m4 CTAGS_ATTR_UNUSED, const char* token)
-{
-	int keyword;
-	int index = CORK_NIL;
+static int newMacroCallback(m4Subparser *m4 CTAGS_ATTR_UNUSED,
+                            const char *token) {
+  int keyword;
+  int index = CORK_NIL;
 
-	keyword = lookupKeyword (token, getInputLanguage ());
+  keyword = lookupKeyword(token, getInputLanguage());
 
-	/* TODO:
-	   AH_VERBATIM
-	 */
-	switch (keyword)
-	{
-	case KEYWORD_NONE:
-		break;
-	case KEYWORD_init:
-		index = makeAutoconfTag (PACKAGE_KIND);
-		break;
-	case KEYWORD_template:
-		index = makeAutoconfTag (TEMPLATE_KIND);
-		break;
-	case KEYWORD_defun:
-		index = makeAutoconfTag (MACRO_KIND);
-		break;
-	case KEYWORD_argwith:
-		index = makeAutoconfTag (OPTWITH_KIND);
-		break;
-	case KEYWORD_argenable:
-		index = makeAutoconfTag (OPTENABLE_KIND);
-		break;
-	case KEYWORD_subst:
-		index = makeAutoconfTag (SUBST_KIND);
-		break;
-	case KEYWORD_conditional:
-		index = makeAutoconfTag (CONDITION_KIND);
-		break;
-	case KEYWORD_define:
-		index = makeAutoconfTag (DEFINITION_KIND);
-		break;
-	default:
-		AssertNotReached ();
-	}
-	return index;
+  /* TODO:
+     AH_VERBATIM
+   */
+  switch (keyword) {
+  case KEYWORD_NONE:
+    break;
+  case KEYWORD_init:
+    index = makeAutoconfTag(PACKAGE_KIND);
+    break;
+  case KEYWORD_template:
+    index = makeAutoconfTag(TEMPLATE_KIND);
+    break;
+  case KEYWORD_defun:
+    index = makeAutoconfTag(MACRO_KIND);
+    break;
+  case KEYWORD_argwith:
+    index = makeAutoconfTag(OPTWITH_KIND);
+    break;
+  case KEYWORD_argenable:
+    index = makeAutoconfTag(OPTENABLE_KIND);
+    break;
+  case KEYWORD_subst:
+    index = makeAutoconfTag(SUBST_KIND);
+    break;
+  case KEYWORD_conditional:
+    index = makeAutoconfTag(CONDITION_KIND);
+    break;
+  case KEYWORD_define:
+    index = makeAutoconfTag(DEFINITION_KIND);
+    break;
+  default:
+    AssertNotReached();
+  }
+  return index;
 }
 
-static void exclusiveSubparserChosenCallback (subparser *s CTAGS_ATTR_UNUSED, void *data CTAGS_ATTR_UNUSED)
-{
-	setM4Quotes ('[', ']');
+static void exclusiveSubparserChosenCallback(subparser *s CTAGS_ATTR_UNUSED,
+                                             void *data CTAGS_ATTR_UNUSED) {
+  setM4Quotes('[', ']');
 }
 
-static void findAutoconfTags(void)
-{
-	scheduleRunningBaseparser (0);
-}
+static void findAutoconfTags(void) { scheduleRunningBaseparser(0); }
 
-extern parserDefinition* AutoconfParser (void)
-{
-	static const char *const patterns [] = { "configure.in", NULL };
-	static const char *const extensions [] = { "ac", NULL };
-	parserDefinition* const def = parserNew("Autoconf");
+extern parserDefinition *AutoconfParser(void) {
+  static const char *const patterns[] = {"configure.in", NULL};
+  static const char *const extensions[] = {"ac", NULL};
+  parserDefinition *const def = parserNew("Autoconf");
 
-	static m4Subparser autoconfSubparser = {
-		.subparser = {
-			.direction = SUBPARSER_BI_DIRECTION,
-			.exclusiveSubparserChosenNotify = exclusiveSubparserChosenCallback,
-		},
-		.probeLanguage  = probeLanguage,
-		.newMacroNotify = newMacroCallback,
-		.doesLineCommentStart = doesLineCommentStart,
-		.doesStringLiteralStart = doesStringLiteralStart,
-	};
-	static parserDependency dependencies [] = {
-		[0] = { DEPTYPE_SUBPARSER, "M4", &autoconfSubparser },
-	};
+  static m4Subparser autoconfSubparser = {
+      .subparser =
+          {
+              .direction = SUBPARSER_BI_DIRECTION,
+              .exclusiveSubparserChosenNotify =
+                  exclusiveSubparserChosenCallback,
+          },
+      .probeLanguage = probeLanguage,
+      .newMacroNotify = newMacroCallback,
+      .doesLineCommentStart = doesLineCommentStart,
+      .doesStringLiteralStart = doesStringLiteralStart,
+  };
+  static parserDependency dependencies[] = {
+      [0] = {DEPTYPE_SUBPARSER, "M4", &autoconfSubparser},
+  };
 
-	def->dependencies = dependencies;
-	def->dependencyCount = ARRAY_SIZE (dependencies);
+  def->dependencies = dependencies;
+  def->dependencyCount = ARRAY_SIZE(dependencies);
 
-	def->kindTable = AutoconfKinds;
-	def->kindCount = ARRAY_SIZE(AutoconfKinds);
-	def->patterns = patterns;
-	def->extensions = extensions;
-	def->parser = findAutoconfTags;
-	def->useCork = true;
+  def->kindTable = AutoconfKinds;
+  def->kindCount = ARRAY_SIZE(AutoconfKinds);
+  def->patterns = patterns;
+  def->extensions = extensions;
+  def->parser = findAutoconfTags;
+  def->useCork = true;
 
-	def->keywordTable = autoconfKeywordTable;
-	def->keywordCount = ARRAY_SIZE (autoconfKeywordTable);
+  def->keywordTable = autoconfKeywordTable;
+  def->keywordCount = ARRAY_SIZE(autoconfKeywordTable);
 
-	return def;
+  return def;
 }

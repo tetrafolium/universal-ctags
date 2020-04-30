@@ -1,19 +1,19 @@
 /*
-*   Copyright (c) 2016, Szymon Tomasz Stefanek
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License version 2 or (at your option) any later version.
-*
-*   This module contains functions for parsing and scanning C++ source files
-*/
+ *   Copyright (c) 2016, Szymon Tomasz Stefanek
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License version 2 or (at your option) any later version.
+ *
+ *   This module contains functions for parsing and scanning C++ source files
+ */
 
 #include "cxx_scope.h"
 
-#include "vstring.h"
 #include "debug.h"
+#include "vstring.h"
 
-#include "cxx_tag.h"
 #include "cxx_debug.h"
+#include "cxx_tag.h"
 #include "cxx_token_chain.h"
 
 #ifdef CXX_DO_DEBUGGING
@@ -21,251 +21,194 @@
 #endif
 
 // The tokens defining current scope
-static CXXTokenChain * g_pScope = NULL;
-static vString * g_szScopeName = NULL;
+static CXXTokenChain *g_pScope = NULL;
+static vString *g_szScopeName = NULL;
 static bool g_bScopeNameDirty = true;
 
-void cxxScopeInit(void)
-{
-	g_pScope = cxxTokenChainCreate();
+void cxxScopeInit(void) { g_pScope = cxxTokenChainCreate(); }
+
+void cxxScopeDone(void) {
+  cxxTokenChainDestroy(g_pScope);
+  if (g_szScopeName) {
+    vStringDelete(g_szScopeName);
+    g_szScopeName = NULL;
+  }
 }
 
-void cxxScopeDone(void)
-{
-	cxxTokenChainDestroy(g_pScope);
-	if(g_szScopeName)
-	{
-		vStringDelete(g_szScopeName);
-		g_szScopeName = NULL;
-	}
+void cxxScopeClear(void) {
+  if (g_pScope)
+    cxxTokenChainClear(g_pScope);
+  if (g_szScopeName) {
+    vStringDelete(g_szScopeName);
+    g_szScopeName = NULL;
+  }
 }
 
-void cxxScopeClear(void)
-{
-	if(g_pScope)
-		cxxTokenChainClear(g_pScope);
-	if(g_szScopeName)
-	{
-		vStringDelete(g_szScopeName);
-		g_szScopeName = NULL;
-	}
+bool cxxScopeIsGlobal(void) { return (g_pScope->iCount < 1); }
+
+enum CXXScopeType cxxScopeGetType(void) {
+  if (g_pScope->iCount < 1)
+    return CXXScopeTypeNamespace;
+  return (enum CXXScopeType)g_pScope->pTail->uInternalScopeType;
 }
 
-bool cxxScopeIsGlobal(void)
-{
-	return (g_pScope->iCount < 1);
+unsigned int cxxScopeGetVariableKind(void) {
+  switch (cxxScopeGetType()) {
+  case CXXScopeTypeClass:
+  case CXXScopeTypeUnion:
+  case CXXScopeTypeStruct:
+    return CXXTagKindMEMBER;
+    break;
+  case CXXScopeTypeFunction:
+    return CXXTagKindLOCAL;
+    break;
+  // case CXXScopeTypeNamespace:
+  // case CXXScopeTypeEnum:
+  default:
+    // fall down
+    break;
+  }
+  return CXXTagKindVARIABLE;
 }
 
-enum CXXScopeType cxxScopeGetType(void)
-{
-	if(g_pScope->iCount < 1)
-		return CXXScopeTypeNamespace;
-	return (enum CXXScopeType)g_pScope->pTail->uInternalScopeType;
+unsigned int cxxScopeGetKind(void) {
+  CXX_DEBUG_ASSERT(g_pScope->iCount >= 0, "Must not be called in global scope");
+
+  switch (g_pScope->pTail->uInternalScopeType) {
+  case CXXScopeTypeNamespace:
+    CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(), "C++ only");
+    return CXXTagCPPKindNAMESPACE;
+  case CXXScopeTypeClass:
+    CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(), "C++ only");
+    return CXXTagCPPKindCLASS;
+  case CXXScopeTypeEnum:
+    return CXXTagKindENUM;
+  case CXXScopeTypeFunction:
+    return CXXTagKindFUNCTION;
+  case CXXScopeTypeStruct:
+    return CXXTagKindSTRUCT;
+  case CXXScopeTypeUnion:
+    return CXXTagKindUNION;
+  case CXXScopeTypeVariable:
+    return CXXTagKindVARIABLE;
+  default:
+    CXX_DEBUG_ASSERT(false, "Unhandled scope type!");
+    break;
+  }
+
+  return CXXTagKindFUNCTION;
 }
 
-unsigned int cxxScopeGetVariableKind(void)
-{
-	switch(cxxScopeGetType())
-	{
-		case CXXScopeTypeClass:
-		case CXXScopeTypeUnion:
-		case CXXScopeTypeStruct:
-			return CXXTagKindMEMBER;
-		break;
-		case CXXScopeTypeFunction:
-			return CXXTagKindLOCAL;
-		break;
-		//case CXXScopeTypeNamespace:
-		//case CXXScopeTypeEnum:
-		default:
-			// fall down
-		break;
-	}
-	return CXXTagKindVARIABLE;
+enum CXXScopeAccess cxxScopeGetAccess(void) {
+  if (g_pScope->iCount < 1)
+    return CXXScopeAccessUnknown;
+  return (enum CXXScopeAccess)g_pScope->pTail->uInternalScopeAccess;
 }
 
-
-unsigned int cxxScopeGetKind(void)
-{
-	CXX_DEBUG_ASSERT(g_pScope->iCount >= 0,"Must not be called in global scope");
-
-	switch(g_pScope->pTail->uInternalScopeType)
-	{
-		case CXXScopeTypeNamespace:
-			CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(),"C++ only");
-			return CXXTagCPPKindNAMESPACE;
-		case CXXScopeTypeClass:
-			CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(),"C++ only");
-			return CXXTagCPPKindCLASS;
-		case CXXScopeTypeEnum:
-			return CXXTagKindENUM;
-		case CXXScopeTypeFunction:
-			return CXXTagKindFUNCTION;
-		case CXXScopeTypeStruct:
-			return CXXTagKindSTRUCT;
-		case CXXScopeTypeUnion:
-			return CXXTagKindUNION;
-		case CXXScopeTypeVariable:
-			return CXXTagKindVARIABLE;
-		default:
-			CXX_DEBUG_ASSERT(false,"Unhandled scope type!");
-			break;
-	}
-
-	return CXXTagKindFUNCTION;
+const char *cxxScopeGetName(void) {
+  if (g_pScope->iCount < 1)
+    return NULL;
+  return vStringValue(g_pScope->pTail->pszWord);
 }
 
+int cxxScopeGetSize(void) { return g_pScope->iCount; }
 
-enum CXXScopeAccess cxxScopeGetAccess(void)
-{
-	if(g_pScope->iCount < 1)
-		return CXXScopeAccessUnknown;
-	return (enum CXXScopeAccess)g_pScope->pTail->uInternalScopeAccess;
+const char *cxxScopeGetFullName(void) {
+  if (!g_bScopeNameDirty)
+    return g_szScopeName ? g_szScopeName->buffer : NULL;
+
+  if (g_pScope->iCount < 1) {
+    g_bScopeNameDirty = false;
+    return NULL;
+  }
+
+  if (g_szScopeName)
+    vStringClear(g_szScopeName);
+  else
+    g_szScopeName = vStringNew();
+
+  cxxTokenChainJoinInString(g_pScope, g_szScopeName,
+                            "::", CXXTokenChainJoinNoTrailingSpaces);
+
+  g_bScopeNameDirty = false;
+  return g_szScopeName->buffer;
 }
 
-const char * cxxScopeGetName(void)
-{
-	if(g_pScope->iCount < 1)
-		return NULL;
-	return vStringValue(g_pScope->pTail->pszWord);
+vString *cxxScopeGetFullNameAsString(void) {
+  vString *ret;
+
+  if (!g_bScopeNameDirty) {
+    ret = g_szScopeName;
+    g_szScopeName = NULL;
+    g_bScopeNameDirty = true;
+    return ret;
+  }
+
+  if (g_pScope->iCount < 1)
+    return NULL;
+
+  if (g_szScopeName)
+    vStringClear(g_szScopeName);
+  else
+    g_szScopeName = vStringNew();
+
+  cxxTokenChainJoinInString(g_pScope, g_szScopeName,
+                            "::", CXXTokenChainJoinNoTrailingSpaces);
+
+  ret = g_szScopeName;
+  g_szScopeName = NULL;
+  return ret;
 }
 
-int cxxScopeGetSize(void)
-{
-	return g_pScope->iCount;
+vString *cxxScopeGetFullNameExceptLastComponentAsString(void) {
+  if (g_pScope->iCount < 2)
+    return NULL;
+
+  return cxxTokenChainJoinRange(g_pScope->pHead, g_pScope->pTail->pPrev,
+                                "::", CXXTokenChainJoinNoTrailingSpaces);
 }
 
-const char * cxxScopeGetFullName(void)
-{
-	if(!g_bScopeNameDirty)
-		return g_szScopeName ? g_szScopeName->buffer : NULL;
-
-	if(g_pScope->iCount < 1)
-	{
-		g_bScopeNameDirty = false;
-		return NULL;
-	}
-
-	if(g_szScopeName)
-		vStringClear(g_szScopeName);
-	else
-		g_szScopeName = vStringNew();
-
-	cxxTokenChainJoinInString(
-			g_pScope,
-			g_szScopeName,
-			"::",
-			CXXTokenChainJoinNoTrailingSpaces
-		);
-
-	g_bScopeNameDirty = false;
-	return g_szScopeName->buffer;
+void cxxScopeSetAccess(enum CXXScopeAccess eAccess) {
+  if (g_pScope->iCount < 1)
+    return; // warning?
+  g_pScope->pTail->uInternalScopeAccess = (unsigned char)eAccess;
 }
 
-vString * cxxScopeGetFullNameAsString(void)
-{
-	vString * ret;
+void cxxScopePushTop(CXXToken *t) {
+  CXX_DEBUG_ASSERT(t->eType == CXXTokenTypeIdentifier,
+                   "The scope name must be an identifier");
+  CXX_DEBUG_ASSERT(t->pszWord, "The scope name should have a text");
 
-	if(!g_bScopeNameDirty)
-	{
-		ret = g_szScopeName;
-		g_szScopeName = NULL;
-		g_bScopeNameDirty = true;
-		return ret;
-	}
-
-	if(g_pScope->iCount < 1)
-		return NULL;
-
-	if(g_szScopeName)
-		vStringClear(g_szScopeName);
-	else
-		g_szScopeName = vStringNew();
-
-	cxxTokenChainJoinInString(
-			g_pScope,
-			g_szScopeName,
-			"::",
-			CXXTokenChainJoinNoTrailingSpaces
-		);
-
-	ret = g_szScopeName;
-	g_szScopeName = NULL;
-	return ret;
-}
-
-vString * cxxScopeGetFullNameExceptLastComponentAsString(void)
-{
-	if(g_pScope->iCount < 2)
-		return NULL;
-
-	return cxxTokenChainJoinRange(
-			g_pScope->pHead,
-			g_pScope->pTail->pPrev,
-			"::",
-			CXXTokenChainJoinNoTrailingSpaces
-		);
-}
-
-
-void cxxScopeSetAccess(enum CXXScopeAccess eAccess)
-{
-	if(g_pScope->iCount < 1)
-		return; // warning?
-	g_pScope->pTail->uInternalScopeAccess = (unsigned char)eAccess;
-}
-
-void cxxScopePushTop(CXXToken * t)
-{
-	CXX_DEBUG_ASSERT(
-			t->eType == CXXTokenTypeIdentifier,
-			"The scope name must be an identifier"
-		);
-	CXX_DEBUG_ASSERT(
-			t->pszWord,
-			"The scope name should have a text"
-		);
-
-	cxxTokenChainAppend(g_pScope,t);
-	g_bScopeNameDirty = true;
+  cxxTokenChainAppend(g_pScope, t);
+  g_bScopeNameDirty = true;
 
 #ifdef CXX_DO_DEBUGGING
-	const char * szScopeName = cxxScopeGetFullName();
+  const char *szScopeName = cxxScopeGetFullName();
 
-	CXX_DEBUG_PRINT("Pushed scope: '%s'",szScopeName ? szScopeName : "");
+  CXX_DEBUG_PRINT("Pushed scope: '%s'", szScopeName ? szScopeName : "");
 #endif
 }
 
-CXXToken * cxxScopeTakeTop(void)
-{
-	CXX_DEBUG_ASSERT(
-			g_pScope->iCount > 0,
-			"When popping as scope there must be a scope to pop"
-		);
+CXXToken *cxxScopeTakeTop(void) {
+  CXX_DEBUG_ASSERT(g_pScope->iCount > 0,
+                   "When popping as scope there must be a scope to pop");
 
-	CXXToken * t = cxxTokenChainTakeLast(g_pScope);
-	g_bScopeNameDirty = true;
+  CXXToken *t = cxxTokenChainTakeLast(g_pScope);
+  g_bScopeNameDirty = true;
 
 #ifdef CXX_DO_DEBUGGING
-	const char * szScopeName = cxxScopeGetFullName();
+  const char *szScopeName = cxxScopeGetFullName();
 
-	CXX_DEBUG_PRINT("Popped scope: '%s'",szScopeName ? szScopeName : "");
+  CXX_DEBUG_PRINT("Popped scope: '%s'", szScopeName ? szScopeName : "");
 #endif
-	return t;
+  return t;
 }
 
-void cxxScopePush(
-		CXXToken * t,
-		enum CXXScopeType eScopeType,
-		enum CXXScopeAccess eInitialAccess
-	)
-{
-	t->uInternalScopeType = (unsigned char)eScopeType;
-	t->uInternalScopeAccess = (unsigned char)eInitialAccess;
-	cxxScopePushTop(t);
+void cxxScopePush(CXXToken *t, enum CXXScopeType eScopeType,
+                  enum CXXScopeAccess eInitialAccess) {
+  t->uInternalScopeType = (unsigned char)eScopeType;
+  t->uInternalScopeAccess = (unsigned char)eInitialAccess;
+  cxxScopePushTop(t);
 }
 
-void cxxScopePop(void)
-{
-	cxxTokenDestroy(cxxScopeTakeTop());
-}
+void cxxScopePop(void) { cxxTokenDestroy(cxxScopeTakeTop()); }

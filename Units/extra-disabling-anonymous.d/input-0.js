@@ -1,12 +1,9 @@
 var class2 = function() {
-  this.c2m1 = function() {
-    c2m3(function() {
-      return { 'test': {} };
-    });
-  };
+  this.c2m1 = function() { c2m3(function() { return {'test' : {}}; }); };
 };
 
-var class3 = function() {
+var class3 =
+    function() {
   this.c3m1 = function() {
     return function(n) {
       if (n == 42) {
@@ -18,21 +15,16 @@ var class3 = function() {
   };
 }
 
-function f1(y) {
-  return function(x) {
-    return x*y;
-  }
-}
+function
+f1(y) { return function(x) { return x * y; } }
 
-function Mixin(superclass) {
+function
+Mixin(superclass) {
   return class extends superclass {
-    hello() {
-      return "hello from mixin";
-    }
+    hello() { return "hello from mixin"; }
   }
 }
 
 class {
-	method8(n) { return n * n; }
+  method8(n) { return n * n; }
 }
-

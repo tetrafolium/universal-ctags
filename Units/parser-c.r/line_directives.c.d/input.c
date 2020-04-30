@@ -1,5 +1,5 @@
 /* ANSI format */
-# line 10 "a.c"
+#line 10 "a.c"
 int a;
 /* GNU C format */
 # 20 "b.c"

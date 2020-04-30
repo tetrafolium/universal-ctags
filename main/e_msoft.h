@@ -1,11 +1,11 @@
 /*
-*   Copyright (c) 2002-2003, Darren Hiebert
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License version 2 or (at your option) any later version.
-*
-*   Configures ctags for Microsoft environment.
-*/
+ *   Copyright (c) 2002-2003, Darren Hiebert
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License version 2 or (at your option) any later version.
+ *
+ *   Configures ctags for Microsoft environment.
+ */
 #ifndef E_MSOFT_H
 #define E_MSOFT_H
 
@@ -31,13 +31,13 @@
 #define HAVE_PUTENV 1
 #define TMPDIR "\\"
 
-int mkstemp (char *template_name);
+int mkstemp(char *template_name);
 
 #ifdef _MSC_VER
 
-# if _MSC_VER < 1900
-#  define snprintf _snprintf
-# endif
+#if _MSC_VER < 1900
+#define snprintf _snprintf
+#endif
 
 #if (_MSC_VER >= 1800) // Visual Studio 2013 or newer
 #define HAVE_STDBOOL_H 1
@@ -45,23 +45,23 @@ int mkstemp (char *template_name);
 typedef enum { false, true } bool;
 #endif
 
-# ifndef _CRT_SECURE_NO_DEPRECATE
-#  define _CRT_SECURE_NO_DEPRECATE 1
-# endif
-# pragma warning(disable : 4996)
+#ifndef _CRT_SECURE_NO_DEPRECATE
+#define _CRT_SECURE_NO_DEPRECATE 1
+#endif
+#pragma warning(disable : 4996)
 
-#elif defined (__MINGW32__)
+#elif defined(__MINGW32__)
 
-# include <_mingw.h>
-# define HAVE_STDBOOL_H 1
-# define HAVE_DIRENT_H 1
-# define ffblk _finddata_t
-# define FA_DIREC _A_SUBDIR
-# define ff_name name
+#include <_mingw.h>
+#define HAVE_STDBOOL_H 1
+#define HAVE_DIRENT_H 1
+#define ffblk _finddata_t
+#define FA_DIREC _A_SUBDIR
+#define ff_name name
 
-# if defined(__USE_MINGW_ANSI_STDIO) && defined(__MINGW64_VERSION_MAJOR)
-#  define HAVE_ASPRINTF 1
-# endif
+#if defined(__USE_MINGW_ANSI_STDIO) && defined(__MINGW64_VERSION_MAJOR)
+#define HAVE_ASPRINTF 1
+#endif
 
 #endif
 

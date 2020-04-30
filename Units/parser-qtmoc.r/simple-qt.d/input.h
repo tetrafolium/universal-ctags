@@ -1,19 +1,18 @@
-class ColumnPreferencesFrame : public QFrame
-{
-    Q_OBJECT
-    void method0(void);
+class ColumnPreferencesFrame : public QFrame {
+  Q_OBJECT
+  void method0(void);
 
 private slots:
-    void slot0(void);
-    void slot1(void);
+  void slot0(void);
+  void slot1(void);
 
 public slots:
-    void slot2(void);
-    void slot3(void);
+  void slot2(void);
+  void slot3(void);
 
-Q_SLOTS:
-    void slot4(void);
-    void slot5(void);
+  Q_SLOTS:
+  void slot4(void);
+  void slot5(void);
 
 private:
   int field0;
@@ -29,7 +28,7 @@ public Q_SLOTS:
   void slot8(void);
   void slot9(void);
 
-slots:
+  slots:
   void slot10(void);
   void slot11(void);
 
@@ -57,9 +56,9 @@ protected:
   virtual void method3(void);
 
   Q_PROPERTY(QString text MEMBER m_text NOTIFY textChanged)
-  Q_PROPERTY( bool ShowNonprinting READ showsNonprinting WRITE setShowsNonprinting )
+  Q_PROPERTY(
+      bool ShowNonprinting READ showsNonprinting WRITE setShowsNonprinting)
 
 private:
   int field4;
-
 };

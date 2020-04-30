@@ -6,6 +6,4 @@ union {
   int x;
 };
 
-enum {
-  X;
-};
+enum { X; };
