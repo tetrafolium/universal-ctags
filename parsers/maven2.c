@@ -85,7 +85,7 @@ makeTagForProperties(xmlNode *node, const char *xpath CTAGS_ATTR_UNUSED,
 enum maven2XpathTable {
   TABLE_MAIN,
   TABLE_PARENT,
-  TABLE_DEPEDENCY,
+  TABLE_DEPENDENCY,
 };
 
 static tagXpathTable maven2XpathMainTable[] = {
@@ -98,7 +98,7 @@ static tagXpathTable maven2XpathMainTable[] = {
     {"/*[local-name()='project']/*[local-name()='dependencies']/"
      "*[local-name()='dependency']",
      LXPATH_TABLE_DO_RECUR,
-     {.recurSpec = {makeTagRecursively, TABLE_DEPEDENCY}}},
+     {.recurSpec = {makeTagRecursively, TABLE_DEPENDENCY}}},
     {"/*[local-name()='project']/*[local-name()='artifactId']",
      LXPATH_TABLE_DO_MAKE,
      {.makeTagSpec = {K_ARTIFACT_ID, ROLE_DEFINITION_INDEX, makeTagWithScope}}},
@@ -137,7 +137,7 @@ static tagXpathTable maven2XpathDependencyTable[] = {
 static tagXpathTableTable maven2XpathTableTable[] = {
     [TABLE_MAIN] = {ARRAY_AND_SIZE(maven2XpathMainTable)},
     [TABLE_PARENT] = {ARRAY_AND_SIZE(maven2XpathParentTable)},
-    [TABLE_DEPEDENCY] = {ARRAY_AND_SIZE(maven2XpathDependencyTable)},
+    [TABLE_DEPENDENCY] = {ARRAY_AND_SIZE(maven2XpathDependencyTable)},
 };
 
 typedef enum {
