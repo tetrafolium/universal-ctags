@@ -5,7 +5,7 @@ Reported by masatake in issue #930@github.
 However they may actually contain C code, which may
 use C++ keywords as variable names.
 
-This test checks the C++ parser capabilities to guess such occurences.
+This test checks the C++ parser capabilities to guess such occurrences.
 
 
 */

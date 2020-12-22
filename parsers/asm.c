@@ -29,7 +29,7 @@
  *   DATA DECLARATIONS
  */
 typedef enum {
-  K_PSUEDO_MACRO_END = -2,
+  K_PSEUDO_MACRO_END = -2,
   K_NONE = -1,
   K_DEFINE,
   K_LABEL,
@@ -113,7 +113,7 @@ static const keywordTable AsmKeywords[] = {{"align", OP_ALIGN},
 static const opKind OpKinds[] = {
     /* must be ordered same as opKeyword enumeration */
     {OP_ALIGN, K_NONE},      {OP_COLON_EQUAL, K_DEFINE},
-    {OP_END, K_NONE},        {OP_ENDM, K_PSUEDO_MACRO_END},
+    {OP_END, K_NONE},        {OP_ENDM, K_PSEUDO_MACRO_END},
     {OP_ENDMACRO, K_NONE},   {OP_ENDP, K_NONE},
     {OP_ENDS, K_NONE},       {OP_EQU, K_DEFINE},
     {OP_EQUAL, K_DEFINE},    {OP_LABEL, K_LABEL},
@@ -195,7 +195,7 @@ static void makeAsmTag(const vString *const name, const vString *const operator,
       case K_MACRO:
         *lastMacroCorkIndex = makeSimpleTag(operator, kind_for_directive);
         break;
-      case K_PSUEDO_MACRO_END:
+      case K_PSEUDO_MACRO_END:
         if (*lastMacroCorkIndex != CORK_NIL) {
           macro_tag = getEntryInCorkQueue(*lastMacroCorkIndex);
           macro_tag->extensionFields.endLine = getInputLineNumber();

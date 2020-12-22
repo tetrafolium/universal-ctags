@@ -124,7 +124,7 @@ static bool isEndFieldAvailable(const tagEntryInfo *const tag);
     .dataType = DT,                                                            \
   }
 
-#define WITH_DEFUALT_VALUE(str) ((str) ? (str) : FIELD_NULL_LETTER_STRING)
+#define WITH_DEFAULT_VALUE(str) ((str) ? (str) : FIELD_NULL_LETTER_STRING)
 
 static fieldDefinition fieldDefinitionsFixed[] = {
     /* FIXED FIELDS */
@@ -459,14 +459,14 @@ static bool doesContainAnyCharInInput(const tagEntryInfo *const tag,
 static const char *renderFieldSignature(const tagEntryInfo *const tag,
                                         const char *value CTAGS_ATTR_UNUSED,
                                         vString *b) {
-  return renderEscapedString(WITH_DEFUALT_VALUE(tag->extensionFields.signature),
+  return renderEscapedString(WITH_DEFAULT_VALUE(tag->extensionFields.signature),
                              tag, b);
 }
 
 static const char *
 renderFieldSignatureNoEscape(const tagEntryInfo *const tag,
                              const char *value CTAGS_ATTR_UNUSED, vString *b) {
-  return renderAsIs(b, WITH_DEFUALT_VALUE(tag->extensionFields.signature));
+  return renderAsIs(b, WITH_DEFAULT_VALUE(tag->extensionFields.signature));
 }
 
 static bool doesContainAnyCharInSignature(const tagEntryInfo *const tag,
@@ -509,7 +509,7 @@ static const char *renderFieldInherits(const tagEntryInfo *const tag,
                                        const char *value CTAGS_ATTR_UNUSED,
                                        vString *b) {
   return renderEscapedString(
-      WITH_DEFUALT_VALUE(tag->extensionFields.inheritance), tag, b);
+      WITH_DEFAULT_VALUE(tag->extensionFields.inheritance), tag, b);
 }
 
 static const char *renderFieldTyperef(const tagEntryInfo *const tag,
@@ -520,10 +520,10 @@ static const char *renderFieldTyperef(const tagEntryInfo *const tag,
       tag->extensionFields.typeRef[1] == NULL)
     return renderAsIs(b, FIELD_NULL_LETTER_STRING);
 
-  vStringCatS(b, WITH_DEFUALT_VALUE(tag->extensionFields.typeRef[0]));
+  vStringCatS(b, WITH_DEFAULT_VALUE(tag->extensionFields.typeRef[0]));
   vStringPut(b, ':');
   return renderEscapedName(
-      false, WITH_DEFUALT_VALUE(tag->extensionFields.typeRef[1]), tag, b);
+      false, WITH_DEFAULT_VALUE(tag->extensionFields.typeRef[1]), tag, b);
 }
 
 static const char *renderFieldCommon(fieldType type, const tagEntryInfo *tag,
@@ -707,13 +707,13 @@ static const char *renderFieldLanguage(const tagEntryInfo *const tag,
   else
     l = getLanguageName(tag->langType);
 
-  return renderAsIs(b, WITH_DEFUALT_VALUE(l));
+  return renderAsIs(b, WITH_DEFAULT_VALUE(l));
 }
 
 static const char *renderFieldAccess(const tagEntryInfo *const tag,
                                      const char *value CTAGS_ATTR_UNUSED,
                                      vString *b) {
-  return renderAsIs(b, WITH_DEFUALT_VALUE(tag->extensionFields.access));
+  return renderAsIs(b, WITH_DEFAULT_VALUE(tag->extensionFields.access));
 }
 
 static const char *renderFieldKindLetter(const tagEntryInfo *const tag,
@@ -729,7 +729,7 @@ static const char *renderFieldKindLetter(const tagEntryInfo *const tag,
 static const char *
 renderFieldImplementation(const tagEntryInfo *const tag,
                           const char *value CTAGS_ATTR_UNUSED, vString *b) {
-  return renderAsIs(b, WITH_DEFUALT_VALUE(tag->extensionFields.implementation));
+  return renderAsIs(b, WITH_DEFAULT_VALUE(tag->extensionFields.implementation));
 }
 
 static const char *renderFieldFile(const tagEntryInfo *const tag,

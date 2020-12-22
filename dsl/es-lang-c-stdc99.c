@@ -1400,7 +1400,7 @@ s))) count-symbol (+ 1 count-symbol)
                               )))
   (/ total-length count-symbol)) => 15
 */
-#define DEFAULT_TOKEN_LENGHT 16
+#define DEFAULT_TOKEN_LENGTH 16
 static Token *token_new(char seed) {
   Token *t;
 
@@ -1408,7 +1408,7 @@ static Token *token_new(char seed) {
   if (!t)
     return NULL;
 
-  t->buffer = calloc(1, sizeof(char) * DEFAULT_TOKEN_LENGHT);
+  t->buffer = calloc(1, sizeof(char) * DEFAULT_TOKEN_LENGTH);
   if (!t->buffer) {
     free(t);
     return NULL;
@@ -1417,7 +1417,7 @@ static Token *token_new(char seed) {
   t->filled = 0;
   t->buffer[t->filled++] = seed;
   t->buffer[t->filled++] = '\0';
-  t->allocated = DEFAULT_TOKEN_LENGHT;
+  t->allocated = DEFAULT_TOKEN_LENGTH;
 
   return t;
 }
