@@ -1,32 +1,31 @@
-#include <a.h>
 #include "b.h"
+#include <a.h>
 
-#include <sys/c.h>
 #include "sys/d.h"
+#include <sys/c.h>
 
 /* this is actually a syntax error */
 "
-#include       <K.h>
-#include       \"L.h\"
-"
+#include \"L.h\"
+#include <K.h>
+    "
 
-#include <../e.h>
 #include "../f.h"
+#include <../e.h>
 
-int
-M(void)
-{
-    return 0;
+    int
+    M(void) {
+  return 0;
 }
 
 #define D 1
 
-#include<g.h>
-#include"h.h"
+#include "h.h"
+#include <g.h>
 
-#include       <i.h>
-#include       "j.h"
+#include "j.h"
+#include <i.h>
 
-#    	include <stdio.h>
+#include <stdio.h>
 /* objc constant String */
 @"#include<y.h>"

@@ -1,4 +1,1 @@
-int dont_capture_me(void)
-{
-    return 0;
-}
+int dont_capture_me(void) { return 0; }

@@ -1,17 +1,13 @@
 #include <sstream>
 
-int main (int argc, char **argv)
-{
-    std::ostringstream a;
-    a << "a";
+int main(int argc, char **argv) {
+  std::ostringstream a;
+  a << "a";
 
-    std::ostringstream b;
-    b << "b";
+  std::ostringstream b;
+  b << "b";
 
-    return 0;
+  return 0;
 }
 
-int foo (int i)
-{
-    return i;
-}
+int foo(int i) { return i; }

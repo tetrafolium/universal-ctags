@@ -1,1 +1,1 @@
-var.prototype=function(){}
+var .prototype = function() {}

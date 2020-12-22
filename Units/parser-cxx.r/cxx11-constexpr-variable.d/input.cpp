@@ -7,14 +7,14 @@ constexpr static int f_int = 6;
 
 constexpr auto g_auto = 7;
 
-constexpr static const char* const h_char_ptr = "this is valid";
+constexpr static const char *const h_char_ptr = "this is valid";
 
 static constexpr const char i_char_array[] = "this is also valid";
 
-static constexpr int const& j_ref = 42;
+static constexpr int const &j_ref = 42;
 
 constexpr const int *k_int_ptr = &a_int;
 
-static constexpr const char* const l_raw = R"(setfacl {} -m g:{}:{} {})";
+static constexpr const char *const l_raw = R"(setfacl {} -m g:{}:{} {})";
 
 static constexpr const int64_t m_int64 = 120'000;

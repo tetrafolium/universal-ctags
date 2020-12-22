@@ -7,7 +7,4 @@
  * doesn't break the other area of objectivec parser.
  */
 
-extern int foo (void)
-{
-    return 0;
-}
+extern int foo(void) { return 0; }

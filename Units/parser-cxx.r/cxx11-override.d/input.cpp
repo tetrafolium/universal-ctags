@@ -1,24 +1,16 @@
-class Base
-{
+class Base {
 public:
-    virtual void foo() = 0;
+  virtual void foo() = 0;
 };
 
-class Derived : public Base
-{
-    virtual void foo() override;
-    virtual void foo() const override;
-    virtual void override();
+class Derived : public Base {
+  virtual void foo() override;
+  virtual void foo() const override;
+  virtual void override();
 };
 
-void Base::foo()
-{
-}
+void Base::foo() {}
 
-void Derived::foo()
-{
-}
+void Derived::foo() {}
 
-void Derived::override()
-{
-}
+void Derived::override() {}

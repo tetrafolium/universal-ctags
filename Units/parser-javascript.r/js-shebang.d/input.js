@@ -1,3 +1,3 @@
 #!/usr/bin/env nodejs
 
-function f(){}
+function f() {}

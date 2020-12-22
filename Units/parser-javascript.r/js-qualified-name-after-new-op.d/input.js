@@ -1,4 +1,5 @@
-// Derived from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new
+// Derived from
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/new
 
 function Car(make, model, year) {
   this.make = make;
@@ -6,8 +7,7 @@ function Car(make, model, year) {
   this.year = year;
 }
 
-var container = {}
-container.car = Car;
+var container = {} container.car = Car;
 
 var car1 = new container.car('Eagle', 'Talon TSi', 1993);
 

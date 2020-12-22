@@ -2,5 +2,5 @@
 @end
 
 struct s {
-    int i;
+  int i;
 };

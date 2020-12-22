@@ -1,21 +1,21 @@
 /*
-*   Copyright (c) 2016, Szymon Tomasz Stefanek
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License version 2 or (at your option) any later version.
-*
-*   This module contains functions for parsing and scanning C++ source files
-*/
+ *   Copyright (c) 2016, Szymon Tomasz Stefanek
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License version 2 or (at your option) any later version.
+ *
+ *   This module contains functions for parsing and scanning C++ source files
+ */
 
 #include "general.h"
 
 #include "cxx_debug.h"
 #include "cxx_keyword.h"
-#include "cxx_token.h"
-#include "cxx_token_chain.h"
 #include "cxx_parser.h"
 #include "cxx_scope.h"
 #include "cxx_tag.h"
+#include "cxx_token.h"
+#include "cxx_token_chain.h"
 
 #include "dependency.h"
 #include "selectors.h"
@@ -71,93 +71,79 @@
 // - Template specialisations (another field?)
 // - Forward declarations might become tags
 
+parserDefinition *CParser(void) {
+  static const char *const extensions[] = {"c", NULL};
 
-parserDefinition * CParser (void)
-{
-    static const char * const extensions [] =
-    {
-        "c",
-        NULL
-    };
+  static selectLanguage selectors[] = {selectByObjectiveCKeywords, NULL};
 
-    static selectLanguage selectors[] = { selectByObjectiveCKeywords, NULL };
+  parserDefinition *def = parserNew("C");
 
-    parserDefinition* def = parserNew("C");
+  def->kindTable = cxxTagGetCKindDefinitions();
+  def->kindCount = cxxTagGetCKindDefinitionCount();
+  def->fieldTable = cxxTagGetCFieldDefinitionifiers();
+  def->fieldCount = cxxTagGetCFieldDefinitionifierCount();
+  def->extensions = extensions;
+  def->parser2 = cxxCParserMain;
+  def->initialize = cxxCParserInitialize;
+  def->finalize = cxxParserCleanup;
+  def->selectLanguage = selectors;
+  def->useCork = true; // We use corking to block output until the end of file
 
-    def->kindTable = cxxTagGetCKindDefinitions();
-    def->kindCount = cxxTagGetCKindDefinitionCount();
-    def->fieldTable = cxxTagGetCFieldDefinitionifiers();
-    def->fieldCount = cxxTagGetCFieldDefinitionifierCount();
-    def->extensions = extensions;
-    def->parser2 = cxxCParserMain;
-    def->initialize = cxxCParserInitialize;
-    def->finalize = cxxParserCleanup;
-    def->selectLanguage = selectors;
-    def->useCork = true; // We use corking to block output until the end of file
-
-    return def;
+  return def;
 }
 
-parserDefinition * CppParser (void)
-{
-    static const char * const extensions [] =
-    {
-        "c++", "cc", "cp", "cpp", "cxx",
-        "h", "h++", "hh", "hp", "hpp", "hxx", "inl",
+parserDefinition *CppParser(void) {
+  static const char *const extensions[] = {"c++", "cc",  "cp",  "cpp",
+                                           "cxx", "h",   "h++", "hh",
+                                           "hp",  "hpp", "hxx", "inl",
 #ifndef CASE_INSENSITIVE_FILENAMES
-        "C", "H", "CPP", "CXX",
+                                           "C",   "H",   "CPP", "CXX",
 #endif
-        NULL
-    };
-    static parserDependency dependencies [] = {
-        { DEPTYPE_KIND_OWNER, "C" },
-    };
+                                           NULL};
+  static parserDependency dependencies[] = {
+      {DEPTYPE_KIND_OWNER, "C"},
+  };
 
-    static selectLanguage selectors[] = { selectByObjectiveCKeywords, NULL };
+  static selectLanguage selectors[] = {selectByObjectiveCKeywords, NULL};
 
-    parserDefinition* def = parserNew("C++");
+  parserDefinition *def = parserNew("C++");
 
-    def->dependencies = dependencies;
-    def->dependencyCount = ARRAY_SIZE (dependencies);
-    def->kindTable = cxxTagGetCPPKindDefinitions();
-    def->kindCount = cxxTagGetCPPKindDefinitionCount();
-    def->fieldTable = cxxTagGetCPPFieldDefinitionifiers();
-    def->fieldCount = cxxTagGetCPPFieldDefinitionifierCount();
-    def->extensions = extensions;
-    def->parser2 = cxxCppParserMain;
-    def->initialize = cxxCppParserInitialize;
-    def->finalize = cxxParserCleanup;
-    def->selectLanguage = selectors;
-    def->useCork = true; // We use corking to block output until the end of file
+  def->dependencies = dependencies;
+  def->dependencyCount = ARRAY_SIZE(dependencies);
+  def->kindTable = cxxTagGetCPPKindDefinitions();
+  def->kindCount = cxxTagGetCPPKindDefinitionCount();
+  def->fieldTable = cxxTagGetCPPFieldDefinitionifiers();
+  def->fieldCount = cxxTagGetCPPFieldDefinitionifierCount();
+  def->extensions = extensions;
+  def->parser2 = cxxCppParserMain;
+  def->initialize = cxxCppParserInitialize;
+  def->finalize = cxxParserCleanup;
+  def->selectLanguage = selectors;
+  def->useCork = true; // We use corking to block output until the end of file
 
-    return def;
+  return def;
 }
 
-parserDefinition * CUDAParser (void)
-{
-    static const char * const extensions [] =
-    {
-        "cu", "cuh",
-        NULL
-    };
-    static parserDependency dependencies [] = {
-        { DEPTYPE_KIND_OWNER, "C" },
-    };
+parserDefinition *CUDAParser(void) {
+  static const char *const extensions[] = {"cu", "cuh", NULL};
+  static parserDependency dependencies[] = {
+      {DEPTYPE_KIND_OWNER, "C"},
+  };
 
-    parserDefinition* def = parserNew("CUDA");
+  parserDefinition *def = parserNew("CUDA");
 
-    def->dependencies = dependencies;
-    def->dependencyCount = ARRAY_SIZE (dependencies);
-    def->kindTable = cxxTagGetCUDAKindDefinitions();
-    def->kindCount = cxxTagGetCUDAKindDefinitionCount();
-    def->fieldTable = cxxTagGetCUDAFieldDefinitionifiers();
-    def->fieldCount = cxxTagGetCUDAFieldDefinitionifierCount();
-    def->extensions = extensions;
-    def->parser2 = cxxCUDAParserMain;
-    def->initialize = cxxCUDAParserInitialize;
-    def->finalize = cxxParserCleanup;
-    def->selectLanguage = NULL;
-    def->useCork = true; // We use corking to block output until the end of file
+  def->dependencies = dependencies;
+  def->dependencyCount = ARRAY_SIZE(dependencies);
+  def->kindTable = cxxTagGetCUDAKindDefinitions();
+  def->kindCount = cxxTagGetCUDAKindDefinitionCount();
+  def->fieldTable = cxxTagGetCUDAFieldDefinitionifiers();
+  def->fieldCount = cxxTagGetCUDAFieldDefinitionifierCount();
+  def->extensions = extensions;
+  def->parser2 = cxxCUDAParserMain;
+  def->initialize = cxxCUDAParserInitialize;
+  def->finalize = cxxParserCleanup;
+  def->selectLanguage = NULL;
+  def->useCork = true; // We use corking to block output until the end of file
 
-    return def;
+  return def;
 }

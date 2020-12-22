@@ -7,18 +7,16 @@
 //   properties
 //     objectLiteral.objLiteralProperty
 
-
 /**
-* This is an object literal
-*/
+ * This is an object literal
+ */
 var objectLiteral = {
-/**
-* This is a literal object property
-*/
-objLiteralProperty : 1,
-/**
-* This is a literal object method
-*/
-objLiteralMethod : function(){}
+  /**
+   * This is a literal object property
+   */
+  objLiteralProperty : 1,
+  /**
+   * This is a literal object method
+   */
+  objLiteralMethod : function() {}
 }
-

@@ -1,15 +1,12 @@
-int main()
-{
-    if (something) {
-        printf("hello");
+int main() {
+  if (something) {
+    printf("hello");
 #ifdef world
-    } else
-        printf(" world\n");
+  } else
+    printf(" world\n");
 #else
-    }
+  }
 #endif
 }
 
-int func()
-{
-}
+int func() {}

@@ -18,13 +18,11 @@ hi
 it seems that ctags has ommits the scope for nested
 namespaces.
 */
-namespace N1
-{
-namespace N2
-{
+namespace N1 {
+namespace N2 {
 class C12 {}
-}
-}
+} // namespace N2
+} // namespace N1
 /*
 N1	test.h	/^namespace N1$/;"	namespace	line:1
 N2	test.h	/^namespace N2$/;"	namespace	line:3

@@ -18,8 +18,7 @@ Summary: anonymous namespaces in headers
 Initial Comment:
 --------------------temp3.h----------------
 */
-namespace
-{
+namespace {
 int foo;
 }
 /*

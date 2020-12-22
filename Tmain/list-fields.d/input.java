@@ -1,4 +1,1 @@
-abstract public class Foo extends Bar
-{
-    public int x;
-};
+abstract public class Foo extends Bar { public int x; };

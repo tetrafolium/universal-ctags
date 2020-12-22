@@ -5,28 +5,18 @@
  from libX11-1.3 library (include/X11/Xlibint.h):
 */
 
-extern Bool (*XESetCopyEventCookie(
-                 Display*            /* display */,
-                 int                 /* extension */,
-                 Bool (*) (
-                     Display*                 /* display */,
-                     XGenericEventCookie*     /* in */,
-                     XGenericEventCookie*     /* out */
-                 )          /* proc */
-             ))(
-                 Display*, XGenericEventCookie*, XGenericEventCookie*
-             );
+extern Bool (*XESetCopyEventCookie(Display * /* display */, int /* extension */,
+                                   Bool (*)(Display * /* display */,
+                                            XGenericEventCookie * /* in */,
+                                            XGenericEventCookie * /* out */
+                                            )                     /* proc */
+                                   ))(Display *, XGenericEventCookie *,
+                                      XGenericEventCookie *);
 
 /* also adding simplified output found by masatake */
 
-int (* f (char c)) (void * a);
+int (*f(char c))(void *a);
 
-static int g (void *a)
-{
-    return 1;
-}
+static int g(void *a) { return 1; }
 
-int (* f (char c)) (void * a)
-{
-    return g;
-}
+int (*f(char c))(void *a) { return g; }

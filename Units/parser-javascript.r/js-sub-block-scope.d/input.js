@@ -2,11 +2,9 @@
 function parent() {
   function foo() {
     if (test) {
-      function hello() {
-      }
+      function hello() {}
     } else {
-      function hi() {
-      }
+      function hi() {}
     }
   }
 

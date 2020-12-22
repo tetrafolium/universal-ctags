@@ -12,15 +12,15 @@
 #define CTAGS_MAIN_INLINE_H
 
 #if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 199901L
-# define CTAGS_INLINE static inline
+#define CTAGS_INLINE static inline
 #elif defined(_MSC_VER)
-# define CTAGS_INLINE static __inline
+#define CTAGS_INLINE static __inline
 #elif defined(__GNUC__) || defined(__clang__)
-# define CTAGS_INLINE static __inline__
+#define CTAGS_INLINE static __inline__
 // #elif ... other compilers/tests here ...
 // # define CTAGS_INLINE ...
 #else
-# define CTAGS_INLINE static
+#define CTAGS_INLINE static
 #endif
 
 #endif /* CTAGS_MAIN_INLINE_H */

@@ -6,9 +6,9 @@ function f05(a) {}
 function f06(a) {}
 function f07(a) {}
 function f08(a) {}
-function f09(a	) {}
-function f10(a) {}
-function f11(a) {}
+function f09(a) {}
+function f10(a) {}
+function f11(a) {}
 function f12(a) {}
 function f13(a) {}
 function f14(a) {}

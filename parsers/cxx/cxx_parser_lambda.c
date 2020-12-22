@@ -1,27 +1,27 @@
 /*
-*   Copyright (c) 2016, Szymon Tomasz Stefanek
-*
-*   This source code is released for free distribution under the terms of the
-*   GNU General Public License version 2 or (at your option) any later version.
-*
-*   This module contains functions for parsing and scanning C++ source files
-*/
+ *   Copyright (c) 2016, Szymon Tomasz Stefanek
+ *
+ *   This source code is released for free distribution under the terms of the
+ *   GNU General Public License version 2 or (at your option) any later version.
+ *
+ *   This module contains functions for parsing and scanning C++ source files
+ */
 #include "cxx_parser.h"
 #include "cxx_parser_internal.h"
 
 #include "cxx_debug.h"
 #include "cxx_keyword.h"
-#include "cxx_token.h"
-#include "cxx_token_chain.h"
 #include "cxx_scope.h"
 #include "cxx_tag.h"
+#include "cxx_token.h"
+#include "cxx_token_chain.h"
 
-#include "parse.h"
-#include "vstring.h"
 #include "../cpreprocessor.h"
 #include "debug.h"
 #include "keyword.h"
+#include "parse.h"
 #include "read.h"
+#include "vstring.h"
 
 #include <string.h>
 
@@ -32,190 +32,155 @@
 // capture list square parenthesis token if the lambda is
 // parameterless.
 //
-CXXToken * cxxParserOpeningBracketIsLambda(void)
-{
-    CXX_DEBUG_ENTER();
+CXXToken *cxxParserOpeningBracketIsLambda(void) {
+  CXX_DEBUG_ENTER();
 
-    // Lambda syntax variants:
-    //
-    // 1) [ capture-list ] ( params ) mutable(opt) exception attr -> ret { body }
-    // 2) [ capture-list ] ( params ) -> ret { body }
-    // 3) [ capture-list ] ( params ) { body }
-    // 4) [ capture-list ] { body }
+  // Lambda syntax variants:
+  //
+  // 1) [ capture-list ] ( params ) mutable(opt) exception attr -> ret { body }
+  // 2) [ capture-list ] ( params ) -> ret { body }
+  // 3) [ capture-list ] ( params ) { body }
+  // 4) [ capture-list ] { body }
 
-    // Similar, but not lambda:
-    //
-    // 5) type var[] { ... }
-    // 6) operator [] ( params ) { ... }
+  // Similar, but not lambda:
+  //
+  // 5) type var[] { ... }
+  // 6) operator [] ( params ) { ... }
 
-    CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(),"C++ only");
+  CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(), "C++ only");
 
-    CXXToken * t = g_cxx.pToken->pPrev;
+  CXXToken *t = g_cxx.pToken->pPrev;
 
-    if(!t)
-    {
-        CXX_DEBUG_LEAVE_TEXT("Not a lambda: no token before bracket");
-        return NULL; // not a lambda
+  if (!t) {
+    CXX_DEBUG_LEAVE_TEXT("Not a lambda: no token before bracket");
+    return NULL; // not a lambda
+  }
+
+  // Check simple cases first
+
+  // case 4?
+  if (cxxTokenTypeIs(t, CXXTokenTypeSquareParenthesisChain)) {
+    if (t->pPrev && cxxTokenTypeIs(t->pPrev, CXXTokenTypeIdentifier)) {
+      // case 5
+      CXX_DEBUG_LEAVE_TEXT("Not a lambda: looks like type var[] { ... }");
+      return NULL;
     }
 
-    // Check simple cases first
+    // very likely parameterless lambda
+    CXX_DEBUG_LEAVE_TEXT("Likely a parameterless lambda");
+    return t;
+  }
 
-    // case 4?
-    if(cxxTokenTypeIs(t,CXXTokenTypeSquareParenthesisChain))
-    {
-        if(
-            t->pPrev &&
-            cxxTokenTypeIs(t->pPrev,CXXTokenTypeIdentifier)
-        )
-        {
-            // case 5
-            CXX_DEBUG_LEAVE_TEXT("Not a lambda: looks like type var[] { ... }");
-            return NULL;
-        }
-
-        // very likely parameterless lambda
-        CXX_DEBUG_LEAVE_TEXT("Likely a parameterless lambda");
-        return t;
+  // case 3?
+  if (cxxTokenTypeIs(t, CXXTokenTypeParenthesisChain)) {
+    t = t->pPrev;
+    if (!t) {
+      CXX_DEBUG_LEAVE_TEXT("Not a lambda: nothing before ()");
+      return NULL; // can't be
     }
 
-    // case 3?
-    if(cxxTokenTypeIs(t,CXXTokenTypeParenthesisChain))
-    {
-        t = t->pPrev;
-        if(!t)
-        {
-            CXX_DEBUG_LEAVE_TEXT("Not a lambda: nothing before ()");
-            return NULL; // can't be
-        }
-
-        if(!cxxTokenTypeIs(t,CXXTokenTypeSquareParenthesisChain))
-        {
-            CXX_DEBUG_LEAVE_TEXT("Not a lambda: no [] before ()");
-            return NULL; // can't be
-        }
-
-        if(
-            t->pPrev &&
-            // namely: operator [], operator new[], operator delete[]
-            cxxTokenTypeIs(t->pPrev,CXXTokenTypeKeyword)
-        )
-        {
-            // case 6
-            CXX_DEBUG_LEAVE_TEXT("Not a lambda: keyword before []");
-            return NULL;
-        }
-
-        CXX_DEBUG_LEAVE_TEXT("Looks like a lambda with parameters");
-        return t->pNext;
+    if (!cxxTokenTypeIs(t, CXXTokenTypeSquareParenthesisChain)) {
+      CXX_DEBUG_LEAVE_TEXT("Not a lambda: no [] before ()");
+      return NULL; // can't be
     }
 
-    // Handle the harder cases.
-    // Look backwards for the square parenthesis chain, but stop at
-    // tokens that shouldn't be present between the bracket and the
-    // parenthesis.
-    t = cxxTokenChainPreviousTokenOfType(
-            t,
-            CXXTokenTypeSquareParenthesisChain |
-            CXXTokenTypeBracketChain |
-            CXXTokenTypeAssignment |
-            CXXTokenTypeOperator
-        );
-
-    if(!t)
-    {
-        CXX_DEBUG_LEAVE_TEXT("Not a lambda: no []");
-        return NULL;
-    }
-
-    if(!cxxTokenTypeIs(t,CXXTokenTypeSquareParenthesisChain))
-    {
-        CXX_DEBUG_LEAVE_TEXT("Not a lambda: no [] before assignment or operator");
-        return NULL;
-    }
-
-    if(
-        t->pPrev &&
+    if (t->pPrev &&
         // namely: operator [], operator new[], operator delete[]
-        cxxTokenTypeIs(t->pPrev,CXXTokenTypeKeyword)
-    )
-    {
-        // case 6
-        CXX_DEBUG_LEAVE_TEXT("Not a lambda: keyword before []");
-        return NULL;
+        cxxTokenTypeIs(t->pPrev, CXXTokenTypeKeyword)) {
+      // case 6
+      CXX_DEBUG_LEAVE_TEXT("Not a lambda: keyword before []");
+      return NULL;
     }
 
-    t = t->pNext;
+    CXX_DEBUG_LEAVE_TEXT("Looks like a lambda with parameters");
+    return t->pNext;
+  }
 
-    if(cxxTokenTypeIs(t,CXXTokenTypeParenthesisChain))
-    {
-        CXX_DEBUG_LEAVE_TEXT("Looks like a lambda (got () after [])");
-        return t;
-    }
+  // Handle the harder cases.
+  // Look backwards for the square parenthesis chain, but stop at
+  // tokens that shouldn't be present between the bracket and the
+  // parenthesis.
+  t = cxxTokenChainPreviousTokenOfType(
+      t, CXXTokenTypeSquareParenthesisChain | CXXTokenTypeBracketChain |
+             CXXTokenTypeAssignment | CXXTokenTypeOperator);
 
-    CXX_DEBUG_LEAVE_TEXT("Not a lambda: no () after []");
+  if (!t) {
+    CXX_DEBUG_LEAVE_TEXT("Not a lambda: no []");
     return NULL;
+  }
+
+  if (!cxxTokenTypeIs(t, CXXTokenTypeSquareParenthesisChain)) {
+    CXX_DEBUG_LEAVE_TEXT("Not a lambda: no [] before assignment or operator");
+    return NULL;
+  }
+
+  if (t->pPrev &&
+      // namely: operator [], operator new[], operator delete[]
+      cxxTokenTypeIs(t->pPrev, CXXTokenTypeKeyword)) {
+    // case 6
+    CXX_DEBUG_LEAVE_TEXT("Not a lambda: keyword before []");
+    return NULL;
+  }
+
+  t = t->pNext;
+
+  if (cxxTokenTypeIs(t, CXXTokenTypeParenthesisChain)) {
+    CXX_DEBUG_LEAVE_TEXT("Looks like a lambda (got () after [])");
+    return t;
+  }
+
+  CXX_DEBUG_LEAVE_TEXT("Not a lambda: no () after []");
+  return NULL;
 }
 
 // In case of a parameterless lambda (that has no parenthesis) the parameter
 // is the capture list token.
-bool cxxParserHandleLambda(CXXToken * pParenthesis)
-{
-    CXX_DEBUG_ENTER();
+bool cxxParserHandleLambda(CXXToken *pParenthesis) {
+  CXX_DEBUG_ENTER();
 
-    CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(),"C++ only");
+  CXX_DEBUG_ASSERT(cxxParserCurrentLanguageIsCPP(), "C++ only");
 
-    CXXToken * pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindFUNCTION);
+  CXXToken *pIdentifier = cxxTokenCreateAnonymousIdentifier(CXXTagKindFUNCTION);
 
-    CXXTokenChain * pSave = g_cxx.pTokenChain;
-    CXXTokenChain * pNew = cxxTokenChainCreate();
-    g_cxx.pTokenChain = pNew;
+  CXXTokenChain *pSave = g_cxx.pTokenChain;
+  CXXTokenChain *pNew = cxxTokenChainCreate();
+  g_cxx.pTokenChain = pNew;
 
-    tagEntryInfo * tag = cxxTagBegin(CXXTagKindFUNCTION,pIdentifier);
+  tagEntryInfo *tag = cxxTagBegin(CXXTagKindFUNCTION, pIdentifier);
 
-    CXXToken * pAfterParenthesis = pParenthesis ? pParenthesis->pNext : NULL;
+  CXXToken *pAfterParenthesis = pParenthesis ? pParenthesis->pNext : NULL;
 
-    CXXToken * pCaptureList = NULL;
+  CXXToken *pCaptureList = NULL;
 
-    if(pParenthesis)
-    {
-        if(cxxTokenTypeIs(pParenthesis,CXXTokenTypeSquareParenthesisChain))
-        {
-            // form (4) of lambda (see cxxParserOpeningBracketIsLambda()).
-            pCaptureList = pParenthesis;
-        } else if(
-            pParenthesis->pPrev &&
-            cxxTokenTypeIs(pParenthesis->pPrev,CXXTokenTypeSquareParenthesisChain)
-        )
-        {
-            // other forms of lambda (see cxxParserOpeningBracketIsLambda()).
-            pCaptureList = pParenthesis->pPrev;
-        }
+  if (pParenthesis) {
+    if (cxxTokenTypeIs(pParenthesis, CXXTokenTypeSquareParenthesisChain)) {
+      // form (4) of lambda (see cxxParserOpeningBracketIsLambda()).
+      pCaptureList = pParenthesis;
+    } else if (pParenthesis->pPrev &&
+               cxxTokenTypeIs(pParenthesis->pPrev,
+                              CXXTokenTypeSquareParenthesisChain)) {
+      // other forms of lambda (see cxxParserOpeningBracketIsLambda()).
+      pCaptureList = pParenthesis->pPrev;
     }
+  }
 
-    if(
-        pAfterParenthesis &&
-        cxxTokenTypeIs(pAfterParenthesis,CXXTokenTypeKeyword) &&
-        (pAfterParenthesis->eKeyword == CXXKeywordCONST)
-    )
-        pAfterParenthesis = pAfterParenthesis->pNext;
+  if (pAfterParenthesis &&
+      cxxTokenTypeIs(pAfterParenthesis, CXXTokenTypeKeyword) &&
+      (pAfterParenthesis->eKeyword == CXXKeywordCONST))
+    pAfterParenthesis = pAfterParenthesis->pNext;
 
-    CXXToken * pTypeStart = NULL;
-    CXXToken * pTypeEnd;
+  CXXToken *pTypeStart = NULL;
+  CXXToken *pTypeEnd;
 
-    if(
-        pAfterParenthesis &&
-        cxxTokenTypeIs(pAfterParenthesis,CXXTokenTypePointerOperator) &&
-        pAfterParenthesis->pNext &&
-        !cxxTokenTypeIs(pAfterParenthesis->pNext,CXXTokenTypeOpeningBracket)
-    )
-    {
-        pTypeStart = pAfterParenthesis->pNext;
-        pTypeEnd = pTypeStart;
-        while(
-            pTypeEnd->pNext &&
-            (!cxxTokenTypeIs(pTypeEnd->pNext,CXXTokenTypeOpeningBracket))
-        )
-            pTypeEnd = pTypeEnd->pNext;
+  if (pAfterParenthesis &&
+      cxxTokenTypeIs(pAfterParenthesis, CXXTokenTypePointerOperator) &&
+      pAfterParenthesis->pNext &&
+      !cxxTokenTypeIs(pAfterParenthesis->pNext, CXXTokenTypeOpeningBracket)) {
+    pTypeStart = pAfterParenthesis->pNext;
+    pTypeEnd = pTypeStart;
+    while (pTypeEnd->pNext &&
+           (!cxxTokenTypeIs(pTypeEnd->pNext, CXXTokenTypeOpeningBracket)))
+      pTypeEnd = pTypeEnd->pNext;
 
 #if 0
         while(
@@ -225,102 +190,91 @@ bool cxxParserHandleLambda(CXXToken * pParenthesis)
         )
             pTypeStart = pTypeStart->pNext;
 #endif
+  }
+
+  int iCorkQueueIndex = CORK_NIL;
+
+  if (tag) {
+    tag->isFileScope = true;
+
+    CXXToken *pTypeName;
+
+    markTagExtraBit(tag, XTAG_ANONYMOUS);
+
+    if (pTypeStart)
+      pTypeName = cxxTagCheckAndSetTypeField(pTypeStart, pTypeEnd);
+    else
+      pTypeName = NULL;
+
+    if (pCaptureList && cxxTagFieldEnabled(CXXTagCPPFieldLambdaCaptureList)) {
+      CXX_DEBUG_ASSERT(pCaptureList->pChain,
+                       "The capture list must be a chain");
+      cxxTokenChainCondense(pCaptureList->pChain, 0);
+      CXX_DEBUG_ASSERT(
+          cxxTokenChainFirst(pCaptureList->pChain),
+          "Condensation should have created a single token in the chain");
+      cxxTagSetField(
+          CXXTagCPPFieldLambdaCaptureList,
+          vStringValue(cxxTokenChainFirst(pCaptureList->pChain)->pszWord));
     }
 
-    int iCorkQueueIndex = CORK_NIL;
+    // FIXME: Properties?
 
-    if(tag)
-    {
-        tag->isFileScope = true;
+    vString *pszSignature = NULL;
+    if (cxxTokenTypeIs(pParenthesis, CXXTokenTypeParenthesisChain))
+      pszSignature = cxxTokenChainJoin(pParenthesis->pChain, NULL, 0);
 
-        CXXToken * pTypeName;
+    if (pszSignature)
+      tag->extensionFields.signature = vStringValue(pszSignature);
 
-        markTagExtraBit (tag, XTAG_ANONYMOUS);
+    iCorkQueueIndex = cxxTagCommit();
 
-        if(pTypeStart)
-            pTypeName = cxxTagCheckAndSetTypeField(pTypeStart,pTypeEnd);
-        else
-            pTypeName = NULL;
+    if (pTypeName)
+      cxxTokenDestroy(pTypeName);
 
-        if(pCaptureList && cxxTagFieldEnabled(CXXTagCPPFieldLambdaCaptureList))
-        {
-            CXX_DEBUG_ASSERT(pCaptureList->pChain,"The capture list must be a chain");
-            cxxTokenChainCondense(pCaptureList->pChain,0);
-            CXX_DEBUG_ASSERT(
-                cxxTokenChainFirst(pCaptureList->pChain),
-                "Condensation should have created a single token in the chain"
-            );
-            cxxTagSetField(
-                CXXTagCPPFieldLambdaCaptureList,
-                vStringValue(cxxTokenChainFirst(pCaptureList->pChain)->pszWord)
-            );
-        }
+    if (pszSignature)
+      vStringDelete(pszSignature);
+  }
 
-        // FIXME: Properties?
+  cxxScopePush(pIdentifier, CXXScopeTypeFunction, CXXScopeAccessUnknown);
 
-        vString * pszSignature = NULL;
-        if(cxxTokenTypeIs(pParenthesis,CXXTokenTypeParenthesisChain))
-            pszSignature = cxxTokenChainJoin(pParenthesis->pChain,NULL,0);
+  if (pParenthesis &&
+      cxxTokenTypeIs(pParenthesis, CXXTokenTypeParenthesisChain) &&
+      cxxTagKindEnabled(CXXTagKindPARAMETER)) {
+    CXXFunctionParameterInfo oParamInfo;
+    if (cxxParserTokenChainLooksLikeFunctionParameterList(pParenthesis->pChain,
+                                                          &oParamInfo))
+      cxxParserEmitFunctionParameterTags(&oParamInfo);
+  }
 
-        if(pszSignature)
-            tag->extensionFields.signature = vStringValue(pszSignature);
+  bool bRet = cxxParserParseBlock(true);
 
-        iCorkQueueIndex = cxxTagCommit();
+  if (iCorkQueueIndex > CORK_NIL)
+    cxxParserMarkEndLineForTagInCorkQueue(iCorkQueueIndex);
 
-        if(pTypeName)
-            cxxTokenDestroy(pTypeName);
+  cxxScopePop();
 
-        if(pszSignature)
-            vStringDelete(pszSignature);
-    }
+  pNew = g_cxx.pTokenChain; // May have been destroyed and re-created
 
-    cxxScopePush(
-        pIdentifier,
-        CXXScopeTypeFunction,
-        CXXScopeAccessUnknown
-    );
+  g_cxx.pTokenChain = pSave;
+  g_cxx.pToken = pSave->pTail;
 
-    if(
-        pParenthesis &&
-        cxxTokenTypeIs(pParenthesis,CXXTokenTypeParenthesisChain) &&
-        cxxTagKindEnabled(CXXTagKindPARAMETER)
-    )
-    {
-        CXXFunctionParameterInfo oParamInfo;
-        if(cxxParserTokenChainLooksLikeFunctionParameterList(
-                    pParenthesis->pChain,&oParamInfo
-                ))
-            cxxParserEmitFunctionParameterTags(&oParamInfo);
-    }
+  // change the type of token so following parsing code is not confused too much
+  g_cxx.pToken->eType = CXXTokenTypeAngleBracketChain;
+  g_cxx.pToken->pChain = pNew;
 
-    bool bRet = cxxParserParseBlock(true);
+  cxxTokenChainClear(pNew);
 
-    if(iCorkQueueIndex > CORK_NIL)
-        cxxParserMarkEndLineForTagInCorkQueue(iCorkQueueIndex);
+  CXXToken *t = cxxTokenCreate();
+  t->eType = CXXTokenTypeOpeningBracket;
+  vStringPut(t->pszWord, '{');
+  cxxTokenChainAppend(pNew, t);
 
-    cxxScopePop();
+  t = cxxTokenCreate();
+  t->eType = CXXTokenTypeClosingBracket;
+  vStringPut(t->pszWord, '}');
+  cxxTokenChainAppend(pNew, t);
 
-    pNew = g_cxx.pTokenChain; // May have been destroyed and re-created
-
-    g_cxx.pTokenChain = pSave;
-    g_cxx.pToken = pSave->pTail;
-
-    // change the type of token so following parsing code is not confused too much
-    g_cxx.pToken->eType = CXXTokenTypeAngleBracketChain;
-    g_cxx.pToken->pChain = pNew;
-
-    cxxTokenChainClear(pNew);
-
-    CXXToken * t = cxxTokenCreate();
-    t->eType = CXXTokenTypeOpeningBracket;
-    vStringPut (t->pszWord, '{');
-    cxxTokenChainAppend(pNew,t);
-
-    t = cxxTokenCreate();
-    t->eType = CXXTokenTypeClosingBracket;
-    vStringPut (t->pszWord, '}');
-    cxxTokenChainAppend(pNew,t);
-
-    CXX_DEBUG_LEAVE();
-    return bRet;
+  CXX_DEBUG_LEAVE();
+  return bRet;
 }

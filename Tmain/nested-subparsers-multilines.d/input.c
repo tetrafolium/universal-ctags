@@ -1,10 +1,5 @@
-DEFINE_EVENT(a,
-             b);
+DEFINE_EVENT(a, b);
 
-DEFINE_HOOK(h,
-            i);
+DEFINE_HOOK(h, i);
 
-int
-main(void)
-{
-}
+int main(void) {}

@@ -4,7 +4,7 @@
 
 #import <Foundation/NSObject.h>
 
-#if OS_API_VERSION(MAC_OS_X_VERSION_10_7,GS_API_LATEST)
+#if OS_API_VERSION(MAC_OS_X_VERSION_10_7, GS_API_LATEST)
 
 @interface NSFileAccessIntent : NSObject
 @end

@@ -19,11 +19,8 @@ variable length argument list will not be added to the tags file.
 
 For example create a file, say test.c with the following code
 */
-void test(a, ...)
-char a;
-{
-    return;
-}
+void test(a, ...) char a;
+{ return; }
 /*
 Run ctags test.c.  the tags file with only contain the line:
    a	test.c	/^char a;$/;"	v

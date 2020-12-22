@@ -1,11 +1,9 @@
 interface Mover {
-  move(): void
-  getStatus(): { speed: number }
+  move(): void getStatus(): {speed: number}
 }
 
 interface Shaker {
-  shake(): void
-  getStatus(): { frequency: number }
+  shake(): void getStatus(): {frequency: number}
 }
 
 interface MoverShaker extends Mover, Shaker {
@@ -40,8 +38,7 @@ interface CompilerOptions {
   targetPath?: string
 }
 
-interface List<T> {
-  data: T
+interface List<T>{data : T
   next: List<T>
   owner: List<List<T>>
 }
@@ -56,7 +53,6 @@ interface JQueryStatic {
 }
 
 interface Array<T> {
-  length: number
-  [x: number]: T
-  // Other members
-}
+    length: number [x: number]: T
+    // Other members
+  }

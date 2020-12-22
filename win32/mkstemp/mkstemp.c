@@ -1,10 +1,10 @@
-#include <stdlib.h>
-#include <stdio.h>
-#include <string.h>
-#include <io.h>
 #include <errno.h>
-#include <share.h>
 #include <fcntl.h>
+#include <io.h>
+#include <share.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include <sys/stat.h>
 
 /*
@@ -22,39 +22,41 @@
     owner only. The returned file descriptor provides both read and write access
     to the file.
  */
-int __cdecl mkstemp (char *template_name)
-{
-    int i, j, fd, len, index;
+int __cdecl mkstemp(char *template_name) {
+  int i, j, fd, len, index;
 
-    /* These are the (62) characters used in temporary filenames. */
-    static const char letters[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+  /* These are the (62) characters used in temporary filenames. */
+  static const char letters[] =
+      "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    /* The last six characters of template must be "XXXXXX" */
-    if (template_name == NULL || (len = strlen (template_name)) < 6
-            || memcmp (template_name + (len - 6), "XXXXXX", 6)) {
-        errno = EINVAL;
-        return -1;
-    }
-
-    /* User may supply more than six trailing Xs */
-    for (index = len - 6; index > 0 && template_name[index - 1] == 'X'; index--);
-
-    /*
-        Like OpenBSD, mkstemp() will try at least 2 ** 31 combinations before
-        giving up.
-     */
-    for (i = 0; i >= 0; i++) {
-        for(j = index; j < len; j++) {
-            template_name[j] = letters[rand () % 62];
-        }
-        fd = _sopen(template_name,
-                    _O_RDWR | _O_CREAT | _O_EXCL | _O_BINARY,
-                    _SH_DENYRW, _S_IREAD | _S_IWRITE);
-        if (fd != -1) return fd;
-        if (fd == -1 && errno != EEXIST) return -1;
-    }
-
+  /* The last six characters of template must be "XXXXXX" */
+  if (template_name == NULL || (len = strlen(template_name)) < 6 ||
+      memcmp(template_name + (len - 6), "XXXXXX", 6)) {
+    errno = EINVAL;
     return -1;
+  }
+
+  /* User may supply more than six trailing Xs */
+  for (index = len - 6; index > 0 && template_name[index - 1] == 'X'; index--)
+    ;
+
+  /*
+      Like OpenBSD, mkstemp() will try at least 2 ** 31 combinations before
+      giving up.
+   */
+  for (i = 0; i >= 0; i++) {
+    for (j = index; j < len; j++) {
+      template_name[j] = letters[rand() % 62];
+    }
+    fd = _sopen(template_name, _O_RDWR | _O_CREAT | _O_EXCL | _O_BINARY,
+                _SH_DENYRW, _S_IREAD | _S_IWRITE);
+    if (fd != -1)
+      return fd;
+    if (fd == -1 && errno != EEXIST)
+      return -1;
+  }
+
+  return -1;
 }
 
 #if 0

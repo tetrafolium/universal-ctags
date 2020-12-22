@@ -1,11 +1,9 @@
 struct {
-    int x;
+  int x;
 };
 
 union {
-    int x;
+  int x;
 };
 
-enum {
-    X;
-};
+enum { X; };

@@ -1,11 +1,8 @@
-/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function#Simple_example */
+/* https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function#Simple_example
+ */
 
 function resolveAfter2Seconds(x) {
-  return new Promise(resolve => {
-    setTimeout(() => {
-      resolve(x);
-    }, 2000);
-  });
+  return new Promise(resolve => { setTimeout(() => { resolve(x); }, 2000); });
 }
 
 async function add1(x) {
@@ -15,7 +12,7 @@ async function add1(x) {
 }
 
 add1(10).then(v => {
-  console.log(v);  // prints 60 after 2 seconds.
+  console.log(v); // prints 60 after 2 seconds.
 });
 
 async function add2(x) {
@@ -25,5 +22,5 @@ async function add2(x) {
 }
 
 add2(10).then(v => {
-  console.log(v);  // prints 60 after 4 seconds.
+  console.log(v); // prints 60 after 4 seconds.
 });

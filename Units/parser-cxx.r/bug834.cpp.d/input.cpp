@@ -12,6 +12,6 @@ using namespace std;
 vector<vector<int>> C;
 
 struct A {
-    int a;
-    int b;
+  int a;
+  int b;
 };

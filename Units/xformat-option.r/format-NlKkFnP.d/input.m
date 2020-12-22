@@ -6,32 +6,23 @@
 - aMethod;
 @end
 
-@interface B : A <X>
-{
+@interface B : A <X> {
 @public
-    int i;
+  int i;
 @private
-    int j;
+  int j;
 }
 @end
 
-static int x(void)
-{
-    return 0;
-}
+static int x(void) { return 0; }
 
-int y(void)
-{
-    return 1;
-}
+int y(void) { return 1; }
 
 @implementation B
-- aMethod
-{
-    return nil;
+- aMethod {
+  return nil;
 }
-- doSomething
-{
-    return self;
+- doSomething {
+  return self;
 }
 @end
