@@ -1,6 +1,6 @@
 /*
 Bugs item #665086, was opened at 2003-01-09 15:30
-You can respond by visiting: 
+You can respond by visiting:
 https://sourceforge.net/tracker/?func=detail&atid=106556&aid=665086&group_id=6556
 
 Category: None
@@ -15,15 +15,15 @@ Summary: nested namespaces
 Initial Comment:
 hi
 
-it seems that ctags has ommits the scope for nested 
+it seems that ctags has ommits the scope for nested
 namespaces.
 */
 namespace N1
 {
-  namespace N2
-  {
-    class C12{}
-  }
+namespace N2
+{
+class C12 {}
+}
 }
 /*
 N1	test.h	/^namespace N1$/;"	namespace	line:1

@@ -18,7 +18,7 @@ typedef something SampleTypedefObjC;
 
 // Mer & no_struct_name must not be present in output
 // tag
- # define ANOTHER_MACRO( WITH, MOAR ) \
+# define ANOTHER_MACRO( WITH, MOAR ) \
                 Mer( ) \
                 struct no_struct_name
 
@@ -31,17 +31,17 @@ struct aStruct
 #pragma DONTCARE /* :-) */
 
 @interface FileTree : NSObject {
-	NSString	*name;
+    NSString	*name;
     LayoutTree  *representation;
     FolderTree  *parent[THISISNOTATAG];
     FileSize    diskSize;
 }
 - (id)initWithName:(NSString*)treeName
-           andSize:(uint64_t)size
-           atPlace:(FolderTree*)parentFolder;
+    andSize:(uint64_t)size
+    atPlace:(FolderTree*)parentFolder;
 
 - (id)initWithName:(NSString*)treeName
-           atPlace:(FolderTree*)parentFolder;
+    atPlace:(FolderTree*)parentFolder;
 
 - (void)dealloc;
 
@@ -54,7 +54,7 @@ struct aStruct
 }
 
 - (id)initWithName:(NSString*)treeName
-           atPlace:(FolderTree*)parentFolder;
+    atPlace:(FolderTree*)parentFolder;
 - (void)dealloc;
 
 - (FolderTree*)addChild:(FileTree*)subTree;

@@ -22,7 +22,7 @@ int32 test3(int32	a)
    However, it should be recorded well after converting
    the newline to a whitespace. */
 int32 test4(int32
-a)
+            a)
 {
     return 0;
 }

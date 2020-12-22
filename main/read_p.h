@@ -23,8 +23,8 @@
 */
 
 enum nestedInputBoundaryFlag {
-	BOUNDARY_START = 1UL << 0,
-	BOUNDARY_END   = 1UL << 1,
+    BOUNDARY_START = 1UL << 0,
+    BOUNDARY_END   = 1UL << 1,
 };
 
 /*
@@ -53,7 +53,7 @@ extern void freeInputFileResources (void);
    created in parser guessing stage. */
 extern bool openInputFile (const char *const fileName, const langType language, MIO *mio);
 extern MIO *getMio (const char *const fileName, const char *const openMode,
-				    bool memStreamRequired);
+                    bool memStreamRequired);
 extern void resetInputFile (const langType language);
 extern void closeInputFile (void);
 extern void *getInputFileUserData(void);
@@ -66,15 +66,15 @@ extern langType getSourceLanguage (void);
 /* Bypass: reading from fp in inputFile WITHOUT updating fields in input fields */
 extern char *readLineFromBypass (vString *const vLine, MIOPos location, long *const pSeekValue);
 extern void   pushNarrowedInputStream (
-				       unsigned long startLine, long startCharOffset,
-				       unsigned long endLine, long endCharOffset,
-				       unsigned long sourceLineOffset,
-				       int promise);
+    unsigned long startLine, long startCharOffset,
+    unsigned long endLine, long endCharOffset,
+    unsigned long sourceLineOffset,
+    int promise);
 extern void   popNarrowedInputStream  (void);
 
 #define THIN_STREAM_SPEC 0, 0, 0, 0, 0
 extern bool isThinStreamSpec(unsigned long startLine, long startCharOffset,
-							 unsigned long endLine, long endCharOffset,
-							 unsigned long sourceLineOffset);
+                             unsigned long endLine, long endCharOffset,
+                             unsigned long sourceLineOffset);
 
 #endif  /* CTAGS_MAIN_READ_PRIVATE_H */

@@ -1,1 +1,1 @@
-struct a::b{
+struct a::b {

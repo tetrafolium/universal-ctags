@@ -25,16 +25,16 @@ typedef struct NestingLevels NestingLevels;
 
 struct NestingLevel
 {
-	int corkIndex;
-	char userData [];
+    int corkIndex;
+    char userData [];
 };
 
 struct NestingLevels
 {
-	void *levels;
-	int n;					/* number of levels in use */
-	int allocated;
-	size_t userDataSize;
+    void *levels;
+    int n;					/* number of levels in use */
+    int allocated;
+    size_t userDataSize;
 };
 
 /*

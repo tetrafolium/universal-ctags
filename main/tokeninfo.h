@@ -22,38 +22,38 @@ typedef short tokenType;
 typedef short tokenKeyword;
 
 typedef struct sTokenInfo {
-	tokenType type;
-	tokenKeyword keyword;
-	vString *string;
-	struct tokenInfoClass *klass;
-	unsigned long lineNumber;
-	MIOPos filePosition;
+    tokenType type;
+    tokenKeyword keyword;
+    vString *string;
+    struct tokenInfoClass *klass;
+    unsigned long lineNumber;
+    MIOPos filePosition;
 } tokenInfo;
 
 struct tokenTypePair {
-	tokenType start;
-	tokenType end;
+    tokenType start;
+    tokenType end;
 };
 
 #define TOKEN(X)  ((tokenInfo *)X)
 #define TOKENX(X,T)  ((T *)(((char *)TOKEN(X)) + sizeof (tokenInfo)))
 
 struct tokenInfoClass {
-	unsigned int nPreAlloc;
-	tokenType typeForUndefined;
-	tokenKeyword keywordNone;
-	tokenType typeForKeyword;
-	tokenType typeForEOF;
-	size_t extraSpace;
-	struct tokenTypePair   *pairs;
-	unsigned int        pairCount;
-	void (*init)   (tokenInfo *token, void *data);
-	void (*read)   (tokenInfo *token, void *data);
-	void (*clear)  (tokenInfo *token);
-	void (*delete) (tokenInfo *token);
-	void (*copy)   (tokenInfo *dest, tokenInfo *src, void *data);
-	objPool *pool;
-	ptrArray *backlog;
+    unsigned int nPreAlloc;
+    tokenType typeForUndefined;
+    tokenKeyword keywordNone;
+    tokenType typeForKeyword;
+    tokenType typeForEOF;
+    size_t extraSpace;
+    struct tokenTypePair   *pairs;
+    unsigned int        pairCount;
+    void (*init)   (tokenInfo *token, void *data);
+    void (*read)   (tokenInfo *token, void *data);
+    void (*clear)  (tokenInfo *token);
+    void (*delete) (tokenInfo *token);
+    void (*copy)   (tokenInfo *dest, tokenInfo *src, void *data);
+    objPool *pool;
+    ptrArray *backlog;
 };
 
 void *newToken       (struct tokenInfoClass *klass);

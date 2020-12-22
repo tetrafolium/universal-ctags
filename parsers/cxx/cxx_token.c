@@ -27,146 +27,146 @@ void cxxTokenForceDestroy(CXXToken * t);
 
 static CXXToken *createToken(void *createArg CTAGS_ATTR_UNUSED)
 {
-	CXXToken *t = xMalloc(1, CXXToken);
-	// we almost always want a string, and since this token
-	// is being reused..well.. we always want it
-	t->pszWord = vStringNew();
-	return t;
+    CXXToken *t = xMalloc(1, CXXToken);
+    // we almost always want a string, and since this token
+    // is being reused..well.. we always want it
+    t->pszWord = vStringNew();
+    return t;
 }
 
 static void deleteToken(CXXToken *token)
 {
-	vStringDelete(token->pszWord);
-	eFree(token);
+    vStringDelete(token->pszWord);
+    eFree(token);
 }
 
 static void clearToken(CXXToken *t)
 {
-	CXX_DEBUG_ASSERT(t->pszWord,"The string shouldn't have been destroyed");
+    CXX_DEBUG_ASSERT(t->pszWord,"The string shouldn't have been destroyed");
 
-	// this won't actually release memory (but we're taking care
-	// to do not create very large strings)
-	vStringClear(t->pszWord);
+    // this won't actually release memory (but we're taking care
+    // to do not create very large strings)
+    vStringClear(t->pszWord);
 
-	t->bFollowedBySpace = false;
+    t->bFollowedBySpace = false;
 
-	t->pChain = NULL;
-	t->pNext = NULL;
-	t->pPrev = NULL;
+    t->pChain = NULL;
+    t->pNext = NULL;
+    t->pPrev = NULL;
 }
 
 void cxxTokenAPIInit(void)
 {
-	g_pTokenPool = objPoolNew(CXX_TOKEN_POOL_MAXIMUM_SIZE,
-		(objPoolCreateFunc)createToken, (objPoolDeleteFunc)deleteToken,
-		(objPoolClearFunc)clearToken,
-		NULL);
+    g_pTokenPool = objPoolNew(CXX_TOKEN_POOL_MAXIMUM_SIZE,
+                              (objPoolCreateFunc)createToken, (objPoolDeleteFunc)deleteToken,
+                              (objPoolClearFunc)clearToken,
+                              NULL);
 }
 
 void cxxTokenAPINewFile(void)
 {
-	/* Stub */
+    /* Stub */
 }
 
 void cxxTokenAPIDone(void)
 {
-	objPoolDelete (g_pTokenPool);
+    objPoolDelete (g_pTokenPool);
 }
 
 CXXToken * cxxTokenCreate(void)
 {
-	return objPoolGet (g_pTokenPool);
+    return objPoolGet (g_pTokenPool);
 }
 
 void cxxTokenDestroy(CXXToken * t)
 {
-	if(!t)
-		return;
+    if(!t)
+        return;
 
-	if(t->pChain)
-	{
-		cxxTokenChainDestroy(t->pChain);
-		t->pChain = NULL;
-	}
+    if(t->pChain)
+    {
+        cxxTokenChainDestroy(t->pChain);
+        t->pChain = NULL;
+    }
 
-	objPoolPut (g_pTokenPool, t);
+    objPoolPut (g_pTokenPool, t);
 }
 
 void cxxTokenForceDestroy(CXXToken * t)
 {
-	if(!t)
-		return;
+    if(!t)
+        return;
 
-	if(t->pChain)
-	{
-		cxxTokenChainDestroy(t->pChain);
-		t->pChain = NULL;
-	}
+    if(t->pChain)
+    {
+        cxxTokenChainDestroy(t->pChain);
+        t->pChain = NULL;
+    }
 
-	CXX_DEBUG_ASSERT(t->pszWord,"There should be a word here");
+    CXX_DEBUG_ASSERT(t->pszWord,"There should be a word here");
 
-	vStringDelete(t->pszWord);
+    vStringDelete(t->pszWord);
 
-	eFree(t);
+    eFree(t);
 }
 
 CXXToken * cxxTokenCreateKeyword(int iLineNumber,MIOPos oFilePosition,CXXKeyword eKeyword)
 {
-	CXXToken * pToken = cxxTokenCreate();
-	pToken->iLineNumber = iLineNumber;
-	pToken->oFilePosition = oFilePosition;
-	pToken->eType = CXXTokenTypeKeyword;
-	pToken->eKeyword = eKeyword;
-	pToken->bFollowedBySpace = true;
-	vStringCatS(pToken->pszWord,cxxKeywordName(eKeyword));
+    CXXToken * pToken = cxxTokenCreate();
+    pToken->iLineNumber = iLineNumber;
+    pToken->oFilePosition = oFilePosition;
+    pToken->eType = CXXTokenTypeKeyword;
+    pToken->eKeyword = eKeyword;
+    pToken->bFollowedBySpace = true;
+    vStringCatS(pToken->pszWord,cxxKeywordName(eKeyword));
 
-	return pToken;
+    return pToken;
 }
 
 
 CXXToken * cxxTokenCreateAnonymousIdentifier(unsigned int uTagKind)
 {
-	CXXToken * t = cxxTokenCreate();
+    CXXToken * t = cxxTokenCreate();
 
-	anonGenerate (t->pszWord, "__anon", uTagKind);
-	t->eType = CXXTokenTypeIdentifier;
-	t->bFollowedBySpace = true;
-	t->iLineNumber = getInputLineNumber();
-	t->oFilePosition = getInputFilePosition();
+    anonGenerate (t->pszWord, "__anon", uTagKind);
+    t->eType = CXXTokenTypeIdentifier;
+    t->bFollowedBySpace = true;
+    t->iLineNumber = getInputLineNumber();
+    t->oFilePosition = getInputFilePosition();
 
-	return t;
+    return t;
 }
 
 void cxxTokenAppendToString(vString * s,CXXToken * t)
 {
-	switch(t->eType)
-	{
-		case CXXTokenTypeParenthesisChain:
-		case CXXTokenTypeSquareParenthesisChain:
-		case CXXTokenTypeBracketChain:
-		case CXXTokenTypeAngleBracketChain:
-			CXX_DEBUG_ASSERT(t->pChain,"This token should have a nested chain!");
-			cxxTokenChainJoinInString(t->pChain,s,NULL,0);
-		break;
-		default:
-			vStringCat(s,t->pszWord);
-		break;
-	}
+    switch(t->eType)
+    {
+    case CXXTokenTypeParenthesisChain:
+    case CXXTokenTypeSquareParenthesisChain:
+    case CXXTokenTypeBracketChain:
+    case CXXTokenTypeAngleBracketChain:
+        CXX_DEBUG_ASSERT(t->pChain,"This token should have a nested chain!");
+        cxxTokenChainJoinInString(t->pChain,s,NULL,0);
+        break;
+    default:
+        vStringCat(s,t->pszWord);
+        break;
+    }
 }
 
 void cxxTokenReduceBackward (CXXToken *pStart)
 {
-	enum CXXTokenType eSentinelType = pStart->eType >> 4;
-	CXXToken *pTmp = pStart->pPrev;
-	CXXToken *pReducingCandidate;
+    enum CXXTokenType eSentinelType = pStart->eType >> 4;
+    CXXToken *pTmp = pStart->pPrev;
+    CXXToken *pReducingCandidate;
 
-	while (pTmp && (!cxxTokenTypeIsOneOf (pTmp, eSentinelType)))
-	{
-		pReducingCandidate = pTmp;
-		pTmp = pTmp->pPrev;
-		pTmp->pNext = pReducingCandidate->pNext;
-		pReducingCandidate->pNext->pPrev = pTmp;
-		CXX_DEBUG_PRINT("reduce inner token: %p",pReducingCandidate);
-		cxxTokenDestroy (pReducingCandidate);
-	}
+    while (pTmp && (!cxxTokenTypeIsOneOf (pTmp, eSentinelType)))
+    {
+        pReducingCandidate = pTmp;
+        pTmp = pTmp->pPrev;
+        pTmp->pNext = pReducingCandidate->pNext;
+        pReducingCandidate->pNext->pPrev = pTmp;
+        CXX_DEBUG_PRINT("reduce inner token: %p",pReducingCandidate);
+        cxxTokenDestroy (pReducingCandidate);
+    }
 }

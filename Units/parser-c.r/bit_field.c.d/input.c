@@ -6,15 +6,18 @@ struct bit_fields {
 
 struct {
     unsigned sign  : 1;
-    unsigned exp   : _FP_EXPBITS_D;
-    unsigned frac1 : _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0) - _FP_W_TYPE_SIZE;
-    unsigned frac0 : _FP_W_TYPE_SIZE;
+unsigned exp   :
+    _FP_EXPBITS_D;
+unsigned frac1 :
+    _FP_FRACBITS_D - (_FP_IMPLBIT_D != 0) - _FP_W_TYPE_SIZE;
+unsigned frac0 :
+    _FP_W_TYPE_SIZE;
 };
 
 struct shortname_info {
-	unsigned char lower:1,
-		      upper:1,
-		      valid:1;
+    unsigned char lower:1,
+             upper:1,
+             valid:1;
 };
 
 // Problem reported by Michael Brown on 23 October 2001.

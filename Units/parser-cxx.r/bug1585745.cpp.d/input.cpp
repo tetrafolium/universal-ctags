@@ -4,5 +4,6 @@ Class2::~ Class2() { }
 Class3:: ~Class3() { }
 Class4:: ~ Class4() { }
 class Class5 {
-    public: ~ Class5() { }
+public:
+    ~ Class5() { }
 };

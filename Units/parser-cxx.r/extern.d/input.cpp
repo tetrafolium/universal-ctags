@@ -9,12 +9,12 @@ extern "C" void g(void) {}
 
 extern "C"
 {
-  // Please note that h() and i have internal linkage (but their name
-  // mangling is C-style). h() is just a prototype while i is both
-  // a declaration AND a definition of variable.
-  void h(void);
-  int i;
+    // Please note that h() and i have internal linkage (but their name
+    // mangling is C-style). h() is just a prototype while i is both
+    // a declaration AND a definition of variable.
+    void h(void);
+    int i;
 
-  // j has external linkage (declaration only).
-  extern int j;
+    // j has external linkage (declaration only).
+    extern int j;
 }

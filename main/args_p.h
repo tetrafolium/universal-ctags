@@ -23,21 +23,21 @@
 typedef enum { ARG_NONE, ARG_STRING, ARG_ARGV, ARG_FILE } argType;
 
 typedef struct sArgs {
-	argType type;
-	union {
-		struct sStringArgs {
-			const char* next;
-		} stringArgs;
-		struct sArgvArgs {
-			char* const* argv;
-			char* const* item;
-		} argvArgs;
-		struct sFileArgs {
-			FILE* fp;
-		} fileArgs;
-	} u;
-	char* item;
-	bool lineMode;
+    argType type;
+    union {
+        struct sStringArgs {
+            const char* next;
+        } stringArgs;
+        struct sArgvArgs {
+            char* const* argv;
+            char* const* item;
+        } argvArgs;
+        struct sFileArgs {
+            FILE* fp;
+        } fileArgs;
+    } u;
+    char* item;
+    bool lineMode;
 } Arguments;
 
 /*

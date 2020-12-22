@@ -20,53 +20,53 @@
    preWriteEntry, postWriteEntry should free it. */
 
 typedef enum eWriterType {
-	WRITER_DEFAULT,
-	WRITER_U_CTAGS = WRITER_DEFAULT,
-	WRITER_E_CTAGS,
-	WRITER_ETAGS,
-	WRITER_XREF,
-	WRITER_JSON,
-	WRITER_CUSTOM,
-	WRITER_COUNT,
+    WRITER_DEFAULT,
+    WRITER_U_CTAGS = WRITER_DEFAULT,
+    WRITER_E_CTAGS,
+    WRITER_ETAGS,
+    WRITER_XREF,
+    WRITER_JSON,
+    WRITER_CUSTOM,
+    WRITER_COUNT,
 } writerType;
 
 struct sTagWriter;
 typedef struct sTagWriter tagWriter;
 struct sTagWriter {
-	int (* writeEntry) (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag,
-						void *clientData);
-	int (* writePtagEntry) (tagWriter *writer, MIO * mio, const ptagDesc *desc,
-							const char *const fileName,
-							const char *const pattern,
-							const char *const parserName,
-							void *clientData);
-	bool printPtagByDefault;
-	void * (* preWriteEntry) (tagWriter *writer, MIO * mio,
-							  void *clientData);
+    int (* writeEntry) (tagWriter *writer, MIO * mio, const tagEntryInfo *const tag,
+                        void *clientData);
+    int (* writePtagEntry) (tagWriter *writer, MIO * mio, const ptagDesc *desc,
+                            const char *const fileName,
+                            const char *const pattern,
+                            const char *const parserName,
+                            void *clientData);
+    bool printPtagByDefault;
+    void * (* preWriteEntry) (tagWriter *writer, MIO * mio,
+                              void *clientData);
 
-	/* Returning TRUE means the output file may be shrunk.
-	   In such case the callee may do truncate output file. */
-	bool (* postWriteEntry)  (tagWriter *writer, MIO * mio, const char* filename,
-							  void *clientData);
-	void (* rescanFailedEntry) (tagWriter *writer, unsigned long validTagNum,
-								void *clientData);
-	bool (* treatFieldAsFixed) (int fieldType);
+    /* Returning TRUE means the output file may be shrunk.
+       In such case the callee may do truncate output file. */
+    bool (* postWriteEntry)  (tagWriter *writer, MIO * mio, const char* filename,
+                              void *clientData);
+    void (* rescanFailedEntry) (tagWriter *writer, unsigned long validTagNum,
+                                void *clientData);
+    bool (* treatFieldAsFixed) (int fieldType);
 
-	void (* checkOptions) (tagWriter *writer);
+    void (* checkOptions) (tagWriter *writer);
 
 #ifdef WIN32
-	enum filenameSepOp (* overrideFilenameSeparator) (enum filenameSepOp currentSetting);
+    enum filenameSepOp (* overrideFilenameSeparator) (enum filenameSepOp currentSetting);
 #endif	/* WIN32 */
 
-	const char *defaultFileName;
+    const char *defaultFileName;
 
-	/* The value returned from preWriteEntry is stored `private' field.
-	   The value must be released in postWriteEntry. */
-	void *private;
-	writerType type;
-	/* The value passed as the second argument for writerSetup iss
-	 * stored here. Unlink `private' field, ctags does nothing more. */
-	void *clientData;
+    /* The value returned from preWriteEntry is stored `private' field.
+       The value must be released in postWriteEntry. */
+    void *private;
+    writerType type;
+    /* The value passed as the second argument for writerSetup iss
+     * stored here. Unlink `private' field, ctags does nothing more. */
+    void *clientData;
 };
 
 /* customWriter is used only if otype is WRITER_CUSTOM */
@@ -76,17 +76,17 @@ extern bool writerTeardown (MIO *mio, const char *filename);
 
 int writerWriteTag (MIO * mio, const tagEntryInfo *const tag);
 int writerWritePtag (MIO * mio,
-					 const ptagDesc *desc,
-					 const char *const fileName,
-					 const char *const pattern,
-					 const char *const parserName);
+                     const ptagDesc *desc,
+                     const char *const fileName,
+                     const char *const pattern,
+                     const char *const parserName);
 
 void writerRescanFailed (unsigned long validTagNum);
 
 extern const char *outputDefaultFileName (void);
 
 extern size_t truncateTagLineAfterTag (char *const line, const char *const token,
-			     const bool discardNewline);
+                                       const bool discardNewline);
 extern void abort_if_ferror(MIO *const fp);
 
 extern bool ptagMakeJsonOutputVersion (ptagDesc *desc, const void *data CTAGS_ATTR_UNUSED);

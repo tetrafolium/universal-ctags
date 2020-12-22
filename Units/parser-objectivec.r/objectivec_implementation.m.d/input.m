@@ -6,7 +6,7 @@
 }
 
 - (id)initWithName:(NSString*)treeName
-           atPlace:(FolderTree*)parentFolder
+    atPlace:(FolderTree*)parentFolder
 {
     self = [super init];
 
@@ -20,8 +20,8 @@
 }
 
 - (id)initWithName:(NSString*)treeName
-           andSize:(FileSize)size
-           atPlace:(FolderTree*)parentFolder
+    andSize:(FileSize)size
+    atPlace:(FolderTree*)parentFolder
 {
     self = [super init];
 
@@ -49,10 +49,10 @@
 
 @implementation FolderTree
 - (id)initWithName:(NSString*)treeName
-           atPlace:(FolderTree*)parentFolder
+    atPlace:(FolderTree*)parentFolder
 {
     self = [super initWithName:treeName
-                       atPlace:parentFolder];
+                  atPlace:parentFolder];
 
     children = [[NSMutableArray alloc] init];
     return self;
@@ -66,25 +66,25 @@
 
 + (void) createFileList: (NSString*)root atPlace:(FolderTree*)parentFolder
 {
-	NSFileManager *localFileManager = [[NSFileManager alloc] init];
-	NSURL		  *rootUrl = [NSURL fileURLWithPath:root];
-	NSDirectoryEnumerator *dirEnumerator = [localFileManager enumeratorAtURL:rootUrl
-											
-                                                  includingPropertiesForKeys:[NSArray arrayWithObjects:
-                                                                              NSURLNameKey,
-                                                                              NSURLIsDirectoryKey,
-                                                                              nil]
-											
-                                                                     options:NSDirectoryEnumerationSkipsHiddenFiles
-											
-                                                                errorHandler:nil];
-    
-	for (NSURL *theURL in dirEnumerator)
-	{
+    NSFileManager *localFileManager = [[NSFileManager alloc] init];
+    NSURL		  *rootUrl = [NSURL fileURLWithPath:root];
+    NSDirectoryEnumerator *dirEnumerator = [localFileManager enumeratorAtURL:rootUrl
+
+                                                             includingPropertiesForKeys:[NSArray arrayWithObjects:
+                                                                     NSURLNameKey,
+                                                                     NSURLIsDirectoryKey,
+                                                                     nil]
+
+                                                             options:NSDirectoryEnumerationSkipsHiddenFiles
+
+                                                             errorHandler:nil];
+
+    for (NSURL *theURL in dirEnumerator)
+    {
         [theURL getResourceValue:&fileName
-						  forKey:NSURLNameKey
-						   error:NULL];
-        
+                forKey:NSURLNameKey
+                error:NULL];
+
         // Ignore files under the _extras directory
         if ([isDirectory boolValue]==YES)
         {
@@ -93,18 +93,18 @@
         else if ([isDirectory boolValue]==NO)
         {
             [parentFolder addChild:f];
-        }		
+        }
     }
 }
 
 - (void) populateChildList:(NSString*)root
 {
     NSString *thisRoot = [[root stringByAppendingString:@"/"]
-                                stringByAppendingString:name];
-    
+                          stringByAppendingString:name];
+
     [FolderTree createFileList:thisRoot
-                       atPlace:self];
-    
+                atPlace:self];
+
     for ( FileTree *f in children )
         diskSize += [f getDiskSize];
 }
@@ -119,7 +119,7 @@
 {
     return
         [[LayoutTree alloc] initWithFileList:children
-                                andTotalSize:diskSize];
+                            andTotalSize:diskSize];
 }
 @end
 

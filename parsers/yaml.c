@@ -52,124 +52,125 @@ static const char *tokenTypeName [] = {
 
 static void yamlInit (yaml_parser_t *yaml)
 {
-	const unsigned char* data;
-	size_t size;
+    const unsigned char* data;
+    size_t size;
 
-	yaml_parser_initialize (yaml);
+    yaml_parser_initialize (yaml);
 
-	data = getInputFileData (&size);
-	Assert (data);
+    data = getInputFileData (&size);
+    Assert (data);
 
-	yaml_parser_set_input_string (yaml, data, size);
+    yaml_parser_set_input_string (yaml, data, size);
 }
 
 static void yamlFini (yaml_parser_t *yaml)
 {
-	yaml_parser_delete (yaml);
+    yaml_parser_delete (yaml);
 }
 
 extern void attachYamlPosition (tagEntryInfo *tag, yaml_token_t *token, bool asEndPosition)
 {
-	unsigned int ln = token->start_mark.line + 1;
+    unsigned int ln = token->start_mark.line + 1;
 
-	if (asEndPosition)
-		tag->extensionFields.endLine = ln;
-	else
-	{
-		tag->lineNumber = ln;
-		tag->filePosition = getInputFilePositionForLine (tag->lineNumber);
-	}
+    if (asEndPosition)
+        tag->extensionFields.endLine = ln;
+    else
+    {
+        tag->lineNumber = ln;
+        tag->filePosition = getInputFilePositionForLine (tag->lineNumber);
+    }
 }
 
 enum YamlKind {
-	K_ANCHOR,
+    K_ANCHOR,
 };
 
 enum YamlAnchorRole {
-	R_ANCHOR_ALIAS,
+    R_ANCHOR_ALIAS,
 };
 
 static roleDefinition YamlAnchorRoles [] = {
-	{ true, "alias", "alias" },
+    { true, "alias", "alias" },
 };
 
 static kindDefinition YamlKinds [] = {
-	{ true,  'a', "anchor", "anchors",
-	  .referenceOnly = false, ATTACH_ROLES(YamlAnchorRoles) },
+    {   true,  'a', "anchor", "anchors",
+        .referenceOnly = false, ATTACH_ROLES(YamlAnchorRoles)
+    },
 };
 
 static void handlYamlToken (yaml_token_t *token)
 {
-	tagEntryInfo tag;
+    tagEntryInfo tag;
 
-	if (token->type == YAML_ANCHOR_TOKEN)
-	{
-		initTagEntry (&tag, (char *)token->data.anchor.value,
-					  K_ANCHOR);
-		attachYamlPosition (&tag, token, false);
-		makeTagEntry (&tag);
-	}
-	else if (token->type == YAML_ALIAS_TOKEN)
-	{
-		initRefTagEntry (&tag, (char *)token->data.alias.value,
-						 K_ANCHOR, R_ANCHOR_ALIAS);
-		attachYamlPosition (&tag, token, false);
-		makeTagEntry (&tag);
-	}
+    if (token->type == YAML_ANCHOR_TOKEN)
+    {
+        initTagEntry (&tag, (char *)token->data.anchor.value,
+                      K_ANCHOR);
+        attachYamlPosition (&tag, token, false);
+        makeTagEntry (&tag);
+    }
+    else if (token->type == YAML_ALIAS_TOKEN)
+    {
+        initRefTagEntry (&tag, (char *)token->data.alias.value,
+                         K_ANCHOR, R_ANCHOR_ALIAS);
+        attachYamlPosition (&tag, token, false);
+        makeTagEntry (&tag);
+    }
 
 }
 
 static void findYamlTags (void)
 {
-	subparser *sub;
-	yaml_parser_t yaml;
-	yaml_token_t token;
-	bool done;
+    subparser *sub;
+    yaml_parser_t yaml;
+    yaml_token_t token;
+    bool done;
 
-	yamlInit (&yaml);
+    yamlInit (&yaml);
 
-	findRegexTags ();
+    findRegexTags ();
 
-	sub = getSubparserRunningBaseparser();
-	if (sub)
-		chooseExclusiveSubparser (sub, NULL);
+    sub = getSubparserRunningBaseparser();
+    if (sub)
+        chooseExclusiveSubparser (sub, NULL);
 
-	done = false;
-	while (!done)
-	{
-		if (!yaml_parser_scan (&yaml, &token))
-			break;
+    done = false;
+    while (!done)
+    {
+        if (!yaml_parser_scan (&yaml, &token))
+            break;
 
-		handlYamlToken (&token);
-		foreachSubparser(sub, false)
-		{
-			enterSubparser (sub);
-			((yamlSubparser *)sub)->newTokenNotfify ((yamlSubparser *)sub, &token);
-			leaveSubparser ();
-		}
+        handlYamlToken (&token);
+        foreachSubparser(sub, false)
+        {
+            enterSubparser (sub);
+            ((yamlSubparser *)sub)->newTokenNotfify ((yamlSubparser *)sub, &token);
+            leaveSubparser ();
+        }
 
-		verbose("yaml token:%s<%d>@Line:%"PRIuPTR"\n", tokenTypeName[token.type], token.type,
-				token.start_mark.line + 1);
-		if (token.type == YAML_STREAM_END_TOKEN)
-			done = true;
+        verbose("yaml token:%s<%d>@Line:%"PRIuPTR"\n", tokenTypeName[token.type], token.type,
+                token.start_mark.line + 1);
+        if (token.type == YAML_STREAM_END_TOKEN)
+            done = true;
 
-		yaml_token_delete (&token);
-	}
-	yamlFini (&yaml);
+        yaml_token_delete (&token);
+    }
+    yamlFini (&yaml);
 }
 
 extern parserDefinition* YamlParser (void)
 {
-	static const char *const extensions [] = { "yml", NULL };
-	parserDefinition* const def = parserNew ("Yaml");
+    static const char *const extensions [] = { "yml", NULL };
+    parserDefinition* const def = parserNew ("Yaml");
 
-	def->kindTable = YamlKinds;
-	def->extensions = extensions;
-	def->parser     = findYamlTags;
-	def->useCork    = true;
-	def->kindTable         = YamlKinds;
-	def->kindCount     = ARRAY_SIZE (YamlKinds);
-	def->useMemoryStreamInput = true;
+    def->kindTable = YamlKinds;
+    def->extensions = extensions;
+    def->parser     = findYamlTags;
+    def->useCork    = true;
+    def->kindTable         = YamlKinds;
+    def->kindCount     = ARRAY_SIZE (YamlKinds);
+    def->useMemoryStreamInput = true;
 
-	return def;
+    return def;
 }

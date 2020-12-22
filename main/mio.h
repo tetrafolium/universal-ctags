@@ -39,8 +39,8 @@
  * Existing implementations.
  */
 enum _MIOType {
-	MIO_TYPE_FILE,
-	MIO_TYPE_MEMORY
+    MIO_TYPE_FILE,
+    MIO_TYPE_MEMORY
 };
 
 typedef enum _MIOType   MIOType;
@@ -99,29 +99,29 @@ typedef void (*MIODestroyNotify) (void *data);
  * accessed directly.
  */
 struct _MIOPos {
-	/*< private >*/
-	MIOType type;
+    /*< private >*/
+    MIOType type;
 #ifdef MIO_DEBUG
-	void *tag;
+    void *tag;
 #endif
-	union {
-		fpos_t file;
-		size_t mem;
-	} impl;
+    union {
+        fpos_t file;
+        size_t mem;
+    } impl;
 };
 
 
 
 MIO *mio_new_file (const char *filename, const char *mode);
 MIO *mio_new_file_full (const char *filename,
-						const char *mode,
-						MIOFOpenFunc open_func,
-						MIOFCloseFunc close_func);
+                        const char *mode,
+                        MIOFOpenFunc open_func,
+                        MIOFCloseFunc close_func);
 MIO *mio_new_fp (FILE *fp, MIOFCloseFunc close_func);
 MIO *mio_new_memory (unsigned char *data,
-					 size_t size,
-					 MIOReallocFunc realloc_func,
-					 MIODestroyNotify free_func);
+                     size_t size,
+                     MIOReallocFunc realloc_func,
+                     MIODestroyNotify free_func);
 
 MIO *mio_new_mio    (MIO *base, long start, long size);
 MIO *mio_ref        (MIO *mio);
@@ -130,13 +130,13 @@ int mio_unref (MIO *mio);
 FILE *mio_file_get_fp (MIO *mio);
 unsigned char *mio_memory_get_data (MIO *mio, size_t *size);
 size_t mio_read (MIO *mio,
-				 void *ptr,
-				 size_t size,
-				 size_t nmemb);
+                 void *ptr,
+                 size_t size,
+                 size_t nmemb);
 size_t mio_write (MIO *mio,
-				  const void *ptr,
-				  size_t size,
-				  size_t nmemb);
+                  const void *ptr,
+                  size_t size,
+                  size_t nmemb);
 int mio_getc (MIO *mio);
 char *mio_gets (MIO *mio, char *s, size_t size);
 int mio_ungetc (MIO *mio, int ch);

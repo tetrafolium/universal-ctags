@@ -20,15 +20,15 @@
 
 typedef struct sM4Subparser m4Subparser;
 struct sM4Subparser {
-	subparser subparser;
+    subparser subparser;
 
-	bool (* probeLanguage) (m4Subparser *m4, const char* token);
+    bool (* probeLanguage) (m4Subparser *m4, const char* token);
 
-	/* return value: Cork index */
-	int  (* newMacroNotify) (m4Subparser *m4, const char* token);
+    /* return value: Cork index */
+    int  (* newMacroNotify) (m4Subparser *m4, const char* token);
 
-	bool (* doesLineCommentStart)   (m4Subparser *m4, int c, const char *token);
-	bool (* doesStringLiteralStart) (m4Subparser *m4, int c);
+    bool (* doesLineCommentStart)   (m4Subparser *m4, int c, const char *token);
+    bool (* doesStringLiteralStart) (m4Subparser *m4, int c);
 };
 
 /* Helpers functions */

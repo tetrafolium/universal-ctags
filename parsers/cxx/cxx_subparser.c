@@ -16,110 +16,110 @@
 
 bool cxxSubparserNotifyParseAccessSpecifier (ptrArray *pSubparsers)
 {
-	bool bR = false;
-	subparser *pSubparser;
+    bool bR = false;
+    subparser *pSubparser;
 
-	foreachSubparser (pSubparser, false)
-	{
-		cxxSubparser *pS = (cxxSubparser *)pSubparser;
-		if (pS->parseAccessSpecifierNotify)
-		{
-			enterSubparser(pSubparser);
-			if (pS->parseAccessSpecifierNotify (pS))
-			{
-				ptrArrayAdd(pSubparsers, pS);
-				bR = true;
-			}
-			leaveSubparser();
-		}
-	}
-	return bR;
+    foreachSubparser (pSubparser, false)
+    {
+        cxxSubparser *pS = (cxxSubparser *)pSubparser;
+        if (pS->parseAccessSpecifierNotify)
+        {
+            enterSubparser(pSubparser);
+            if (pS->parseAccessSpecifierNotify (pS))
+            {
+                ptrArrayAdd(pSubparsers, pS);
+                bR = true;
+            }
+            leaveSubparser();
+        }
+    }
+    return bR;
 }
 
 void cxxSubparserNotifyfoundExtraIdentifierAsAccessSpecifier(ptrArray *pSubparsers,
-															 CXXToken *pToken)
+        CXXToken *pToken)
 {
-	unsigned int c = ptrArrayCount(pSubparsers);
-	for (unsigned int i = 0; i < c; i++)
-	{
-		cxxSubparser *pS = ptrArrayItem (pSubparsers, i);
-		if (pS->foundExtraIdentifierAsAccessSpecifier)
-		{
-			enterSubparser((subparser*)pS);
-			pS->foundExtraIdentifierAsAccessSpecifier(pS, pToken);
-			leaveSubparser();
-		}
-	}
+    unsigned int c = ptrArrayCount(pSubparsers);
+    for (unsigned int i = 0; i < c; i++)
+    {
+        cxxSubparser *pS = ptrArrayItem (pSubparsers, i);
+        if (pS->foundExtraIdentifierAsAccessSpecifier)
+        {
+            enterSubparser((subparser*)pS);
+            pS->foundExtraIdentifierAsAccessSpecifier(pS, pToken);
+            leaveSubparser();
+        }
+    }
 }
 
 bool cxxSubparserNewIdentifierAsHeadOfMemberNotify(CXXToken *pToken)
 {
-	subparser *pSubparser;
-	bool handled = false;
+    subparser *pSubparser;
+    bool handled = false;
 
-	foreachSubparser (pSubparser, false)
-	{
-		cxxSubparser *pS = (cxxSubparser *)pSubparser;
-		if (pS->newIdentifierAsHeadOfMemberNotify)
-		{
-			enterSubparser(pSubparser);
-			if (pS->newIdentifierAsHeadOfMemberNotify (pS, pToken))
-				handled = true;
-			leaveSubparser();
-			if (handled)
-				break;
-		}
-	}
-	return handled;
+    foreachSubparser (pSubparser, false)
+    {
+        cxxSubparser *pS = (cxxSubparser *)pSubparser;
+        if (pS->newIdentifierAsHeadOfMemberNotify)
+        {
+            enterSubparser(pSubparser);
+            if (pS->newIdentifierAsHeadOfMemberNotify (pS, pToken))
+                handled = true;
+            leaveSubparser();
+            if (handled)
+                break;
+        }
+    }
+    return handled;
 }
 
 void cxxSubparserUnknownIdentifierInClassNotify(CXXToken *pToken)
 {
-	subparser *pSubparser;
-	bool handled = false;
+    subparser *pSubparser;
+    bool handled = false;
 
-	foreachSubparser (pSubparser, false)
-	{
-		cxxSubparser *pS = (cxxSubparser *)pSubparser;
-		if (pS->unknownIdentifierInClassNotify)
-		{
-			enterSubparser(pSubparser);
-			if (pS->unknownIdentifierInClassNotify (pS, pToken))
-				handled = true;
-			leaveSubparser();
-			if (handled)
-				break;
-		}
+    foreachSubparser (pSubparser, false)
+    {
+        cxxSubparser *pS = (cxxSubparser *)pSubparser;
+        if (pS->unknownIdentifierInClassNotify)
+        {
+            enterSubparser(pSubparser);
+            if (pS->unknownIdentifierInClassNotify (pS, pToken))
+                handled = true;
+            leaveSubparser();
+            if (handled)
+                break;
+        }
 
-	}
+    }
 }
 
 void cxxSubparserNotifyEnterBlock (void)
 {
-	subparser *pSubparser;
-	foreachSubparser (pSubparser, false)
-	{
-		cxxSubparser *pS = (cxxSubparser *)pSubparser;
-		if (pS->enterBlockNotify)
-		{
-			enterSubparser(pSubparser);
-			pS->enterBlockNotify (pS);
-			leaveSubparser();
-		}
-	}
+    subparser *pSubparser;
+    foreachSubparser (pSubparser, false)
+    {
+        cxxSubparser *pS = (cxxSubparser *)pSubparser;
+        if (pS->enterBlockNotify)
+        {
+            enterSubparser(pSubparser);
+            pS->enterBlockNotify (pS);
+            leaveSubparser();
+        }
+    }
 }
 
 void cxxSubparserNotifyLeaveBlock (void)
 {
-	subparser *pSubparser;
-	foreachSubparser (pSubparser, false)
-	{
-		cxxSubparser *pS = (cxxSubparser *)pSubparser;
-		if (pS->leaveBlockNotify)
-		{
-			enterSubparser(pSubparser);
-			pS->leaveBlockNotify (pS);
-			leaveSubparser();
-		}
-	}
+    subparser *pSubparser;
+    foreachSubparser (pSubparser, false)
+    {
+        cxxSubparser *pS = (cxxSubparser *)pSubparser;
+        if (pS->leaveBlockNotify)
+        {
+            enterSubparser(pSubparser);
+            pS->leaveBlockNotify (pS);
+            leaveSubparser();
+        }
+    }
 }

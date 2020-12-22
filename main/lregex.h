@@ -25,23 +25,23 @@
 *   DATA DECLARATIONS
 */
 typedef struct sTagRegexTable {
-	const char *const regex;
-	const char* const name;
-	const char* const kinds;
-	const char *const flags;
-	bool    *disabled;
-	bool  mline;
+    const char *const regex;
+    const char* const name;
+    const char* const kinds;
+    const char *const flags;
+    bool    *disabled;
+    bool  mline;
 } tagRegexTable;
 
 typedef struct {
-	size_t start;   /* character index in line where match starts */
-	size_t length;  /* length of match */
+    size_t start;   /* character index in line where match starts */
+    size_t length;  /* length of match */
 } regexMatch;
 
 /* Return value is referred when {exclusive} is also specified.
    The input line is consumed when "{exclusive}" is specified and
    the value returned from the callback function is true. */
 typedef bool (*regexCallback) (const char *line, const regexMatch *matches, unsigned int count,
-			       void *userData);
+                               void *userData);
 
 #endif	/* CTAGS_MAIN_LREGEX_H */

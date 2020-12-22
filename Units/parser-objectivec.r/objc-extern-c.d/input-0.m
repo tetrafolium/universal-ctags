@@ -9,5 +9,5 @@
 
 extern int foo (void)
 {
-  return 0;
+    return 0;
 }

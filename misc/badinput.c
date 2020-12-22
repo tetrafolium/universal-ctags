@@ -96,224 +96,224 @@
 static void
 print_help(const char *prog, FILE *fp, int status)
 {
-	fprintf(fp, "Usage:\n");
-	fprintf(fp, "	%s --help|-h\n", prog);
-	fprintf(fp, "	%s CMDLINE_TEMPLATE INPUT OUTPUT\n", prog);
-	exit (status);
+    fprintf(fp, "Usage:\n");
+    fprintf(fp, "	%s --help|-h\n", prog);
+    fprintf(fp, "	%s CMDLINE_TEMPLATE INPUT OUTPUT\n", prog);
+    exit (status);
 }
 
 static void
 load (const char* input_file, char** input, size_t* len)
 {
-	int input_fd;
-	struct stat stat_buf;
+    int input_fd;
+    struct stat stat_buf;
 
-	input_fd = open (input_file, O_RDONLY);
-	if (input_fd < 0)
-	{
-		perror ("open(input)");
-		exit(1);
-	}
+    input_fd = open (input_file, O_RDONLY);
+    if (input_fd < 0)
+    {
+        perror ("open(input)");
+        exit(1);
+    }
 
-	if (fstat(input_fd, &stat_buf) < 0)
-	{
-		perror ("fstat");
-		exit(1);
-	}
+    if (fstat(input_fd, &stat_buf) < 0)
+    {
+        perror ("fstat");
+        exit(1);
+    }
 
-	*len = stat_buf.st_size;
-	*input = malloc (*len);
-	if (!*input)
-	{
-		fprintf(stderr, "memory exhausted\n");
-		exit (1);
-	}
+    *len = stat_buf.st_size;
+    *input = malloc (*len);
+    if (!*input)
+    {
+        fprintf(stderr, "memory exhausted\n");
+        exit (1);
+    }
 
-	if (read (input_fd, *input, *len) != *len)
-	{
-		perror ("read");
-		exit (1);
-	}
+    if (read (input_fd, *input, *len) != *len)
+    {
+        perror ("read");
+        exit (1);
+    }
 }
 
 static void
 prepare(int output_fd, char * input, size_t len)
 {
-	if (lseek (output_fd, 0, SEEK_SET == -1))
-	{
-		perror("lseek");
-		exit (1);
-	}
+    if (lseek (output_fd, 0, SEEK_SET == -1))
+    {
+        perror("lseek");
+        exit (1);
+    }
 
-	if (ftruncate(output_fd, 0) == -1)
-	{
-		perror ("truncate");
-		exit (1);
-	}
+    if (ftruncate(output_fd, 0) == -1)
+    {
+        perror ("truncate");
+        exit (1);
+    }
 
-	if (write (output_fd, input, len) != len)
-	{
-		perror ("write");
-		exit (1);
-	}
+    if (write (output_fd, input, len) != len)
+    {
+        perror ("write");
+        exit (1);
+    }
 }
 
 static int
 test (char* cmdline, char * input, off_t start, size_t len, int output_fd)
 {
-	int r;
+    int r;
 
-	prepare (output_fd, input + start, len);
-	fprintf (stderr, "[%lu, %lu]...", start, start + len);
-	r = system(cmdline);
-	fprintf(stderr, "%d\n", r);
+    prepare (output_fd, input + start, len);
+    fprintf (stderr, "[%lu, %lu]...", start, start + len);
+    r = system(cmdline);
+    fprintf(stderr, "%d\n", r);
 
-	return r;
+    return r;
 }
 
 static int
 bisect(char* cmdline, char * input, size_t len, int output_fd)
 {
-	off_t end;
-	off_t start;
+    off_t end;
+    off_t start;
 
-	unsigned int step;
-	int delta;
+    unsigned int step;
+    int delta;
 
-	off_t failed = len;
-	off_t successful = 0;
+    off_t failed = len;
+    off_t successful = 0;
 
-	end = len;
-	failed = len;
-	successful = 0;
-	for (step = 0; 1; step++)
-	{
-		fprintf(stderr, "step(end): %d ", step);
-		delta = (len >> (step + 1));
-		if (delta == 0)
-			delta = 1;
+    end = len;
+    failed = len;
+    successful = 0;
+    for (step = 0; 1; step++)
+    {
+        fprintf(stderr, "step(end): %d ", step);
+        delta = (len >> (step + 1));
+        if (delta == 0)
+            delta = 1;
 
-		if (test (cmdline, input, 0, end, output_fd) == 0)
-		{
-			successful = end;
-			if (end + 1 == failed)
-			{
-				end = failed;
-				break;
-			}
-			else
-				end += delta;
-		}
-		else
-		{
-			failed = end;
-			if (successful + 1 == end)
-				break;
-			else
-				end -= delta;
-		}
-	}
+        if (test (cmdline, input, 0, end, output_fd) == 0)
+        {
+            successful = end;
+            if (end + 1 == failed)
+            {
+                end = failed;
+                break;
+            }
+            else
+                end += delta;
+        }
+        else
+        {
+            failed = end;
+            if (successful + 1 == end)
+                break;
+            else
+                end -= delta;
+        }
+    }
 
-	len = end;
-	start = 0;
-	failed = 0;
-	successful = end;
-	for (step = 0; 1; step++)
-	{
-		fprintf(stderr, "step(start): %d ", step);
-		delta = (len >> (step + 1));
-		if (delta == 0)
-			delta = 1;
-		if (test (cmdline, input, start, end - start, output_fd) == 0)
-		{
-			successful = start;
-			if (start - 1 == failed)
-			{
-				start--;
-				break;
-			}
-			else
-				start -= delta;
-		}
-		else
-		{
-			failed = start;
-			if (successful - 1 == start)
-				break;
-			else
-				start += delta;
-		}
+    len = end;
+    start = 0;
+    failed = 0;
+    successful = end;
+    for (step = 0; 1; step++)
+    {
+        fprintf(stderr, "step(start): %d ", step);
+        delta = (len >> (step + 1));
+        if (delta == 0)
+            delta = 1;
+        if (test (cmdline, input, start, end - start, output_fd) == 0)
+        {
+            successful = start;
+            if (start - 1 == failed)
+            {
+                start--;
+                break;
+            }
+            else
+                start -= delta;
+        }
+        else
+        {
+            failed = start;
+            if (successful - 1 == start)
+                break;
+            else
+                start += delta;
+        }
 
-	}
+    }
 
-	len = end - start;
-	fprintf(stderr, "Minimal bad input:\n");
-	fwrite(input + start, 1, len, stdout);
-	prepare (output_fd, input + start, len);
-	printf("\n");
+    len = end - start;
+    fprintf(stderr, "Minimal bad input:\n");
+    fwrite(input + start, 1, len, stdout);
+    prepare (output_fd, input + start, len);
+    printf("\n");
 
-	return 0;
+    return 0;
 }
 
 int
 main(int argc, char** argv)
 {
-	char* cmdline_template;
-	char* input_file;
-	char* output_file;
+    char* cmdline_template;
+    char* input_file;
+    char* output_file;
 
-	char* cmdline;
-	char * input;
-	size_t len;
-	int output_fd;
+    char* cmdline;
+    char * input;
+    size_t len;
+    int output_fd;
 
 
-	if (argc == 2
-	    && ((!strcmp(argv[2], "--help"))
-		|| (!strcmp(argv[2], "-h"))))
-		print_help(argv[0], stdout, 0);
-	else if (argc != 4)
-	{
-		fprintf(stderr,"wrong number of arguments\n");
-		exit (1);
-	}
+    if (argc == 2
+            && ((!strcmp(argv[2], "--help"))
+                || (!strcmp(argv[2], "-h"))))
+        print_help(argv[0], stdout, 0);
+    else if (argc != 4)
+    {
+        fprintf(stderr,"wrong number of arguments\n");
+        exit (1);
+    }
 
-	cmdline_template = argv[1];
-	input_file = argv[2];
-	output_file = argv[3];
+    cmdline_template = argv[1];
+    input_file = argv[2];
+    output_file = argv[3];
 
-	if (!strstr (cmdline_template, "%s"))
-	{
-		fprintf(stderr, "no %%s is found in command line template\n");
-		exit (1);
-	}
+    if (!strstr (cmdline_template, "%s"))
+    {
+        fprintf(stderr, "no %%s is found in command line template\n");
+        exit (1);
+    }
 
-	load (input_file, &input, &len);
+    load (input_file, &input, &len);
 
-	output_fd = open (output_file, O_WRONLY|O_CREAT, 0666);
-	if (output_fd < 0)
-	{
-		perror ("open(output)");
-		exit (1);
-	}
+    output_fd = open (output_file, O_WRONLY|O_CREAT, 0666);
+    if (output_fd < 0)
+    {
+        perror ("open(output)");
+        exit (1);
+    }
 
-	if (asprintf (&cmdline, cmdline_template, output_file) == -1)
-	{
-		fprintf(stderr, "error in asprintf\n");
-		exit (1);
-	}
+    if (asprintf (&cmdline, cmdline_template, output_file) == -1)
+    {
+        fprintf(stderr, "error in asprintf\n");
+        exit (1);
+    }
 
-	if (test (cmdline, input, 0, len, output_fd) == 0)
-	{
-		fprintf(stderr, "the target command line exits normally against the original input\n");
-		exit (1);
-	}
+    if (test (cmdline, input, 0, len, output_fd) == 0)
+    {
+        fprintf(stderr, "the target command line exits normally against the original input\n");
+        exit (1);
+    }
 
-	if (test (cmdline, input, 0, 0, output_fd) != 0)
-	{
-		fprintf(stderr, "the target command line exits normally against the empty input\n");
-		exit (1);
-	}
+    if (test (cmdline, input, 0, 0, output_fd) != 0)
+    {
+        fprintf(stderr, "the target command line exits normally against the empty input\n");
+        exit (1);
+    }
 
-	return bisect(cmdline, input, len, output_fd);
+    return bisect(cmdline, input, len, output_fd);
 }

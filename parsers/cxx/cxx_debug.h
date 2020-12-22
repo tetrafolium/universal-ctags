@@ -16,7 +16,7 @@
 #include "cxx_scope.h"
 
 #if defined(DO_TRACING)
-	#define CXX_DO_DEBUGGING
+#define CXX_DO_DEBUGGING
 #endif
 
 #ifdef CXX_DO_DEBUGGING

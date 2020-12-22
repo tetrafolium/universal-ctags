@@ -1,7 +1,7 @@
 /*
 Bugs item #1020715, was opened at 2004-09-01 22:42
 Message generated for change (Tracker Item Submitted) made by Item Submitter
-You can respond by visiting: 
+You can respond by visiting:
 https://sourceforge.net/tracker/?func=detail&atid=106556&aid=1020715&group_id=6556
 
 Category: None
@@ -41,10 +41,10 @@ i've come up with a minimal test case, and committed it. it's pretty
 weird:
 */
 void f() {
-	done(a<<1);
-	a->a;
-	if (a->a) {
-	}
+    done(a<<1);
+    a->a;
+    if (a->a) {
+    }
 }
 /*
 change just about anything and the bizarre "done" tag goes away. you can't

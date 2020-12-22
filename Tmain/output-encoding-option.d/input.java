@@ -1,4 +1,4 @@
 class Foo { // Fooクラス
-	public Foo() { // コンストラクタ
-	}
+    public Foo() { // コンストラクタ
+    }
 }

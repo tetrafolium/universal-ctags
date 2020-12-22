@@ -19,39 +19,39 @@
 #define PSEUDO_TAG_SEPARATOR    "!"
 
 typedef enum ePtagType { /* pseudo tag content control */
-	PTAG_UNKNOWN = -1,
-	/* Only --output-format=json use this ptag.
-	   Applications of the output may expect this comes first in the output. */
-	PTAG_JSON_OUTPUT_VERSION,
+    PTAG_UNKNOWN = -1,
+    /* Only --output-format=json use this ptag.
+       Applications of the output may expect this comes first in the output. */
+    PTAG_JSON_OUTPUT_VERSION,
 
-	PTAG_FILE_FORMAT,
-	PTAG_FILE_SORTED,
-	PTAG_PROGRAM_AUTHOR,
-	PTAG_PROGRAM_NAME,
-	PTAG_PROGRAM_URL,
-	PTAG_PROGRAM_VERSION,
+    PTAG_FILE_FORMAT,
+    PTAG_FILE_SORTED,
+    PTAG_PROGRAM_AUTHOR,
+    PTAG_PROGRAM_NAME,
+    PTAG_PROGRAM_URL,
+    PTAG_PROGRAM_VERSION,
 #ifdef HAVE_ICONV
-	PTAG_FILE_ENCODING,
+    PTAG_FILE_ENCODING,
 #endif
-	PTAG_KIND_SEPARATOR,
-	PTAG_KIND_DESCRIPTION,
-	PTAG_OUTPUT_MODE,
-	PTAG_OUTPUT_FILESEP,
-	PTAG_COUNT
+    PTAG_KIND_SEPARATOR,
+    PTAG_KIND_DESCRIPTION,
+    PTAG_OUTPUT_MODE,
+    PTAG_OUTPUT_FILESEP,
+    PTAG_COUNT
 } ptagType;
 
 struct sPtagDesc {
-	bool enabled;
-	const char* name;
-	const char* description;  /* displayed in --list-pseudo-tags output */
+    bool enabled;
+    const char* name;
+    const char* description;  /* displayed in --list-pseudo-tags output */
 
-	/* For the common ptags, the pointer for optionValues type value
-	 * is passed as the second argument.
-	 * For parser specific ptags, the pointer for parserObject
-	 * of the parser is passed as the second argument.
-	 */
-	bool (* makeTag) (ptagDesc *, const void *);
-	bool commonInParsers;
+    /* For the common ptags, the pointer for optionValues type value
+     * is passed as the second argument.
+     * For parser specific ptags, the pointer for parserObject
+     * of the parser is passed as the second argument.
+     */
+    bool (* makeTag) (ptagDesc *, const void *);
+    bool commonInParsers;
 };
 
 extern bool makePtagIfEnabled (ptagType type, const void *data);

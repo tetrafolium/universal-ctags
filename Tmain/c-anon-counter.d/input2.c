@@ -1,11 +1,11 @@
 enum {
-  G, H,
+    G, H,
 } a;
 
 struct {
-  int I, J;
+    int I, J;
 } b;
 
 union {
-  int K, L;
+    int K, L;
 } c;

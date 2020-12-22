@@ -1,14 +1,14 @@
 class Base
 {
 public:
-	virtual void foo() = 0;
+    virtual void foo() = 0;
 };
 
 class Derived : public Base
 {
-	virtual void foo() override;
-	virtual void foo() const override;
-	virtual void override();
+    virtual void foo() override;
+    virtual void foo() const override;
+    virtual void override();
 };
 
 void Base::foo()

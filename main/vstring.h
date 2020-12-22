@@ -46,9 +46,9 @@
 */
 
 typedef struct sVString {
-	size_t  length;  /* size of buffer used */
-	size_t  size;    /* allocated size of buffer */
-	char   *buffer;  /* location of buffer */
+    size_t  length;  /* size of buffer used */
+    size_t  size;    /* allocated size of buffer */
+    char   *buffer;  /* location of buffer */
 } vString;
 
 /*
@@ -101,19 +101,19 @@ extern void vStringCatSWithEscapingAsPattern (vString *output, const char* input
 
 CTAGS_INLINE void vStringPut (vString *const string, const int c)
 {
-	if (string->length + 1 == string->size)  /*  check for buffer overflow */
-		vStringResize (string, string->size * 2);
+    if (string->length + 1 == string->size)  /*  check for buffer overflow */
+        vStringResize (string, string->size * 2);
 
-	string->buffer [string->length] = c;
-	if (c != '\0')
-		string->buffer [++string->length] = '\0';
+    string->buffer [string->length] = c;
+    if (c != '\0')
+        string->buffer [++string->length] = '\0';
 }
 
 CTAGS_INLINE void vStringPutWithLimit (vString *const string, const int c,
-									   unsigned int maxlen)
+                                       unsigned int maxlen)
 {
-	if (vStringLength (string) < maxlen || maxlen == 0)
-		vStringPut (string, c);
+    if (vStringLength (string) < maxlen || maxlen == 0)
+        vStringPut (string, c);
 }
 
 #endif  /* CTAGS_MAIN_VSTRING_H */

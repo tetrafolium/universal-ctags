@@ -1,4 +1,4 @@
- ABC();
+ABC();
 int main(void)
 {
 }

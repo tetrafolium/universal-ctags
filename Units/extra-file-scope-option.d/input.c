@@ -1,2 +1,2 @@
 static void x(void) {}
-       void y(void) {}
+void y(void) {}

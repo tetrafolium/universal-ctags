@@ -1,9 +1,9 @@
 namespace S {
-  struct T {
+struct T {
     enum E {
-      alpha, beta,
+        alpha, beta,
     } elt;
-  };
+};
 }
 
 struct S::T s = { .elt = S::T::E::alpha };
