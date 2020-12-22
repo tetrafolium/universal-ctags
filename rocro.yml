@@ -21,7 +21,7 @@ inspecode:
     thresholds: { num-issues: 41 }
 
   cppcheck:
-    thresholds: { num-issues: 60 }
+    thresholds: { num-issues: 53 }
 
   grep:
     thresholds: { num-issues: 112 }
@@ -38,7 +38,7 @@ inspecode:
   #  thresholds: { num-issues: 999 }
 
   jscpd:
-    thresholds: { num-issues: 39 }
+    thresholds: { num-issues: 38 }
 
   misspell:
     auto-fix: true
@@ -57,7 +57,7 @@ inspecode:
   shellcheck:
     options:
       --exclude: [ SC2086, SC2039 ]
-    thresholds: { num-issues: 482 }
+    thresholds: { num-issues: 485 }
 
   ##----------------------------------------------------------------------------
   ##  $ uncrustify -L1 -c /etc/uncrustify/defaults.cfg --check ${INPUT}
