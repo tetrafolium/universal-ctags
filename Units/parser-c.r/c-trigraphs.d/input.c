@@ -1,47 +1,45 @@
 
 /* simple trigraphs */
-??=define A 1
-   ??=define B 2
-      ??=define STRINGIFY_INTERN(x) ??=x
-                                       ??=define STRINGIFY(x) STRINGIFY_INTERN(x)
+? ? = define A 1
+    ? ? = define B 2
+        ? ? = define STRINGIFY_INTERN(x)
+            ?
+            ? = x
+              ?
+              ? = define STRINGIFY(x) STRINGIFY_INTERN(x)
 
-                                               /* doesn't expand to anything that makes sense, but as "???" is not a valid
-                                                * trigraph it should not prevent "??/" to match */
-                                               ??=define D 4 ???/
+                /* doesn't expand to anything that makes sense, but as "???" is
+                 * not a valid trigraph it should not prevent "??/" to match */
+                ? ? = define D 4 ? ? ? /
 #define bug1
-                                                       ??=define E ?????/
+                    ? ? = define E ? ? ? ? ? /
 #define bug2
 
-                                                               /* \ isn't interpreted for trigraphs */
-                                                               ??=define F ???\??/
-                                                                       extern int bug3 = ??-0;
+                        /* \ isn't interpreted for trigraphs */
+                        ? ? = define F ? ? ?\? ? / extern int bug3 = ? ? -0;
 
-??=define M3_INIT(a, b, c) ??< a, b, c ??>
-   typedef int matrix3??(3??);
+? ? = define M3_INIT(a, b, c) ? ? < a, b,
+  c ? ? > typedef int matrix3 ? ? (3 ? ?);
 
-struct str ??<
-    char *buf;
+struct str ? ? < char *buf;
 unsigned int len, size;
-??>;
+? ? > ;
 
-int main(void)
-??<
-const char *hello = STRINGIFY(hello);
+int main(void) ? ? < const char *hello = STRINGIFY(hello);
 matrix3 m = M3_INIT(1, 2, 3);
 
-return m??(2??);
-??>
+return m ? ? (2 ? ?);
+? ? >
 
-/* FIXME: how to test "??'" ("^"), "??!" ("|") and "??-" ("~")?
- *        I can't think of a construct CTags cares about using those */
+    /* FIXME: how to test "??'" ("^"), "??!" ("|") and "??-" ("~")?
+     *        I can't think of a construct CTags cares about using those */
 
-??=if 0
+    ? ? = if 0
 #define bug4
-   ??=endif
+        ? ? = endif
 
-
-      /* test the same with untaken preprocessor paths (as they are then not read by
-       * the C parser but get.c) */
+/* test the same with untaken preprocessor paths (as they are then not read by
+ * the C parser but get.c) */
 #if 0
 
       ??=define if0d_A 1

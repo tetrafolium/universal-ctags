@@ -28,9 +28,7 @@ int func1(
 }
 #endif
 
-int func2(int a)
-{
-}
+int func2(int a) {}
 /*
 Somehow the opening brace from line 3 doesn't get
 ignored and the closing brace does get ignored and

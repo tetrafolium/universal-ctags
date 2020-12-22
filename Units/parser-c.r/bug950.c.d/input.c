@@ -9,11 +9,11 @@
  else was treated as a giant return type.
 */
 
-extern MagickExport MagickBooleanType
-IdentifyImageMonochrome(const Image *,ExceptionInfo *),
-                        IsGrayImage(const Image *,ExceptionInfo *),
-                        IsMonochromeImage(const Image *,ExceptionInfo *),
-                        IsOpaqueImage(const Image *,ExceptionInfo *),
-                        SetImageChannelDepth(Image *,const ChannelType,const size_t),
-                        SetImageDepth(Image *,const size_t),
-                        SetImageType(Image *,const ImageType);
+extern MagickExport MagickBooleanType IdentifyImageMonochrome(const Image *,
+                                                              ExceptionInfo *),
+    IsGrayImage(const Image *, ExceptionInfo *),
+    IsMonochromeImage(const Image *, ExceptionInfo *),
+    IsOpaqueImage(const Image *, ExceptionInfo *),
+    SetImageChannelDepth(Image *, const ChannelType, const size_t),
+    SetImageDepth(Image *, const size_t),
+    SetImageType(Image *, const ImageType);

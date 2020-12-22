@@ -1,13 +1,13 @@
 
 @interface Person : NSObject {
 @public
-    NSString *m_name;
+  NSString *m_name;
 @private
-    int m_age;
+  int m_age;
 }
 
 @property(copy) NSString *personName;
 @property(readonly) int personAge;
 
--(id)initWithAge:(int)age;
+- (id)initWithAge:(int)age;
 @end

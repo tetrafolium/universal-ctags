@@ -7,23 +7,17 @@
 //      Test.RPC.asyncRequest
 //    properties
 //      Test.RPC.request_id
-Test.RPC =
-{
-	request_id: 0,
+Test.RPC = {
+  request_id : 0,
 
-	asyncRequest: function(
-		/* string */	uri,
-		/* object */	data,
-		/* object */	callback)
-	{
-	},
+  asyncRequest : function(
+      /* string */ uri,
+      /* object */ data,
+      /* object */ callback) {},
 
-	asyncMethod: function(
-		/* string */	uri,
-		/* string */	method,
-		/* array */		params,
-		/* object */	callback)
-	{
-	}
+  asyncMethod : function(
+      /* string */ uri,
+      /* string */ method,
+      /* array */ params,
+      /* object */ callback) {}
 };
-

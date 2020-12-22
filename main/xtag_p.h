@@ -13,39 +13,42 @@
 #define CTAGS_MAIN_XTAG_PRIVATE_H
 
 /*
-*   INCLUDE FILES
-*/
+ *   INCLUDE FILES
+ */
 
 #include "general.h"
 
 #include "colprint_p.h"
 
 /*
-*   FUNCTION PROTOTYPES
-*/
+ *   FUNCTION PROTOTYPES
+ */
 
-extern xtagDefinition* getXtagDefinition (xtagType type);
-extern xtagType  getXtagTypeForLetter (char letter);
-extern xtagType  getXtagTypeForNameAndLanguage (const char *name, langType language);
+extern xtagDefinition *getXtagDefinition(xtagType type);
+extern xtagType getXtagTypeForLetter(char letter);
+extern xtagType getXtagTypeForNameAndLanguage(const char *name,
+                                              langType language);
 
-extern bool enableXtag (xtagType type, bool state);
-extern bool isXtagFixed (xtagType type);
-extern bool isCommonXtag (xtagType type);
-extern int  getXtagOwner (xtagType type);
+extern bool enableXtag(xtagType type, bool state);
+extern bool isXtagFixed(xtagType type);
+extern bool isCommonXtag(xtagType type);
+extern int getXtagOwner(xtagType type);
 
-const char* getXtagName (xtagType type);
+const char *getXtagName(xtagType type);
 
-extern void initXtagObjects (void);
-extern int countXtags (void);
+extern void initXtagObjects(void);
+extern int countXtags(void);
 
-extern int defineXtag (xtagDefinition *def, langType language);
-extern xtagType nextSiblingXtag (xtagType type);
+extern int defineXtag(xtagDefinition *def, langType language);
+extern xtagType nextSiblingXtag(xtagType type);
 
 /* --list-extras implementation. LANGUAGE must be initialized. */
-extern struct colprintTable * xtagColprintTableNew (void);
-extern void xtagColprintAddCommonLines (struct colprintTable *table);
-extern void xtagColprintAddLanguageLines (struct colprintTable *table, langType language);
-extern void xtagColprintTablePrint (struct colprintTable *table,
-                                    bool withListHeader, bool machinable, FILE *fp);
+extern struct colprintTable *xtagColprintTableNew(void);
+extern void xtagColprintAddCommonLines(struct colprintTable *table);
+extern void xtagColprintAddLanguageLines(struct colprintTable *table,
+                                         langType language);
+extern void xtagColprintTablePrint(struct colprintTable *table,
+                                   bool withListHeader, bool machinable,
+                                   FILE *fp);
 
-#endif	/* CTAGS_MAIN_FIELD_PRIVATE_H */
+#endif /* CTAGS_MAIN_FIELD_PRIVATE_H */

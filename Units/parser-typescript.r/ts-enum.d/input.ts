@@ -1,4 +1,8 @@
-enum Color { Red, Green, Blue }
+enum Color {
+  Red,
+  Green,
+  Blue
+}
 enum Test {
   A,
   B,

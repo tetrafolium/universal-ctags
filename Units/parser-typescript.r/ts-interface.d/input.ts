@@ -1,16 +1,16 @@
 interface Mover {
   move(): void;
-  getStatus(): { speed: number; };
+  getStatus(): {speed: number;};
 }
 
 interface Shaker {
   shake(): void;
-  getStatus(): { frequency: number; };
+  getStatus(): {frequency: number;};
 }
 
 interface MoverShaker extends Mover, Shaker {
-  getStatus(/*)*/): { speed: number; frequency: number; };
-  //somethingCommentedOut(): string;
+  getStatus(/*)*/): {speed: number; frequency : number;};
+  // somethingCommentedOut(): string;
   getSomething(): /* } */ void;
   getSomethingSophisticated()/*
     comment

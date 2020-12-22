@@ -1,7 +1,5 @@
 unsigned int level = 42;
-int
-main(void)
-{
-    define a;
-    return a;
+int main(void) {
+  define a;
+  return a;
 }

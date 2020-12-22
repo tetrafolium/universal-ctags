@@ -1,29 +1,27 @@
 class P {
 protected:
-    int x;
+  int x;
 };
 
 namespace A {
 class P {
 protected:
-    int x;
+  int x;
 };
 class Q {
-    int y;
+  int y;
 };
 
 namespace C {
-class R: ::P, A::Q {
-    int z;
-    int f (int v) {
-        return v + x;
-    }
+class R : ::P, A::Q {
+  int z;
+  int f(int v) { return v + x; }
 };
-}
-}
+} // namespace C
+} // namespace A
 
 namespace B {
 class S : A::C::R {
-    int t;
+  int t;
 };
-}
+} // namespace B

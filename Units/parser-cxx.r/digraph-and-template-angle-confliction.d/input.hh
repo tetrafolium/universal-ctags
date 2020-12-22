@@ -1,23 +1,17 @@
-#include <netinet/ip.h>
 #include <map>
+#include <netinet/ip.h>
 
 namespace std {
-template <>
-struct hash<::sockaddr_in> {
-    int a;
-};
-};
+template <> struct hash<::sockaddr_in> { int a; };
+}; // namespace std
 
-int A <::> = {1, 2};
-int B <:2:> = {1, 2};
+int A<::> = {1, 2};
+int B< : 2 :> = {1, 2};
 #define N 2
-int C <:N:> = {1, 2};
-int D [] = {1, 2};
+int C< : N :> = {1, 2};
+int D[] = {1, 2};
 
 const int M = 3;
-int E <:::M:> = {1, 2};
+int E<:: : M :> = {1, 2};
 
-int foo (void)
-{
-    return 0;
-}
+int foo(void) { return 0; }

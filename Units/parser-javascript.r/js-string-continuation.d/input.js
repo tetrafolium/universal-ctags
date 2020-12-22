@@ -1,16 +1,16 @@
 
 var o = {
-  "first": function(){},
+  "first" : function() {},
   "sec\
-ond": function(){},
+ond" : function() {},
   "\
 t\
 h\
 i\
 r\
 d\
-": function(){},
-  "fourth": function(){},
+" : function() {},
+  "fourth" : function() {},
 };
 
 o.first();

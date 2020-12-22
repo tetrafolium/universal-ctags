@@ -22,14 +22,13 @@
 #define MIO_H
 
 #ifndef QUALIFIER
-#include "general.h"  /* must always come first */
+#include "general.h" /* must always come first */
 #else
 #include "gcc-attr.h"
 #endif
 
-#include <stdio.h>
 #include <stdarg.h>
-
+#include <stdio.h>
 
 /**
  * MIOType:
@@ -38,14 +37,11 @@
  *
  * Existing implementations.
  */
-enum _MIOType {
-    MIO_TYPE_FILE,
-    MIO_TYPE_MEMORY
-};
+enum _MIOType { MIO_TYPE_FILE, MIO_TYPE_MEMORY };
 
-typedef enum _MIOType   MIOType;
-typedef struct _MIO     MIO;
-typedef struct _MIOPos  MIOPos;
+typedef enum _MIOType MIOType;
+typedef struct _MIO MIO;
+typedef struct _MIOPos MIOPos;
 
 /**
  * MIOReallocFunc:
@@ -56,7 +52,7 @@ typedef struct _MIOPos  MIOPos;
  *
  * Returns: A pointer to the start of the new memory, or %NULL on failure.
  */
-typedef void *(* MIOReallocFunc) (void * ptr, size_t size);
+typedef void *(*MIOReallocFunc)(void *ptr, size_t size);
 
 /**
  * MIOFOpenFunc:
@@ -68,7 +64,7 @@ typedef void *(* MIOReallocFunc) (void * ptr, size_t size);
  *
  * Returns: A new #FILE object, or %NULL on failure
  */
-typedef FILE *(* MIOFOpenFunc) (const char *filename, const char *mode);
+typedef FILE *(*MIOFOpenFunc)(const char *filename, const char *mode);
 
 /**
  * MIOFCloseFunc:
@@ -79,7 +75,7 @@ typedef FILE *(* MIOFOpenFunc) (const char *filename, const char *mode);
  *
  * Returns: 0 on success, EOF otherwise.
  */
-typedef int (* MIOFCloseFunc) (FILE *fp);
+typedef int (*MIOFCloseFunc)(FILE *fp);
 
 /**
  * MIODestroyNotify:
@@ -89,7 +85,7 @@ typedef int (* MIOFCloseFunc) (FILE *fp);
  * destroyed. It is passed the pointer to the data element and should free any
  * memory and resources allocated for it.
  */
-typedef void (*MIODestroyNotify) (void *data);
+typedef void (*MIODestroyNotify)(void *data);
 
 /**
  * MIOPos:
@@ -99,64 +95,54 @@ typedef void (*MIODestroyNotify) (void *data);
  * accessed directly.
  */
 struct _MIOPos {
-    /*< private >*/
-    MIOType type;
+  /*< private >*/
+  MIOType type;
 #ifdef MIO_DEBUG
-    void *tag;
+  void *tag;
 #endif
-    union {
-        fpos_t file;
-        size_t mem;
-    } impl;
+  union {
+    fpos_t file;
+    size_t mem;
+  } impl;
 };
 
+MIO *mio_new_file(const char *filename, const char *mode);
+MIO *mio_new_file_full(const char *filename, const char *mode,
+                       MIOFOpenFunc open_func, MIOFCloseFunc close_func);
+MIO *mio_new_fp(FILE *fp, MIOFCloseFunc close_func);
+MIO *mio_new_memory(unsigned char *data, size_t size,
+                    MIOReallocFunc realloc_func, MIODestroyNotify free_func);
 
+MIO *mio_new_mio(MIO *base, long start, long size);
+MIO *mio_ref(MIO *mio);
 
-MIO *mio_new_file (const char *filename, const char *mode);
-MIO *mio_new_file_full (const char *filename,
-                        const char *mode,
-                        MIOFOpenFunc open_func,
-                        MIOFCloseFunc close_func);
-MIO *mio_new_fp (FILE *fp, MIOFCloseFunc close_func);
-MIO *mio_new_memory (unsigned char *data,
-                     size_t size,
-                     MIOReallocFunc realloc_func,
-                     MIODestroyNotify free_func);
+int mio_unref(MIO *mio);
+FILE *mio_file_get_fp(MIO *mio);
+unsigned char *mio_memory_get_data(MIO *mio, size_t *size);
+size_t mio_read(MIO *mio, void *ptr, size_t size, size_t nmemb);
+size_t mio_write(MIO *mio, const void *ptr, size_t size, size_t nmemb);
+int mio_getc(MIO *mio);
+char *mio_gets(MIO *mio, char *s, size_t size);
+int mio_ungetc(MIO *mio, int ch);
+int mio_putc(MIO *mio, int c);
+int mio_puts(MIO *mio, const char *s);
 
-MIO *mio_new_mio    (MIO *base, long start, long size);
-MIO *mio_ref        (MIO *mio);
+int mio_vprintf(MIO *mio, const char *format, va_list ap)
+    CTAGS_ATTR_PRINTF(2, 0);
+int mio_printf(MIO *mio, const char *format, ...) CTAGS_ATTR_PRINTF(2, 3);
 
-int mio_unref (MIO *mio);
-FILE *mio_file_get_fp (MIO *mio);
-unsigned char *mio_memory_get_data (MIO *mio, size_t *size);
-size_t mio_read (MIO *mio,
-                 void *ptr,
-                 size_t size,
-                 size_t nmemb);
-size_t mio_write (MIO *mio,
-                  const void *ptr,
-                  size_t size,
-                  size_t nmemb);
-int mio_getc (MIO *mio);
-char *mio_gets (MIO *mio, char *s, size_t size);
-int mio_ungetc (MIO *mio, int ch);
-int mio_putc (MIO *mio, int c);
-int mio_puts (MIO *mio, const char *s);
+void mio_clearerr(MIO *mio);
+int mio_eof(MIO *mio);
+int mio_error(MIO *mio);
+int mio_seek(MIO *mio, long offset, int whence);
+long mio_tell(MIO *mio);
+void mio_rewind(MIO *mio);
+int mio_getpos(MIO *mio, MIOPos *pos);
+int mio_setpos(MIO *mio, MIOPos *pos);
+int mio_flush(MIO *mio);
 
-int mio_vprintf (MIO *mio, const char *format, va_list ap) CTAGS_ATTR_PRINTF (2, 0);
-int mio_printf (MIO *mio, const char *format, ...) CTAGS_ATTR_PRINTF (2, 3);
-
-void mio_clearerr (MIO *mio);
-int mio_eof (MIO *mio);
-int mio_error (MIO *mio);
-int mio_seek (MIO *mio, long offset, int whence);
-long mio_tell (MIO *mio);
-void mio_rewind (MIO *mio);
-int mio_getpos (MIO *mio, MIOPos *pos);
-int mio_setpos (MIO *mio, MIOPos *pos);
-int mio_flush (MIO *mio);
-
-void  mio_attach_user_data (MIO *mio, void *user_data, MIODestroyNotify user_data_free_func);
-void *mio_get_user_data (MIO *mio);
+void mio_attach_user_data(MIO *mio, void *user_data,
+                          MIODestroyNotify user_data_free_func);
+void *mio_get_user_data(MIO *mio);
 
 #endif /* MIO_H */

@@ -10,98 +10,93 @@
  *
  */
 
-#include "general.h"
 #include "debug.h"
 #include "entry_p.h"
-#include "fmt_p.h"
 #include "field.h"
 #include "field_p.h"
+#include "fmt_p.h"
+#include "general.h"
 #include "parse.h"
 #include "routines.h"
-#include <string.h>
 #include <errno.h>
+#include <string.h>
 
 typedef union uFmtSpec {
-    char *const_str;
-    struct {
-        fieldType ftype;
-        int width;
-        char *raw_fmtstr;
-    } field;
+  char *const_str;
+  struct {
+    fieldType ftype;
+    int width;
+    char *raw_fmtstr;
+  } field;
 } fmtSpec;
 
 struct sFmtElement {
-    union uFmtSpec spec;
-    int (* printer) (fmtSpec*, MIO* fp, const tagEntryInfo *);
-    struct sFmtElement *next;
+  union uFmtSpec spec;
+  int (*printer)(fmtSpec *, MIO *fp, const tagEntryInfo *);
+  struct sFmtElement *next;
 };
 
-static int printLiteral (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag CTAGS_ATTR_UNUSED)
-{
-    return mio_puts (fp, fspec->const_str);
+static int printLiteral(fmtSpec *fspec, MIO *fp,
+                        const tagEntryInfo *tag CTAGS_ATTR_UNUSED) {
+  return mio_puts(fp, fspec->const_str);
 }
 
-static bool isParserFieldCompatibleWithFtype (const tagField *pfield, int baseFtype)
-{
-    do {
-        if (pfield->ftype == baseFtype)
-            return true;
-        baseFtype = nextSiblingField (baseFtype);
-    } while (baseFtype != FIELD_UNKNOWN);
-    return false;
+static bool isParserFieldCompatibleWithFtype(const tagField *pfield,
+                                             int baseFtype) {
+  do {
+    if (pfield->ftype == baseFtype)
+      return true;
+    baseFtype = nextSiblingField(baseFtype);
+  } while (baseFtype != FIELD_UNKNOWN);
+  return false;
 }
 
-static int printTagField (fmtSpec* fspec, MIO* fp, const tagEntryInfo * tag)
-{
-    int i;
-    int width = fspec->field.width;
-    int ftype;
-    const char* str = NULL;
+static int printTagField(fmtSpec *fspec, MIO *fp, const tagEntryInfo *tag) {
+  int i;
+  int width = fspec->field.width;
+  int ftype;
+  const char *str = NULL;
 
-    ftype = fspec->field.ftype;
+  ftype = fspec->field.ftype;
 
-    if (isCommonField (ftype))
-        str = renderField (ftype, tag, NO_PARSER_FIELD);
-    else
-    {
-        unsigned int findex;
-        const tagField *f;
+  if (isCommonField(ftype))
+    str = renderField(ftype, tag, NO_PARSER_FIELD);
+  else {
+    unsigned int findex;
+    const tagField *f;
 
-        for (findex = 0; findex < tag->usedParserFields; findex++)
-        {
-            f = getParserField(tag, findex);
-            if (isParserFieldCompatibleWithFtype (f, ftype))
-                break;
-        }
-
-        if (findex == tag->usedParserFields)
-            str = "";
-        else if (isFieldEnabled (f->ftype))
-            str = renderField (f->ftype, tag, findex);
+    for (findex = 0; findex < tag->usedParserFields; findex++) {
+      f = getParserField(tag, findex);
+      if (isParserFieldCompatibleWithFtype(f, ftype))
+        break;
     }
 
-    if (str == NULL)
-        str = "";
+    if (findex == tag->usedParserFields)
+      str = "";
+    else if (isFieldEnabled(f->ftype))
+      str = renderField(f->ftype, tag, findex);
+  }
 
-    if (width)
-        i = mio_printf (fp, fspec->field.raw_fmtstr, width, str);
-    else
-    {
-        mio_puts (fp, str);
-        i = strlen (str);
-    }
-    return i;
+  if (str == NULL)
+    str = "";
+
+  if (width)
+    i = mio_printf(fp, fspec->field.raw_fmtstr, width, str);
+  else {
+    mio_puts(fp, str);
+    i = strlen(str);
+  }
+  return i;
 }
 
-static fmtElement** queueLiteral (fmtElement **last, char *literal)
-{
-    fmtElement *cur = xMalloc (1, fmtElement);
+static fmtElement **queueLiteral(fmtElement **last, char *literal) {
+  fmtElement *cur = xMalloc(1, fmtElement);
 
-    cur->spec.const_str = literal;
-    cur->printer = printLiteral;
-    cur->next = NULL;
-    *last = cur;
-    return &(cur->next);
+  cur->spec.const_str = literal;
+  cur->printer = printLiteral;
+  cur->next = NULL;
+  *last = cur;
+  return &(cur->next);
 }
 
 /* `getLanguageComponentInFieldName' is used as part of the option parameter
@@ -122,254 +117,218 @@ static fmtElement** queueLiteral (fmtElement **last, char *literal)
 
    A proper parser is found, this function returns langType for the
    parser and sets the field name part to *fieldName. */
-static langType getLanguageComponentInFieldName (const char *fullName,
-        const char **fieldName)
-{
-    const char *tmp;
-    langType language;
+static langType getLanguageComponentInFieldName(const char *fullName,
+                                                const char **fieldName) {
+  const char *tmp;
+  langType language;
 
-    tmp = strchr (fullName, '.');
-    if (tmp)
-    {
-        size_t len = tmp - fullName;
+  tmp = strchr(fullName, '.');
+  if (tmp) {
+    size_t len = tmp - fullName;
 
-        if (len == 1 && fullName[0] == '*')
-        {
-            language = LANG_AUTO;
-            *fieldName = tmp + 1;
-        }
-        else if (len == 0)
-        {
-            language = LANG_IGNORE;
-            *fieldName = tmp + 1;
-        }
-        else
-        {
-            language = getNamedLanguage (fullName, len);
-            if (language == LANG_IGNORE)
-                *fieldName = NULL;
-            else
-                *fieldName = tmp + 1;
-        }
+    if (len == 1 && fullName[0] == '*') {
+      language = LANG_AUTO;
+      *fieldName = tmp + 1;
+    } else if (len == 0) {
+      language = LANG_IGNORE;
+      *fieldName = tmp + 1;
+    } else {
+      language = getNamedLanguage(fullName, len);
+      if (language == LANG_IGNORE)
+        *fieldName = NULL;
+      else
+        *fieldName = tmp + 1;
     }
-    else
-    {
-        language = LANG_IGNORE;
-        *fieldName = fullName;
-    }
-    return language;
+  } else {
+    language = LANG_IGNORE;
+    *fieldName = fullName;
+  }
+  return language;
 }
 
-static fmtElement** queueTagField (fmtElement **last, long width, bool truncation,
-                                   char field_letter, const char *field_name)
-{
-    fieldType ftype;
-    fmtElement *cur;
-    langType language;
+static fmtElement **queueTagField(fmtElement **last, long width,
+                                  bool truncation, char field_letter,
+                                  const char *field_name) {
+  fieldType ftype;
+  fmtElement *cur;
+  langType language;
 
+  if (field_letter == NUL_FIELD_LETTER) {
+    const char *f;
+
+    language = getLanguageComponentInFieldName(field_name, &f);
+    if (f == NULL)
+      error(FATAL, "No suitable parser for field name: %s", field_name);
+    ftype = getFieldTypeForNameAndLanguage(f, language);
+  } else {
+    language = LANG_IGNORE;
+    ftype = getFieldTypeForOption(field_letter);
+  }
+
+  if (ftype == FIELD_UNKNOWN) {
     if (field_letter == NUL_FIELD_LETTER)
-    {
-        const char *f;
-
-        language = getLanguageComponentInFieldName (field_name, &f);
-        if (f == NULL)
-            error (FATAL, "No suitable parser for field name: %s", field_name);
-        ftype = getFieldTypeForNameAndLanguage (f, language);
-    }
+      error(FATAL, "No such field name: %s", field_name);
     else
-    {
-        language = LANG_IGNORE;
-        ftype = getFieldTypeForOption (field_letter);
-    }
+      error(FATAL, "No such field letter: %c", field_letter);
+  }
 
-    if (ftype == FIELD_UNKNOWN)
-    {
-        if (field_letter == NUL_FIELD_LETTER)
-            error (FATAL, "No such field name: %s", field_name);
-        else
-            error (FATAL, "No such field letter: %c", field_letter);
-    }
+  if (!doesFieldHaveRenderer(ftype, false)) {
+    Assert(field_letter != NUL_FIELD_LETTER);
+    error(FATAL, "The field cannot be printed in format output: %c",
+          field_letter);
+  }
 
-    if (!doesFieldHaveRenderer (ftype, false))
-    {
-        Assert (field_letter != NUL_FIELD_LETTER);
-        error (FATAL, "The field cannot be printed in format output: %c", field_letter);
-    }
+  cur = xMalloc(1, fmtElement);
 
-    cur = xMalloc (1, fmtElement);
+  cur->spec.field.width = width;
+  cur->spec.field.ftype = ftype;
 
-    cur->spec.field.width = width;
-    cur->spec.field.ftype = ftype;
+  if (width < 0) {
+    cur->spec.field.width *= -1;
+    cur->spec.field.raw_fmtstr = (truncation ? "%-.*s" : "%-*s");
+  } else if (width > 0)
+    cur->spec.field.raw_fmtstr = (truncation ? "%.*s" : "%*s");
+  else
+    cur->spec.field.raw_fmtstr = NULL;
 
-    if (width < 0)
-    {
-        cur->spec.field.width *= -1;
-        cur->spec.field.raw_fmtstr = (truncation? "%-.*s": "%-*s");
-    }
-    else if (width > 0)
-        cur->spec.field.raw_fmtstr = (truncation? "%.*s": "%*s");
-    else
-        cur->spec.field.raw_fmtstr = NULL;
+  enableField(ftype, true, false);
+  if (language == LANG_AUTO) {
+    fieldType ftype_next = ftype;
 
-    enableField (ftype, true, false);
-    if (language == LANG_AUTO)
-    {
-        fieldType ftype_next = ftype;
+    while ((ftype_next = nextSiblingField(ftype_next)) != FIELD_UNKNOWN)
+      enableField(ftype_next, true, false);
+  }
 
-        while ((ftype_next = nextSiblingField (ftype_next)) != FIELD_UNKNOWN)
-            enableField (ftype_next, true, false);
-    }
-
-    cur->printer = printTagField;
-    cur->next = NULL;
-    *last = cur;
-    return &(cur->next);
+  cur->printer = printTagField;
+  cur->next = NULL;
+  *last = cur;
+  return &(cur->next);
 }
 
-extern fmtElement *fmtNew (const char*  fmtString)
-{
-    int i;
-    vString *literal = NULL;
-    fmtElement *code  = NULL;
-    fmtElement **last = &code;
-    bool found_percent = false;
-    long column_width;
-    const char*  cursor;
+extern fmtElement *fmtNew(const char *fmtString) {
+  int i;
+  vString *literal = NULL;
+  fmtElement *code = NULL;
+  fmtElement **last = &code;
+  bool found_percent = false;
+  long column_width;
+  const char *cursor;
 
-    cursor = fmtString;
+  cursor = fmtString;
 
-    for (i = 0; cursor[i] != '\0'; ++i)
-    {
-        if (found_percent)
-        {
-            found_percent = false;
-            if (cursor[i] == '%')
-            {
-                if (literal == NULL)
-                    literal = vStringNew ();
-                vStringPut (literal, cursor[i]);
-            }
-            else
-            {
-                int justification_right = 1;
-                bool truncation = false;
-                vString *width = NULL;
-                if (literal)
-                {
-                    char* l = vStringDeleteUnwrap (literal);
-                    literal = NULL;
-                    last = queueLiteral (last, l);
-                }
-                if (cursor [i] == '-')
-                {
-                    justification_right = -1;
-                    i++;
-
-                    if (cursor [i] == '\0')
-                        error (FATAL, "unexpectedly terminated just after '-': \"%s\"", fmtString);
-
-                }
-                if (cursor [i] == '.')
-                {
-                    truncation = true;
-                    i++;
-
-                    if (cursor [i] == '\0')
-                        error (FATAL, "unexpectedly terminated just after '.': \"%s\"", fmtString);
-                }
-
-                while ( '0' <= cursor[i] && cursor[i] <= '9' )
-                {
-                    if (width == NULL)
-                        width = vStringNew ();
-                    vStringPut (width, cursor[i]);
-                    i++;
-
-                    if (cursor [i] == '\0')
-                        error (FATAL, "unexpectedly terminated during parsing column width: \"%s\"", fmtString);
-                }
-
-                if (justification_right == -1 && width == NULL)
-                    error (FATAL, "no column width given after '-': \"%s\"", fmtString);
-
-                column_width = 0;
-                if (width)
-                {
-                    if(!strToLong (vStringValue (width), 0, &column_width))
-                        error (FATAL | PERROR, "converting failed: %s", vStringValue (width));
-                    vStringDelete (width);
-                    width = NULL;
-                    column_width *= justification_right;
-                }
-
-                if (cursor[i] == '{')
-                {
-                    vString *field_name = vStringNew ();
-
-                    i++;
-                    for (; cursor[i] != '}'; i++)
-                        vStringPut (field_name, cursor[i]);
-
-                    last = queueTagField (last, column_width, truncation,
-                                          NUL_FIELD_LETTER, vStringValue (field_name));
-
-                    vStringDelete (field_name);
-                }
-                else
-                    last = queueTagField (last, column_width, truncation,
-                                          cursor[i], NULL);
-            }
-
+  for (i = 0; cursor[i] != '\0'; ++i) {
+    if (found_percent) {
+      found_percent = false;
+      if (cursor[i] == '%') {
+        if (literal == NULL)
+          literal = vStringNew();
+        vStringPut(literal, cursor[i]);
+      } else {
+        int justification_right = 1;
+        bool truncation = false;
+        vString *width = NULL;
+        if (literal) {
+          char *l = vStringDeleteUnwrap(literal);
+          literal = NULL;
+          last = queueLiteral(last, l);
         }
-        else
-        {
-            if (cursor[i] == '%')
-                found_percent = true;
-            else
-            {
-                if (literal == NULL)
-                    literal = vStringNew ();
+        if (cursor[i] == '-') {
+          justification_right = -1;
+          i++;
 
-                vStringPut (literal, cursor[i]);
-            }
+          if (cursor[i] == '\0')
+            error(FATAL, "unexpectedly terminated just after '-': \"%s\"",
+                  fmtString);
         }
+        if (cursor[i] == '.') {
+          truncation = true;
+          i++;
+
+          if (cursor[i] == '\0')
+            error(FATAL, "unexpectedly terminated just after '.': \"%s\"",
+                  fmtString);
+        }
+
+        while ('0' <= cursor[i] && cursor[i] <= '9') {
+          if (width == NULL)
+            width = vStringNew();
+          vStringPut(width, cursor[i]);
+          i++;
+
+          if (cursor[i] == '\0')
+            error(FATAL,
+                  "unexpectedly terminated during parsing column width: \"%s\"",
+                  fmtString);
+        }
+
+        if (justification_right == -1 && width == NULL)
+          error(FATAL, "no column width given after '-': \"%s\"", fmtString);
+
+        column_width = 0;
+        if (width) {
+          if (!strToLong(vStringValue(width), 0, &column_width))
+            error(FATAL | PERROR, "converting failed: %s", vStringValue(width));
+          vStringDelete(width);
+          width = NULL;
+          column_width *= justification_right;
+        }
+
+        if (cursor[i] == '{') {
+          vString *field_name = vStringNew();
+
+          i++;
+          for (; cursor[i] != '}'; i++)
+            vStringPut(field_name, cursor[i]);
+
+          last = queueTagField(last, column_width, truncation, NUL_FIELD_LETTER,
+                               vStringValue(field_name));
+
+          vStringDelete(field_name);
+        } else
+          last = queueTagField(last, column_width, truncation, cursor[i], NULL);
+      }
+
+    } else {
+      if (cursor[i] == '%')
+        found_percent = true;
+      else {
+        if (literal == NULL)
+          literal = vStringNew();
+
+        vStringPut(literal, cursor[i]);
+      }
     }
-    if (literal)
-    {
-        char* l = vStringDeleteUnwrap (literal);
-        literal = NULL;
-        last = queueLiteral (last, l);
-    }
-    return code;
+  }
+  if (literal) {
+    char *l = vStringDeleteUnwrap(literal);
+    literal = NULL;
+    last = queueLiteral(last, l);
+  }
+  return code;
 }
 
-extern int fmtPrint   (fmtElement * fmtelts, MIO* fp, const tagEntryInfo *tag)
-{
-    fmtElement *f = fmtelts;
-    int i = 0;
-    while (f)
-    {
-        i += f->printer (&(f->spec), fp, tag);
-        f = f->next;
-    }
-    return i;
+extern int fmtPrint(fmtElement *fmtelts, MIO *fp, const tagEntryInfo *tag) {
+  fmtElement *f = fmtelts;
+  int i = 0;
+  while (f) {
+    i += f->printer(&(f->spec), fp, tag);
+    f = f->next;
+  }
+  return i;
 }
 
-extern void fmtDelete  (fmtElement * fmtelts)
-{
-    fmtElement *f = fmtelts;
-    fmtElement *next;
+extern void fmtDelete(fmtElement *fmtelts) {
+  fmtElement *f = fmtelts;
+  fmtElement *next;
 
-    while (f)
-    {
-        next = f->next;
-        if (f->printer == printLiteral)
-        {
-            eFree (f->spec.const_str);
-            f->spec.const_str = NULL;
-        }
-        f->next = NULL;
-        eFree (f);
-        f = next;
+  while (f) {
+    next = f->next;
+    if (f->printer == printLiteral) {
+      eFree(f->spec.const_str);
+      f->spec.const_str = NULL;
     }
+    f->next = NULL;
+    eFree(f);
+    f = next;
+  }
 }

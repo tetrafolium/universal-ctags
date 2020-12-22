@@ -9,16 +9,13 @@ class Bar extends Foo {
 
 function Mixin(superclass) {
   return class extends superclass {
-    hello() {
-      return "hello from mixin";
-    }
+    hello() { return "hello from mixin"; }
   }
 }
 
-class Baz extends Mixin(Bar) {
-  hi() {
-    return "hi";
-  }
+class Baz extends Mixin
+(Bar) {
+  hi() { return "hi"; }
 }
 
 var i = new Baz();

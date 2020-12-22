@@ -24,13 +24,13 @@ My Ctags version:5.2.3
 The typedef of "Qtype" as the following,
 
 */
-#define A1(_type, _length)                  \
-struct  {                                   \
-    	    unsigned int    head;           \
-    	    unsigned int    tail;           \
-    	    bool            is_full;        \
-    	    _type           queue[_length]; \
-	}
+#define A1(_type, _length)                                                     \
+  struct {                                                                     \
+    unsigned int head;                                                         \
+    unsigned int tail;                                                         \
+    bool is_full;                                                              \
+    _type queue[_length];                                                      \
+  }
 
 typedef A1(ilm_struct, 1) Qtype;
 

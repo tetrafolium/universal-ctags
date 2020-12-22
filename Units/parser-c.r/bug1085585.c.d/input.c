@@ -33,5 +33,5 @@ Why does ctags fail on the 1.3 version of the file ?
 */
 
 /* relevant portion from file */
-static int check_parity(des_cblock (*key));
-int des_check_key=0;
+static int check_parity(des_cblock(*key));
+int des_check_key = 0;

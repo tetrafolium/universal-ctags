@@ -26,13 +26,9 @@ template specialization seems to confuse patched
 version of ctags (patch bug849591.diff). When running a
 patched version against the following file
 */
-template<class T> class TemplClass {
-    double i;
-};
+template <class T> class TemplClass { double i; };
 
-template<> class TemplClass< char* > {
-    int i;
-};
+template <> class TemplClass<char *> { int i; };
 
 class FooClass2 {};
 /*

@@ -6,10 +6,6 @@
  * The fix will be part of the 5.8 release.
  */
 
-function f1() {
-    var str = 'This function will be listed.';
-}
+function f1() { var str = 'This function will be listed.'; }
 
-function f2() {
-    var str = 'This function won\'t.';
-}
+function f2() { var str = 'This function won\'t.'; }

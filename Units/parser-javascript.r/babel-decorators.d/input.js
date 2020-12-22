@@ -12,11 +12,15 @@ class Example {
 class MyClass {
   @decorator
   @dec(arg1, arg2)
-  @namespace.decorator
-  @(complex ? dec1 : dec2)
-  my_method() {}
+  @ namespace
+      .decorator @(complex? dec1: dec2) my_method() {
+  }
 }
 
 class YourClass {
-  @decorator @dec(arg1, arg2) @namespace.decorator @(complex ? dec1 : dec2) your_method() {}
+  @decorator
+  @dec(arg1, arg2)
+  @ namespace
+      .decorator @(complex? dec1: dec2) your_method() {
+  }
 }
