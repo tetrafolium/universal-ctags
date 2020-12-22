@@ -31,8 +31,8 @@ typedef struct sObjPool objPool;
 *   FUNCTION PROTOTYPES
 */
 extern objPool *objPoolNew (unsigned int size,
-	objPoolCreateFunc createFunc, objPoolDeleteFunc deleteFunc, objPoolClearFunc clearFunc,
-	void *createArg);
+                            objPoolCreateFunc createFunc, objPoolDeleteFunc deleteFunc, objPoolClearFunc clearFunc,
+                            void *createArg);
 extern void objPoolDelete (objPool *pool);
 extern void *objPoolGet (objPool *pool);
 extern void objPoolPut (objPool *pool, void *obj);

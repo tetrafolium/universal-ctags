@@ -2,11 +2,11 @@
 
 static int foo (void)
 {
-  return 1;
+    return 1;
 }
 
 int
 main(void)
 {
-  return foo();
+    return foo();
 }

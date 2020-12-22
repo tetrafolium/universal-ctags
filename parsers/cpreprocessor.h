@@ -78,15 +78,15 @@ extern unsigned int cppGetDirectiveNestLevel (void);
  * The corkQueue is needed to capture macro parameters.
  */
 extern void cppInit (const bool state,
-		     const bool hasAtLiteralStrings,
-		     const bool hasCxxRawLiteralStrings,
-		     const bool hasSingleQuoteLiteralNumbers,
-		     int defineMacroKindIndex,
-		     int macroUndefRoleIndex,
-		     int headerKindIndex,
-		     int headerSystemRoleIndex, int headerLocalRoleIndex,
-		     int macroParamKindIndex,
-		     int macrodefFieldIndex);
+                     const bool hasAtLiteralStrings,
+                     const bool hasCxxRawLiteralStrings,
+                     const bool hasSingleQuoteLiteralNumbers,
+                     int defineMacroKindIndex,
+                     int macroUndefRoleIndex,
+                     int headerKindIndex,
+                     int headerSystemRoleIndex, int headerLocalRoleIndex,
+                     int macroParamKindIndex,
+                     int macrodefFieldIndex);
 
 extern void cppTerminate (void);
 extern void cppBeginStatement (void);
@@ -105,15 +105,15 @@ extern void cppPopExternalParserBlock(void);
 #define CPP_MACRO_REPLACEMENT_FLAG_STRINGIFY 2
 
 typedef struct sCppMacroReplacementPartInfo {
-	int parameterIndex; /* -1 if this part is a constant */
-	int flags;
-	vString * constant; /* not NULL only if parameterIndex != -1 */
-	struct sCppMacroReplacementPartInfo * next;
+    int parameterIndex; /* -1 if this part is a constant */
+    int flags;
+    vString * constant; /* not NULL only if parameterIndex != -1 */
+    struct sCppMacroReplacementPartInfo * next;
 } cppMacroReplacementPartInfo;
 
 typedef struct sCppMacroInfo {
-	bool hasParameterList; /* true if the macro has a trailing () */
-	cppMacroReplacementPartInfo * replacements;
+    bool hasParameterList; /* true if the macro has a trailing () */
+    cppMacroReplacementPartInfo * replacements;
 } cppMacroInfo;
 
 extern const cppMacroInfo * cppFindMacro (const char *const name);
@@ -125,9 +125,9 @@ extern const cppMacroInfo * cppFindMacro (const char *const name);
 * May return NULL or equivalently an empty replacement string.
 */
 extern vString * cppBuildMacroReplacement(
-		const cppMacroInfo * macro,
-		const char ** parameters, /* may be NULL */
-		int parameterCount
-	);
+    const cppMacroInfo * macro,
+    const char ** parameters, /* may be NULL */
+    int parameterCount
+);
 
 #endif  /* CTAGS_MAIN_GET_H */

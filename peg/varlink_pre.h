@@ -32,41 +32,41 @@
 *   DATA DECLARATIONS
 */
 typedef enum {
-	K_INTERFACE,
-	K_METHOD,
-	K_IPARAM,
-	K_OPARAM,
-	K_STRUCT,
-	K_FIELD,
-	K_ENUM,
-	K_ENUMERATION,
-	K_ERROR,
-	K_EDESC,
+    K_INTERFACE,
+    K_METHOD,
+    K_IPARAM,
+    K_OPARAM,
+    K_STRUCT,
+    K_FIELD,
+    K_ENUM,
+    K_ENUMERATION,
+    K_ERROR,
+    K_EDESC,
 } varlinkKind;
 
 static kindDefinition VarlinkKinds [] = {
-	{ true,  'i', "interface",   "interfaces" },
-	{ true,  'm', "method",      "methods" },
-	{ true,  'I', "iparam",      "input parameters" },
-	{ true,  'O', "oparam",      "output parameters" },
-	{ true,  's', "struct",      "structs" },
-	{ true,  'f', "field",       "fields" },
-	{ true,  'g', "enum",        "enumeration names" },
-	{ true,  'e', "enumerator",  "enumerators (values inside an enumeration)" },
-	{ true,  'E', "error",       "errors" },
-	{ true,  'd', "edesc",       "error descriptors" },
+    { true,  'i', "interface",   "interfaces" },
+    { true,  'm', "method",      "methods" },
+    { true,  'I', "iparam",      "input parameters" },
+    { true,  'O', "oparam",      "output parameters" },
+    { true,  's', "struct",      "structs" },
+    { true,  'f', "field",       "fields" },
+    { true,  'g', "enum",        "enumeration names" },
+    { true,  'e', "enumerator",  "enumerators (values inside an enumeration)" },
+    { true,  'E', "error",       "errors" },
+    { true,  'd', "edesc",       "error descriptors" },
 };
 
 typedef enum  {
-	METHOD_PARAM_INPUT,
-	METHOD_PARAM_OUTPUT,
+    METHOD_PARAM_INPUT,
+    METHOD_PARAM_OUTPUT,
 } methodParamState;
 
 struct parserCtx {
-	int scope_cork_index;
-	intArray *kind_stack;
-	methodParamState mparam_state;
-	bool found_syntax_error;
+    int scope_cork_index;
+    intArray *kind_stack;
+    methodParamState mparam_state;
+    bool found_syntax_error;
 };
 
 /*

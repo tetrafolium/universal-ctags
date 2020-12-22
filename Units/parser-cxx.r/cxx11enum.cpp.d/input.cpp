@@ -25,10 +25,10 @@ enum : whatever_t { Anon3_member1 };
 
 class Class
 {
-	enum CE1 : int { CE1_member1 = 10, CE1_member2 = (CE1_member1 << 10) };
-	enum class CEC1 : unsigned long int { CEC1_member1 };
-	enum struct CES1 : int { CES1_member1 };
-	virtual enum CEC1 Function1(enum CE1 parameter);
+    enum CE1 : int { CE1_member1 = 10, CE1_member2 = (CE1_member1 << 10) };
+    enum class CEC1 : unsigned long int { CEC1_member1 };
+    enum struct CES1 : int { CES1_member1 };
+    virtual enum CEC1 Function1(enum CE1 parameter);
 };
 
 // Forward declarations: we ignore them.

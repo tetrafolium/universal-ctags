@@ -1,13 +1,13 @@
 class Base
 {
 public:
-	virtual void foo() = 0;
+    virtual void foo() = 0;
 };
 
 class Derived final : public Base
 {
-	virtual void foo() final;
-	virtual void final();
+    virtual void foo() final;
+    virtual void final();
 };
 
 void Base::foo()

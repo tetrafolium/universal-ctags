@@ -45,6 +45,6 @@
 #if 0
 SYSCALL_DEFINE2(setregid16, old_gid_t, rgid, old_gid_t, egid)
 {
-	return __sys_setregid(low2highgid(rgid), low2highgid(egid));
+    return __sys_setregid(low2highgid(rgid), low2highgid(egid));
 }
 #endif

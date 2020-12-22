@@ -3,7 +3,7 @@ public class MyGenericClass1<T> { }
 
 // Derived enums.
 enum Enum1 : byte {
-	Value1, Values
+    Value1, Values
 }
 
 // Verbatim strings.

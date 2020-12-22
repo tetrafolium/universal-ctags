@@ -7,7 +7,7 @@ public void catchEvent(SomeEvent e)
 
 @Subscribe
 public void
-    recover(Exception e)
+recover(Exception e)
 {
     return;
 }

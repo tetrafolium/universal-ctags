@@ -32,9 +32,9 @@ int  main( int  argc, char ** argv )
 
 
     // 5. Local variables support
-	// As of now all the identifiers below are either reported as prototypes,
-	// or not recognized at all
-	// The comments on the right specify which kind of tag should be generated
+    // As of now all the identifiers below are either reported as prototypes,
+    // or not recognized at all
+    // The comments on the right specify which kind of tag should be generated
 
     const char *b1( "uuu" );                //variable
     int b2( int ooo, const char* o );       //prototype
@@ -55,9 +55,9 @@ int  main( int  argc, char ** argv )
     SomeType (*f2)( int o );                //variable
     int f3( std::map<int> & a );            //prototype
     int g1( SomeType a );                   //prototype
-	// As of now, the signature of h1 will be "( int a = R )",
-	// 'R' is to be replaced by something clearer to denote a
-	// string literal
+    // As of now, the signature of h1 will be "( int a = R )",
+    // 'R' is to be replaced by something clearer to denote a
+    // string literal
     char h1( const char *a = "a" );         //prototype
     int h2();                               //prototype
     char h3( double );                      //prototype
@@ -69,26 +69,26 @@ int  main( int  argc, char ** argv )
     int v7( 89 );                           //variable
     int v8( ooo );                          //variable
     // __ARGS(x) is a compatibility macro which optionally
-	// expands to x when prototypes are supported, so
-	// w1 should be parsed as a prototype
+    // expands to x when prototypes are supported, so
+    // w1 should be parsed as a prototype
     int w1 __ARGS (( int a ));              //prototype
     int w2 (( a - 5 ) / 6 );                //variable
     int x1( a.b );                          //variable
     int x2( a->b );                         //variable
     int x3( NS::a  b );                     //prototype
-    int x4( a ^ b );                        //variable 
+    int x4( a ^ b );                        //variable
     int x5( a ^ 6 );                        //variable
     int x6( a | b );                        //variable
-	// As of now, x7 is not recognized at all; it should
-	// give a variable tag but it's tricky to get it
-	// right because of '&' which suggests a prototype,
-	// so for now let's just ignore it
+    // As of now, x7 is not recognized at all; it should
+    // give a variable tag but it's tricky to get it
+    // right because of '&' which suggests a prototype,
+    // so for now let's just ignore it
     //int x7( a & b & c );                  //variable
     int x8( a & b & 2 );                    //variable
     int x9( a && b );                       //variable
 }
 
-/* 
+/*
  * Below is a copy/paste of the local identifiers above made uppercase,
  * but with a global scope instead.
  */
@@ -139,12 +139,12 @@ int V5( iii( o ) );                     //variable (ambiguous)
 int V6( int (*p)( int ) );              //prototype
 int V7( 89 );                           //variable
 int V8( ooo );                          //variable (ambiguous)
-int W1 __ARGS (( int a )){}             //function
+int W1 __ARGS (( int a )) {}            //function
 int W2 (( a - 5 ) / 6 );                //variable
 int X1( a.b );                          //variable
 int X2( a->b );                         //variable
 int X3( NS::a  b );                     //prototype
-int X4( a ^ b );                        //variable 
+int X4( a ^ b );                        //variable
 int X5( a ^ 6 );                        //variable
 int X6( a | b );                        //variable
 //int X7( a & b & c );                  //variable

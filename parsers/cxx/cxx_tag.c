@@ -61,32 +61,33 @@ CXX_COMMON_HEADER_ROLES(CUDA);
 	{ false, 'D', "macroparam", "parameters inside macro definitions", .syncWith = _syncWith }
 
 static kindDefinition g_aCXXCKinds [] = {
-	/* All other than LANG_AUTO are ignored.
-	   LANG_IGNORE is specified as a just placeholder for the macro,
-	   and is not needed. */
-	CXX_COMMON_KINDS(C,"struct, and union members", LANG_IGNORE)
+    /* All other than LANG_AUTO are ignored.
+       LANG_IGNORE is specified as a just placeholder for the macro,
+       and is not needed. */
+    CXX_COMMON_KINDS(C,"struct, and union members", LANG_IGNORE)
 };
 
 static kindDefinition g_aCXXCPPKinds [] = {
-	CXX_COMMON_KINDS(CXX,"class, struct, and union members", LANG_AUTO),
-	{ true,  'c', "class",      "classes" },
-	{ true,  'n', "namespace",  "namespaces" },
-	{ false, 'A', "alias",      "namespace aliases" },
-	{ false, 'N', "name",       "names imported via using scope::symbol" },
-	{ false, 'U', "using",      "using namespace statements",
-			.referenceOnly = true },
-	{ false, 'Z', "tparam",     "template parameters" },
+    CXX_COMMON_KINDS(CXX,"class, struct, and union members", LANG_AUTO),
+    { true,  'c', "class",      "classes" },
+    { true,  'n', "namespace",  "namespaces" },
+    { false, 'A', "alias",      "namespace aliases" },
+    { false, 'N', "name",       "names imported via using scope::symbol" },
+    {   false, 'U', "using",      "using namespace statements",
+        .referenceOnly = true
+    },
+    { false, 'Z', "tparam",     "template parameters" },
 };
 
 static kindDefinition g_aCXXCUDAKinds [] = {
-	CXX_COMMON_KINDS(CUDA,"struct, and union members", LANG_IGNORE)
+    CXX_COMMON_KINDS(CUDA,"struct, and union members", LANG_IGNORE)
 };
 
 static const char * g_aCXXAccessStrings [] = {
-	NULL,
-	"public",
-	"private",
-	"protected",
+    NULL,
+    "public",
+    "private",
+    "protected",
 };
 
 #define CXX_COMMON_FIELDS \
@@ -101,138 +102,138 @@ static const char * g_aCXXAccessStrings [] = {
 	}
 
 static fieldDefinition g_aCXXCFields [] = {
-	CXX_COMMON_FIELDS
+    CXX_COMMON_FIELDS
 };
 
 static fieldDefinition g_aCXXCPPFields [] = {
-	CXX_COMMON_FIELDS,
-	{
-		.name = "template",
-		.description = "template parameters",
-		.enabled = false,
-	},
-	{
-		.name = "captures",
-		.description = "lambda capture list",
-		.enabled = false
-	},
-	{
-		.name = "name",
-		.description = "aliased names",
-		.enabled = true
-	}
+    CXX_COMMON_FIELDS,
+    {
+        .name = "template",
+        .description = "template parameters",
+        .enabled = false,
+    },
+    {
+        .name = "captures",
+        .description = "lambda capture list",
+        .enabled = false
+    },
+    {
+        .name = "name",
+        .description = "aliased names",
+        .enabled = true
+    }
 };
 
 static fieldDefinition g_aCXXCUDAFields [] = {
-	CXX_COMMON_FIELDS
+    CXX_COMMON_FIELDS
 };
 
 void cxxTagInitForLanguage(langType eLangType)
 {
-	g_cxx.eLangType = eLangType;
+    g_cxx.eLangType = eLangType;
 
-	if(g_cxx.eLangType == g_cxx.eCLangType)
-	{
-		g_cxx.eLanguage = CXXLanguageC;
-		g_cxx.pKindDefinitions = g_aCXXCKinds;
-		g_cxx.uKindDefinitionCount = sizeof(g_aCXXCKinds) / sizeof(kindDefinition);
-		g_cxx.pFieldOptions = g_aCXXCFields;
-		g_cxx.uFieldOptionCount = sizeof(g_aCXXCFields) / sizeof(fieldDefinition);
-	} else if(g_cxx.eLangType == g_cxx.eCPPLangType)
-	{
-		g_cxx.eLanguage = CXXLanguageCPP;
-		g_cxx.pKindDefinitions = g_aCXXCPPKinds;
-		g_cxx.uKindDefinitionCount = sizeof(g_aCXXCPPKinds) / sizeof(kindDefinition);
-		g_cxx.pFieldOptions = g_aCXXCPPFields;
-		g_cxx.uFieldOptionCount = sizeof(g_aCXXCPPFields) / sizeof(fieldDefinition);
-	} else if(g_cxx.eLangType == g_cxx.eCUDALangType)
-	{
-		g_cxx.eLanguage = CXXLanguageCUDA;
-		g_cxx.pKindDefinitions = g_aCXXCUDAKinds;
-		g_cxx.uKindDefinitionCount = sizeof(g_aCXXCUDAKinds) / sizeof(kindDefinition);
-		g_cxx.pFieldOptions = g_aCXXCUDAFields;
-		g_cxx.uFieldOptionCount = sizeof(g_aCXXCUDAFields) / sizeof(fieldDefinition);
-	} else {
-		CXX_DEBUG_ASSERT(false,"Invalid language passed to cxxTagInitForLanguage()");
-	}
+    if(g_cxx.eLangType == g_cxx.eCLangType)
+    {
+        g_cxx.eLanguage = CXXLanguageC;
+        g_cxx.pKindDefinitions = g_aCXXCKinds;
+        g_cxx.uKindDefinitionCount = sizeof(g_aCXXCKinds) / sizeof(kindDefinition);
+        g_cxx.pFieldOptions = g_aCXXCFields;
+        g_cxx.uFieldOptionCount = sizeof(g_aCXXCFields) / sizeof(fieldDefinition);
+    } else if(g_cxx.eLangType == g_cxx.eCPPLangType)
+    {
+        g_cxx.eLanguage = CXXLanguageCPP;
+        g_cxx.pKindDefinitions = g_aCXXCPPKinds;
+        g_cxx.uKindDefinitionCount = sizeof(g_aCXXCPPKinds) / sizeof(kindDefinition);
+        g_cxx.pFieldOptions = g_aCXXCPPFields;
+        g_cxx.uFieldOptionCount = sizeof(g_aCXXCPPFields) / sizeof(fieldDefinition);
+    } else if(g_cxx.eLangType == g_cxx.eCUDALangType)
+    {
+        g_cxx.eLanguage = CXXLanguageCUDA;
+        g_cxx.pKindDefinitions = g_aCXXCUDAKinds;
+        g_cxx.uKindDefinitionCount = sizeof(g_aCXXCUDAKinds) / sizeof(kindDefinition);
+        g_cxx.pFieldOptions = g_aCXXCUDAFields;
+        g_cxx.uFieldOptionCount = sizeof(g_aCXXCUDAFields) / sizeof(fieldDefinition);
+    } else {
+        CXX_DEBUG_ASSERT(false,"Invalid language passed to cxxTagInitForLanguage()");
+    }
 }
 
 kindDefinition * cxxTagGetCKindDefinitions(void)
 {
-	return g_aCXXCKinds;
+    return g_aCXXCKinds;
 }
 
 int cxxTagGetCKindDefinitionCount(void)
 {
-	return sizeof(g_aCXXCKinds) / sizeof(kindDefinition);
+    return sizeof(g_aCXXCKinds) / sizeof(kindDefinition);
 }
 
 kindDefinition * cxxTagGetCUDAKindDefinitions(void)
 {
-	return g_aCXXCUDAKinds;
+    return g_aCXXCUDAKinds;
 }
 
 int cxxTagGetCUDAKindDefinitionCount(void)
 {
-	return sizeof(g_aCXXCUDAKinds) / sizeof(kindDefinition);
+    return sizeof(g_aCXXCUDAKinds) / sizeof(kindDefinition);
 }
 
 kindDefinition * cxxTagGetCPPKindDefinitions(void)
 {
-	return g_aCXXCPPKinds;
+    return g_aCXXCPPKinds;
 }
 
 int cxxTagGetCPPKindDefinitionCount(void)
 {
-	return sizeof(g_aCXXCPPKinds) / sizeof(kindDefinition);
+    return sizeof(g_aCXXCPPKinds) / sizeof(kindDefinition);
 }
 
 bool cxxTagKindEnabled(unsigned int uKind)
 {
-	CXX_DEBUG_ASSERT(
-			uKind < g_cxx.uKindDefinitionCount,
-			"The kind must be associated to the current language!"
-		);
-	return g_cxx.pKindDefinitions[uKind].enabled;
+    CXX_DEBUG_ASSERT(
+        uKind < g_cxx.uKindDefinitionCount,
+        "The kind must be associated to the current language!"
+    );
+    return g_cxx.pKindDefinitions[uKind].enabled;
 }
 
 fieldDefinition * cxxTagGetCPPFieldDefinitionifiers(void)
 {
-	return g_aCXXCPPFields;
+    return g_aCXXCPPFields;
 }
 
 int cxxTagGetCPPFieldDefinitionifierCount(void)
 {
-	return sizeof(g_aCXXCPPFields) / sizeof(fieldDefinition);
+    return sizeof(g_aCXXCPPFields) / sizeof(fieldDefinition);
 }
 
 fieldDefinition * cxxTagGetCUDAFieldDefinitionifiers(void)
 {
-	return g_aCXXCUDAFields;
+    return g_aCXXCUDAFields;
 }
 
 int cxxTagGetCUDAFieldDefinitionifierCount(void)
 {
-	return sizeof(g_aCXXCUDAFields) / sizeof(fieldDefinition);
+    return sizeof(g_aCXXCUDAFields) / sizeof(fieldDefinition);
 }
 
 fieldDefinition * cxxTagGetCFieldDefinitionifiers(void)
 {
-	return g_aCXXCFields;
+    return g_aCXXCFields;
 }
 
 int cxxTagGetCFieldDefinitionifierCount(void)
 {
-	return sizeof(g_aCXXCFields) / sizeof(fieldDefinition);
+    return sizeof(g_aCXXCFields) / sizeof(fieldDefinition);
 }
 
 bool cxxTagFieldEnabled(unsigned int uField)
 {
-	CXX_DEBUG_ASSERT(
-			uField < g_cxx.uFieldOptionCount,
-			"The field must be associated to the current language!"
-		);
-	return g_cxx.pFieldOptions[uField].enabled;
+    CXX_DEBUG_ASSERT(
+        uField < g_cxx.uFieldOptionCount,
+        "The field must be associated to the current language!"
+    );
+    return g_cxx.pFieldOptions[uField].enabled;
 }
 
 
@@ -241,47 +242,47 @@ static tagEntryInfo g_oCXXTag;
 
 tagEntryInfo * cxxTagBegin(unsigned int uKind,CXXToken * pToken)
 {
-	kindDefinition * pKindDefinitions = g_cxx.pKindDefinitions;
+    kindDefinition * pKindDefinitions = g_cxx.pKindDefinitions;
 
-	if(!pKindDefinitions[uKind].enabled)
-	{
-		//CXX_DEBUG_PRINT("Tag kind %s is not enabled",g_aCXXKinds[eKind].name);
-		return NULL;
-	}
+    if(!pKindDefinitions[uKind].enabled)
+    {
+        //CXX_DEBUG_PRINT("Tag kind %s is not enabled",g_aCXXKinds[eKind].name);
+        return NULL;
+    }
 
-	initTagEntry(
-			&g_oCXXTag,
-			vStringValue(pToken->pszWord),
-			uKind
-		);
+    initTagEntry(
+        &g_oCXXTag,
+        vStringValue(pToken->pszWord),
+        uKind
+    );
 
-	g_oCXXTag.lineNumber = pToken->iLineNumber;
-	g_oCXXTag.filePosition = pToken->oFilePosition;
-	g_oCXXTag.isFileScope = false;
+    g_oCXXTag.lineNumber = pToken->iLineNumber;
+    g_oCXXTag.filePosition = pToken->oFilePosition;
+    g_oCXXTag.isFileScope = false;
 
-	if(!cxxScopeIsGlobal())
-	{
-		g_oCXXTag.extensionFields.scopeKindIndex = cxxScopeGetKind();
-		g_oCXXTag.extensionFields.scopeName = cxxScopeGetFullName();
-	}
+    if(!cxxScopeIsGlobal())
+    {
+        g_oCXXTag.extensionFields.scopeKindIndex = cxxScopeGetKind();
+        g_oCXXTag.extensionFields.scopeName = cxxScopeGetFullName();
+    }
 
-	// FIXME: meaning of "is file scope" is quite debatable...
-	g_oCXXTag.extensionFields.access = g_aCXXAccessStrings[cxxScopeGetAccess()];
+    // FIXME: meaning of "is file scope" is quite debatable...
+    g_oCXXTag.extensionFields.access = g_aCXXAccessStrings[cxxScopeGetAccess()];
 
-	return &g_oCXXTag;
+    return &g_oCXXTag;
 }
 
 vString * cxxTagSetProperties(unsigned int uProperties)
 {
-	if(uProperties == 0)
-		return NULL;
+    if(uProperties == 0)
+        return NULL;
 
-	if(!cxxTagFieldEnabled(CXXTagFieldProperties))
-		return NULL;
+    if(!cxxTagFieldEnabled(CXXTagFieldProperties))
+        return NULL;
 
-	vString * pszProperties = vStringNew();
+    vString * pszProperties = vStringNew();
 
-	bool bFirst = true;
+    bool bFirst = true;
 
 #define ADD_PROPERTY(_szProperty) \
 	do { \
@@ -292,358 +293,358 @@ vString * cxxTagSetProperties(unsigned int uProperties)
 		vStringCatS(pszProperties,_szProperty); \
 	} while(0)
 
-	if(uProperties & CXXTagPropertyConst)
-		ADD_PROPERTY("const");
-	if(uProperties & CXXTagPropertyDefault)
-		ADD_PROPERTY("default");
-	if(uProperties & CXXTagPropertyDelete)
-		ADD_PROPERTY("delete");
-	if(uProperties & CXXTagPropertyExplicit)
-		ADD_PROPERTY("explicit");
-	if(uProperties & CXXTagPropertyExtern)
-		ADD_PROPERTY("extern");
-	if(uProperties & CXXTagPropertyFinal)
-		ADD_PROPERTY("final");
-	if(uProperties & CXXTagPropertyInline)
-		ADD_PROPERTY("inline");
-	if(uProperties & CXXTagPropertyMutable)
-		ADD_PROPERTY("mutable");
-	if(uProperties & CXXTagPropertyOverride)
-		ADD_PROPERTY("override");
-	if(uProperties & CXXTagPropertyPure)
-		ADD_PROPERTY("pure");
-	if(uProperties & CXXTagPropertyScopeTemplateSpecialization)
-		ADD_PROPERTY("scopespecialization");
-	if(uProperties & CXXTagPropertyStatic)
-		ADD_PROPERTY("static");
-	if(uProperties & CXXTagPropertyTemplateSpecialization)
-		ADD_PROPERTY("specialization");
-	if(uProperties & CXXTagPropertyVirtual)
-		ADD_PROPERTY("virtual");
-	if(uProperties & CXXTagPropertyVolatile)
-		ADD_PROPERTY("volatile");
-	if(uProperties & CXXTagPropertyDeprecated)
-		ADD_PROPERTY("deprecated");
-	if(uProperties & CXXTagPropertyScopedEnum)
-		ADD_PROPERTY("scopedenum");
-	if(uProperties & CXXTagPropertyFunctionTryBlock)
-		ADD_PROPERTY("fntryblock");
+    if(uProperties & CXXTagPropertyConst)
+        ADD_PROPERTY("const");
+    if(uProperties & CXXTagPropertyDefault)
+        ADD_PROPERTY("default");
+    if(uProperties & CXXTagPropertyDelete)
+        ADD_PROPERTY("delete");
+    if(uProperties & CXXTagPropertyExplicit)
+        ADD_PROPERTY("explicit");
+    if(uProperties & CXXTagPropertyExtern)
+        ADD_PROPERTY("extern");
+    if(uProperties & CXXTagPropertyFinal)
+        ADD_PROPERTY("final");
+    if(uProperties & CXXTagPropertyInline)
+        ADD_PROPERTY("inline");
+    if(uProperties & CXXTagPropertyMutable)
+        ADD_PROPERTY("mutable");
+    if(uProperties & CXXTagPropertyOverride)
+        ADD_PROPERTY("override");
+    if(uProperties & CXXTagPropertyPure)
+        ADD_PROPERTY("pure");
+    if(uProperties & CXXTagPropertyScopeTemplateSpecialization)
+        ADD_PROPERTY("scopespecialization");
+    if(uProperties & CXXTagPropertyStatic)
+        ADD_PROPERTY("static");
+    if(uProperties & CXXTagPropertyTemplateSpecialization)
+        ADD_PROPERTY("specialization");
+    if(uProperties & CXXTagPropertyVirtual)
+        ADD_PROPERTY("virtual");
+    if(uProperties & CXXTagPropertyVolatile)
+        ADD_PROPERTY("volatile");
+    if(uProperties & CXXTagPropertyDeprecated)
+        ADD_PROPERTY("deprecated");
+    if(uProperties & CXXTagPropertyScopedEnum)
+        ADD_PROPERTY("scopedenum");
+    if(uProperties & CXXTagPropertyFunctionTryBlock)
+        ADD_PROPERTY("fntryblock");
 
-	cxxTagSetField(CXXTagFieldProperties,vStringValue(pszProperties));
+    cxxTagSetField(CXXTagFieldProperties,vStringValue(pszProperties));
 
-	return pszProperties;
+    return pszProperties;
 }
 
 static bool cxxTagCheckTypeField(
-		CXXToken * pTypeStart,
-		CXXToken * pTypeEnd
-	)
+    CXXToken * pTypeStart,
+    CXXToken * pTypeEnd
+)
 {
-	CXX_DEBUG_ENTER();
-	if(!pTypeStart || !pTypeEnd)
-	{
-		CXX_DEBUG_LEAVE_TEXT("One of the pointers is NULL");
-		return false;
-	}
+    CXX_DEBUG_ENTER();
+    if(!pTypeStart || !pTypeEnd)
+    {
+        CXX_DEBUG_LEAVE_TEXT("One of the pointers is NULL");
+        return false;
+    }
 
-	int iTotalCount = 0;
-	int iParenthesisCount = 0;
-	int iIdentifierOrKeywordCount = 0;
-	int iConsecutiveIdentifiers = 0;
+    int iTotalCount = 0;
+    int iParenthesisCount = 0;
+    int iIdentifierOrKeywordCount = 0;
+    int iConsecutiveIdentifiers = 0;
 
-	while(pTypeStart)
-	{
-		iTotalCount++;
-		if(iTotalCount > 30)
-		{
-			CXX_DEBUG_LEAVE_TEXT("The chain is really too long to be a type name");
-			return false;
-		}
+    while(pTypeStart)
+    {
+        iTotalCount++;
+        if(iTotalCount > 30)
+        {
+            CXX_DEBUG_LEAVE_TEXT("The chain is really too long to be a type name");
+            return false;
+        }
 
-		if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeIdentifier))
-		{
-			iConsecutiveIdentifiers++;
-			iIdentifierOrKeywordCount++;
-			if(iConsecutiveIdentifiers > 4)
-			{
-				// Probably many macros inside. Too many.
-				CXX_DEBUG_LEAVE_TEXT("Too many consecutive identifiers for a type name");
-				return false;
-			}
-		} else {
-			iConsecutiveIdentifiers = 0;
+        if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeIdentifier))
+        {
+            iConsecutiveIdentifiers++;
+            iIdentifierOrKeywordCount++;
+            if(iConsecutiveIdentifiers > 4)
+            {
+                // Probably many macros inside. Too many.
+                CXX_DEBUG_LEAVE_TEXT("Too many consecutive identifiers for a type name");
+                return false;
+            }
+        } else {
+            iConsecutiveIdentifiers = 0;
 
-			if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeParenthesisChain))
-			{
-				iParenthesisCount++;
-				if(iParenthesisCount > 3)
-				{
-					CXX_DEBUG_LEAVE_TEXT("Too many non-nested parentheses for a type name");
-					return false;
-				}
+            if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeParenthesisChain))
+            {
+                iParenthesisCount++;
+                if(iParenthesisCount > 3)
+                {
+                    CXX_DEBUG_LEAVE_TEXT("Too many non-nested parentheses for a type name");
+                    return false;
+                }
 
-				if(
-					(iTotalCount > 1) &&
-					cxxTokenTypeIs(pTypeStart->pPrev,CXXTokenTypeIdentifier) &&
-					pTypeStart != pTypeEnd &&
-					pTypeStart->pNext &&
-					cxxTokenTypeIs(pTypeStart->pNext,CXXTokenTypeIdentifier)
-				)
-				{
-					// identifier () identifier
-					// Looks suspicious, might be macros gathered by mistake
-					CXX_DEBUG_LEAVE_TEXT("Identifier-parenthesis-identifier pattern: looks suspicious");
-					return false;
-				}
-			} else if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword))
-			{
-				iIdentifierOrKeywordCount++;
-			}
-		}
+                if(
+                    (iTotalCount > 1) &&
+                    cxxTokenTypeIs(pTypeStart->pPrev,CXXTokenTypeIdentifier) &&
+                    pTypeStart != pTypeEnd &&
+                    pTypeStart->pNext &&
+                    cxxTokenTypeIs(pTypeStart->pNext,CXXTokenTypeIdentifier)
+                )
+                {
+                    // identifier () identifier
+                    // Looks suspicious, might be macros gathered by mistake
+                    CXX_DEBUG_LEAVE_TEXT("Identifier-parenthesis-identifier pattern: looks suspicious");
+                    return false;
+                }
+            } else if(cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword))
+            {
+                iIdentifierOrKeywordCount++;
+            }
+        }
 
-		if(pTypeStart == pTypeEnd)
-			break;
+        if(pTypeStart == pTypeEnd)
+            break;
 
-		pTypeStart = pTypeStart->pNext;
-	}
+        pTypeStart = pTypeStart->pNext;
+    }
 
-	if(iIdentifierOrKeywordCount < 1)
-	{
-		CXX_DEBUG_LEAVE_TEXT("Type does not seem to contains identifiers or keywords, can't be a type name");
-		return false;
-	}
+    if(iIdentifierOrKeywordCount < 1)
+    {
+        CXX_DEBUG_LEAVE_TEXT("Type does not seem to contains identifiers or keywords, can't be a type name");
+        return false;
+    }
 
-	if(!pTypeStart)
-	{
-		CXX_DEBUG_LEAVE_TEXT("Type tokens do not belong to the same chain!");
-		return false;
-	}
+    if(!pTypeStart)
+    {
+        CXX_DEBUG_LEAVE_TEXT("Type tokens do not belong to the same chain!");
+        return false;
+    }
 
-	CXX_DEBUG_LEAVE();
-	return true;
+    CXX_DEBUG_LEAVE();
+    return true;
 }
 
 CXXToken * cxxTagCheckAndSetTypeField(
-		CXXToken * pTypeStart,
-		CXXToken * pTypeEnd
-	)
+    CXXToken * pTypeStart,
+    CXXToken * pTypeEnd
+)
 {
-	CXX_DEBUG_ASSERT(pTypeStart,"Non null type start is expected here");
-	CXX_DEBUG_ASSERT(pTypeEnd,"Non null type end is expected here");
+    CXX_DEBUG_ASSERT(pTypeStart,"Non null type start is expected here");
+    CXX_DEBUG_ASSERT(pTypeEnd,"Non null type end is expected here");
 
-	const char * szTypeRef0;
+    const char * szTypeRef0;
 
-	// "typename" is debatable since it's not really
-	// allowed by C++ for unqualified types. However I haven't been able
-	// to come up with something better... so "typename" it is for now.
+    // "typename" is debatable since it's not really
+    // allowed by C++ for unqualified types. However I haven't been able
+    // to come up with something better... so "typename" it is for now.
 
-	// FIXME: The typeRef forma with two fields should be dropped.
-	//        It has been created with specific use cases in mind
-	//        and we are pushing it way beyond them.
-	//        We should have a plain "type" field instead.
+    // FIXME: The typeRef forma with two fields should be dropped.
+    //        It has been created with specific use cases in mind
+    //        and we are pushing it way beyond them.
+    //        We should have a plain "type" field instead.
 
-	static const char * szTypename = "typename";
+    static const char * szTypename = "typename";
 
-	// Filter out initial keywords that need to be excluded from typenames
-	for(;;)
-	{
-		if(!cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword))
-			break;
-		if(!cxxKeywordExcludeFromTypeNames(pTypeStart->eKeyword))
-			break;
-		// must be excluded
-		if(pTypeStart == pTypeEnd)
-		{
-			CXX_DEBUG_PRINT("Type name composed only of ignored keywords");
-			return NULL; // only excluded keywords
-		}
-		pTypeStart = pTypeStart->pNext;
-	}
+    // Filter out initial keywords that need to be excluded from typenames
+    for(;;)
+    {
+        if(!cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword))
+            break;
+        if(!cxxKeywordExcludeFromTypeNames(pTypeStart->eKeyword))
+            break;
+        // must be excluded
+        if(pTypeStart == pTypeEnd)
+        {
+            CXX_DEBUG_PRINT("Type name composed only of ignored keywords");
+            return NULL; // only excluded keywords
+        }
+        pTypeStart = pTypeStart->pNext;
+    }
 
-	if(pTypeStart != pTypeEnd)
-	{
-		// Note that this does not work for types like "const enum X"
-		// But that's not backward compatible anyway, so we live with it.
-		if(
-				cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword) &&
-				cxxKeywordIsTypeRefMarker(pTypeStart->eKeyword)
-			)
-		{
-			szTypeRef0 = cxxKeywordName(pTypeStart->eKeyword);
-			pTypeStart = pTypeStart->pNext;
-		} else {
-			szTypeRef0 = szTypename;
-		}
-	} else {
-		szTypeRef0 = szTypename;
-	}
+    if(pTypeStart != pTypeEnd)
+    {
+        // Note that this does not work for types like "const enum X"
+        // But that's not backward compatible anyway, so we live with it.
+        if(
+            cxxTokenTypeIs(pTypeStart,CXXTokenTypeKeyword) &&
+            cxxKeywordIsTypeRefMarker(pTypeStart->eKeyword)
+        )
+        {
+            szTypeRef0 = cxxKeywordName(pTypeStart->eKeyword);
+            pTypeStart = pTypeStart->pNext;
+        } else {
+            szTypeRef0 = szTypename;
+        }
+    } else {
+        szTypeRef0 = szTypename;
+    }
 
-	if(!cxxTagCheckTypeField(pTypeStart,pTypeEnd))
-	{
-		CXX_DEBUG_PRINT("Type name looks suspicious: refusing to emit it");
-		return NULL;
-	}
+    if(!cxxTagCheckTypeField(pTypeStart,pTypeEnd))
+    {
+        CXX_DEBUG_PRINT("Type name looks suspicious: refusing to emit it");
+        return NULL;
+    }
 
-	cxxTokenChainNormalizeTypeNameSpacingInRange(pTypeStart,pTypeEnd);
-	CXXToken * pTypeName = cxxTokenChainExtractRangeFilterTypeName(pTypeStart,pTypeEnd);
+    cxxTokenChainNormalizeTypeNameSpacingInRange(pTypeStart,pTypeEnd);
+    CXXToken * pTypeName = cxxTokenChainExtractRangeFilterTypeName(pTypeStart,pTypeEnd);
 
-	if(!pTypeName)
-	{
-		CXX_DEBUG_PRINT("Can't extract type name");
-		return NULL;
-	}
+    if(!pTypeName)
+    {
+        CXX_DEBUG_PRINT("Can't extract type name");
+        return NULL;
+    }
 
-	CXX_DEBUG_PRINT("Type name is '%s'",vStringValue(pTypeName->pszWord));
+    CXX_DEBUG_PRINT("Type name is '%s'",vStringValue(pTypeName->pszWord));
 
-	g_oCXXTag.extensionFields.typeRef[0] = szTypeRef0;
-	g_oCXXTag.extensionFields.typeRef[1] = vStringValue(pTypeName->pszWord);
+    g_oCXXTag.extensionFields.typeRef[0] = szTypeRef0;
+    g_oCXXTag.extensionFields.typeRef[1] = vStringValue(pTypeName->pszWord);
 
-	return pTypeName;
+    return pTypeName;
 }
 
 void cxxTagSetField(unsigned int uField,const char * szValue)
 {
-	CXX_DEBUG_ASSERT(
-			uField < g_cxx.uFieldOptionCount,
-			"The field must be associated to the current language!"
-		);
+    CXX_DEBUG_ASSERT(
+        uField < g_cxx.uFieldOptionCount,
+        "The field must be associated to the current language!"
+    );
 
-	if(!g_cxx.pFieldOptions[uField].enabled)
-		return;
+    if(!g_cxx.pFieldOptions[uField].enabled)
+        return;
 
-	attachParserField(&g_oCXXTag,false,g_cxx.pFieldOptions[uField].ftype,szValue);
+    attachParserField(&g_oCXXTag,false,g_cxx.pFieldOptions[uField].ftype,szValue);
 }
 
 void cxxTagSetCorkQueueField(
-		int iIndex,
-		unsigned int uField,
-		const char * szValue
-	)
+    int iIndex,
+    unsigned int uField,
+    const char * szValue
+)
 {
-	CXX_DEBUG_ASSERT(
-			uField < g_cxx.uFieldOptionCount,
-			"The field must be associated to the current language!"
-		);
+    CXX_DEBUG_ASSERT(
+        uField < g_cxx.uFieldOptionCount,
+        "The field must be associated to the current language!"
+    );
 
-	CXX_DEBUG_ASSERT(g_cxx.pFieldOptions[uField].enabled,"The field must be enabled!");
+    CXX_DEBUG_ASSERT(g_cxx.pFieldOptions[uField].enabled,"The field must be enabled!");
 
-	attachParserFieldToCorkEntry(iIndex,g_cxx.pFieldOptions[uField].ftype,szValue);
+    attachParserFieldToCorkEntry(iIndex,g_cxx.pFieldOptions[uField].ftype,szValue);
 }
 
 void cxxTagHandleTemplateField()
 {
-	CXX_DEBUG_ASSERT(
-		g_cxx.pTemplateTokenChain &&
-		(g_cxx.pTemplateTokenChain->iCount > 0) &&
-		cxxParserCurrentLanguageIsCPP() &&
-		cxxTagFieldEnabled(CXXTagCPPFieldTemplate),
-		"Template existence must be checked before calling this function"
-	);
+    CXX_DEBUG_ASSERT(
+        g_cxx.pTemplateTokenChain &&
+        (g_cxx.pTemplateTokenChain->iCount > 0) &&
+        cxxParserCurrentLanguageIsCPP() &&
+        cxxTagFieldEnabled(CXXTagCPPFieldTemplate),
+        "Template existence must be checked before calling this function"
+    );
 
-	cxxTokenChainNormalizeTypeNameSpacing(g_cxx.pTemplateTokenChain);
+    cxxTokenChainNormalizeTypeNameSpacing(g_cxx.pTemplateTokenChain);
 
-	CXXToken * t = cxxTokenChainCondenseIntoToken(g_cxx.pTemplateTokenChain,0);
+    CXXToken * t = cxxTokenChainCondenseIntoToken(g_cxx.pTemplateTokenChain,0);
 
-	if(t)
-	{
-		cxxTagSetField(
-				CXXTagCPPFieldTemplate,
-				vStringValue(t->pszWord)
-			);
+    if(t)
+    {
+        cxxTagSetField(
+            CXXTagCPPFieldTemplate,
+            vStringValue(t->pszWord)
+        );
 
-		cxxTokenDestroy(t);
-	}
+        cxxTokenDestroy(t);
+    }
 }
 
 int cxxTagCommit(void)
 {
-	if(g_oCXXTag.isFileScope)
-	{
-		if(!isXtagEnabled(XTAG_FILE_SCOPE))
-			return CORK_NIL;
+    if(g_oCXXTag.isFileScope)
+    {
+        if(!isXtagEnabled(XTAG_FILE_SCOPE))
+            return CORK_NIL;
 
-		markTagExtraBit(&g_oCXXTag,XTAG_FILE_SCOPE);
-	}
+        markTagExtraBit(&g_oCXXTag,XTAG_FILE_SCOPE);
+    }
 
 #ifdef CXX_DO_DEBUGGING
-	CXX_DEBUG_PRINT(
-			"Emitting tag for symbol '%s', kind '%s', line %d",
-			g_oCXXTag.name,
-			getLanguageKindName(g_oCXXTag.langType, g_oCXXTag.kindIndex),
-			g_oCXXTag.lineNumber
-		);
-	if(
-			g_oCXXTag.extensionFields.typeRef[0] &&
-			g_oCXXTag.extensionFields.typeRef[1]
-		)
-		CXX_DEBUG_PRINT(
-				"Tag has typeref %s %s",
-				g_oCXXTag.extensionFields.typeRef[0],
-				g_oCXXTag.extensionFields.typeRef[1]
-			);
+    CXX_DEBUG_PRINT(
+        "Emitting tag for symbol '%s', kind '%s', line %d",
+        g_oCXXTag.name,
+        getLanguageKindName(g_oCXXTag.langType, g_oCXXTag.kindIndex),
+        g_oCXXTag.lineNumber
+    );
+    if(
+        g_oCXXTag.extensionFields.typeRef[0] &&
+        g_oCXXTag.extensionFields.typeRef[1]
+    )
+        CXX_DEBUG_PRINT(
+            "Tag has typeref %s %s",
+            g_oCXXTag.extensionFields.typeRef[0],
+            g_oCXXTag.extensionFields.typeRef[1]
+        );
 #endif
 
-	int iCorkQueueIndex = makeTagEntry(&g_oCXXTag);
+    int iCorkQueueIndex = makeTagEntry(&g_oCXXTag);
 
-	// Handle --extra=+q
-	if(!isXtagEnabled(XTAG_QUALIFIED_TAGS))
-		return iCorkQueueIndex;
+    // Handle --extra=+q
+    if(!isXtagEnabled(XTAG_QUALIFIED_TAGS))
+        return iCorkQueueIndex;
 
-	markTagExtraBit(&g_oCXXTag,XTAG_QUALIFIED_TAGS);
+    markTagExtraBit(&g_oCXXTag,XTAG_QUALIFIED_TAGS);
 
-	if(!g_oCXXTag.extensionFields.scopeName)
-		return iCorkQueueIndex;
+    if(!g_oCXXTag.extensionFields.scopeName)
+        return iCorkQueueIndex;
 
-	// WARNING: The following code assumes that the scope
-	// didn't change between cxxTagBegin() and cxxTagCommit().
+    // WARNING: The following code assumes that the scope
+    // didn't change between cxxTagBegin() and cxxTagCommit().
 
-	enum CXXScopeType eScopeType = cxxScopeGetType();
+    enum CXXScopeType eScopeType = cxxScopeGetType();
 
-	if(eScopeType == CXXScopeTypeFunction)
-	{
-		// old ctags didn't do this, and --extra=+q is mainly
-		// for backward compatibility so...
-		return iCorkQueueIndex;
-	}
+    if(eScopeType == CXXScopeTypeFunction)
+    {
+        // old ctags didn't do this, and --extra=+q is mainly
+        // for backward compatibility so...
+        return iCorkQueueIndex;
+    }
 
-	// Same tag. Only the name changes.
+    // Same tag. Only the name changes.
 
-	vString * x;
+    vString * x;
 
-	if(eScopeType == CXXScopeTypeEnum)
-	{
-		// If the scope kind is enumeration then we need to remove the
-		// last scope part. This is what old ctags did.
-		if(cxxScopeGetSize() < 2)
-			return -1; // toplevel enum
+    if(eScopeType == CXXScopeTypeEnum)
+    {
+        // If the scope kind is enumeration then we need to remove the
+        // last scope part. This is what old ctags did.
+        if(cxxScopeGetSize() < 2)
+            return -1; // toplevel enum
 
-		x = cxxScopeGetFullNameExceptLastComponentAsString();
-		CXX_DEBUG_ASSERT(x,"Scope with size >= 2 should have returned a value here");
-	} else {
-		x = vStringNewInit(g_oCXXTag.extensionFields.scopeName);
-	}
+        x = cxxScopeGetFullNameExceptLastComponentAsString();
+        CXX_DEBUG_ASSERT(x,"Scope with size >= 2 should have returned a value here");
+    } else {
+        x = vStringNewInit(g_oCXXTag.extensionFields.scopeName);
+    }
 
-	vStringCatS(x,"::");
-	vStringCatS(x,g_oCXXTag.name);
+    vStringCatS(x,"::");
+    vStringCatS(x,g_oCXXTag.name);
 
-	g_oCXXTag.name = vStringValue(x);
+    g_oCXXTag.name = vStringValue(x);
 
-	CXX_DEBUG_PRINT(
-			"Emitting extra tag for symbol '%s', kind '%s', line %d",
-			g_oCXXTag.name,
-			getLanguageKindName(g_oCXXTag.langType, g_oCXXTag.kindIndex),
-			g_oCXXTag.lineNumber
-		);
+    CXX_DEBUG_PRINT(
+        "Emitting extra tag for symbol '%s', kind '%s', line %d",
+        g_oCXXTag.name,
+        getLanguageKindName(g_oCXXTag.langType, g_oCXXTag.kindIndex),
+        g_oCXXTag.lineNumber
+    );
 
-	makeTagEntry(&g_oCXXTag);
+    makeTagEntry(&g_oCXXTag);
 
-	vStringDelete(x);
+    vStringDelete(x);
 
-	return iCorkQueueIndex;
+    return iCorkQueueIndex;
 }
 
 void cxxTag(unsigned int uKind,CXXToken * pToken)
 {
-	if(cxxTagBegin(uKind,pToken) != NULL)
-		cxxTagCommit();
+    if(cxxTagBegin(uKind,pToken) != NULL)
+        cxxTagCommit();
 }

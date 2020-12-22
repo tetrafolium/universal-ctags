@@ -17,7 +17,7 @@
 
 bool cxxSubparserNotifyParseAccessSpecifier (ptrArray *pSubparsers);
 void cxxSubparserNotifyfoundExtraIdentifierAsAccessSpecifier(ptrArray *pSubparsers,
-															 CXXToken *pToken);
+        CXXToken *pToken);
 
 bool cxxSubparserNewIdentifierAsHeadOfMemberNotify(CXXToken *pToken);
 void cxxSubparserUnknownIdentifierInClassNotify(CXXToken *pToken);

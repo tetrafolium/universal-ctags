@@ -23,8 +23,8 @@
 
 typedef struct sYamlSubparser yamlSubparser;
 struct sYamlSubparser {
-	subparser subparser;
-	void (* newTokenNotfify) (yamlSubparser *s, yaml_token_t *token);
+    subparser subparser;
+    void (* newTokenNotfify) (yamlSubparser *s, yaml_token_t *token);
 };
 
 extern void attachYamlPosition (tagEntryInfo *tag, yaml_token_t *token, bool asEndPosition);

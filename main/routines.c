@@ -179,24 +179,24 @@ static void canonicalizePath (char *const path);
 
 extern void freeRoutineResources (void)
 {
-	if (CurrentDirectory != NULL)
-		eFree (CurrentDirectory);
+    if (CurrentDirectory != NULL)
+        eFree (CurrentDirectory);
 }
 
 extern void setExecutableName (const char *const path)
 {
-	ExecutableProgram = path;
-	ExecutableName = baseFilename (path);
+    ExecutableProgram = path;
+    ExecutableName = baseFilename (path);
 }
 
 extern const char *getExecutableName (void)
 {
-	return ExecutableName;
+    return ExecutableName;
 }
 
 extern const char *getExecutablePath (void)
 {
-	return ExecutableProgram;
+    return ExecutableProgram;
 }
 
 /*
@@ -205,9 +205,9 @@ extern const char *getExecutablePath (void)
 static bool fnmChEq (int c1, int c2)
 {
 #ifdef WIN32
-	return tolower( c1 ) == tolower( c2 );  /* case-insensitive */
+    return tolower( c1 ) == tolower( c2 );  /* case-insensitive */
 #else
-	return          c1   ==          c2  ;  /* case-  sensitive */
+    return          c1   ==          c2  ;  /* case-  sensitive */
 #endif
 }
 
@@ -217,56 +217,56 @@ static bool fnmChEq (int c1, int c2)
 
 extern void *eMalloc (const size_t size)
 {
-	void *buffer = malloc (size);
+    void *buffer = malloc (size);
 
-	if (buffer == NULL)
-		error (FATAL, "out of memory");
+    if (buffer == NULL)
+        error (FATAL, "out of memory");
 
-	return buffer;
+    return buffer;
 }
 
 extern void *eCalloc (const size_t count, const size_t size)
 {
-	void *buffer = calloc (count, size);
+    void *buffer = calloc (count, size);
 
-	if (buffer == NULL)
-		error (FATAL, "out of memory");
+    if (buffer == NULL)
+        error (FATAL, "out of memory");
 
-	return buffer;
+    return buffer;
 }
 
 extern void *eRealloc (void *const ptr, const size_t size)
 {
-	void *buffer;
-	if (ptr == NULL)
-		buffer = eMalloc (size);
-	else
-	{
-		buffer = realloc (ptr, size);
-		if (buffer == NULL)
-			error (FATAL, "out of memory");
-	}
-	return buffer;
+    void *buffer;
+    if (ptr == NULL)
+        buffer = eMalloc (size);
+    else
+    {
+        buffer = realloc (ptr, size);
+        if (buffer == NULL)
+            error (FATAL, "out of memory");
+    }
+    return buffer;
 }
 
 extern void eFree (void *const ptr)
 {
-	Assert (ptr != NULL);
-	free (ptr);
+    Assert (ptr != NULL);
+    free (ptr);
 }
 
 extern void eFreeNoNullCheck (void *const ptr)
 {
-	free (ptr);
+    free (ptr);
 }
 
 extern void eFreeIndirect(void **ptr)
 {
-	if (ptr && *ptr)
-	{
-		eFree (*ptr);
-		*ptr = NULL;
-	}
+    if (ptr && *ptr)
+    {
+        eFree (*ptr);
+        *ptr = NULL;
+    }
 }
 
 /*
@@ -282,103 +282,103 @@ extern void eFreeIndirect(void **ptr)
  */
 extern int struppercmp (const char *s1, const char *s2)
 {
-	int result;
-	do
-	{
-		result = toupper ((int) *s1) - toupper ((int) *s2);
-	} while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
-	return result;
+    int result;
+    do
+    {
+        result = toupper ((int) *s1) - toupper ((int) *s2);
+    } while (result == 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+    return result;
 }
 
 extern int strnuppercmp (const char *s1, const char *s2, size_t n)
 {
-	int result;
-	do
-	{
-		result = toupper ((int) *s1) - toupper ((int) *s2);
-	} while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
-	return result;
+    int result;
+    do
+    {
+        result = toupper ((int) *s1) - toupper ((int) *s2);
+    } while (result == 0  &&  --n > 0  &&  *s1++ != '\0'  &&  *s2++ != '\0');
+    return result;
 }
 
 #ifndef HAVE_STRSTR
 extern char* strstr (const char *str, const char *substr)
 {
-	const size_t length = strlen (substr);
-	const char *p;
+    const size_t length = strlen (substr);
+    const char *p;
 
-	for (p = str  ;  *p != '\0'  ;  ++p)
-		if (strncmp (p, substr, length) == 0)
-			return (char*) p;
-	return NULL;
+    for (p = str  ;  *p != '\0'  ;  ++p)
+        if (strncmp (p, substr, length) == 0)
+            return (char*) p;
+    return NULL;
 }
 #endif
 
 extern char* strrstr (const char *str, const char *substr)
 {
-	const size_t length = strlen (substr);
-	const char *p;
+    const size_t length = strlen (substr);
+    const char *p;
 
-	for (p = str + strlen(str) - length  ;  p >= str  ;  --p)
-		if (strncmp (p, substr, length) == 0)
-			return (char*) p;
-	return NULL;
+    for (p = str + strlen(str) - length  ;  p >= str  ;  --p)
+        if (strncmp (p, substr, length) == 0)
+            return (char*) p;
+    return NULL;
 }
 
 extern char* eStrdup (const char* str)
 {
-	char* result = xMalloc (strlen (str) + 1, char);
-	strcpy (result, str);
-	return result;
+    char* result = xMalloc (strlen (str) + 1, char);
+    strcpy (result, str);
+    return result;
 }
 
 extern char* eStrndup (const char* str, size_t len)
 {
-	char* result = xMalloc (len + 1, char);
-	strncpy (result, str, len);
-	result [len] = '\0';
-	return result;
+    char* result = xMalloc (len + 1, char);
+    strncpy (result, str, len);
+    result [len] = '\0';
+    return result;
 }
 
 extern void toLowerString (char* str)
 {
-	while (*str != '\0')
-	{
-		*str = tolower ((int) *str);
-		++str;
-	}
+    while (*str != '\0')
+    {
+        *str = tolower ((int) *str);
+        ++str;
+    }
 }
 
 extern void toUpperString (char* str)
 {
-	while (*str != '\0')
-	{
-		*str = toupper ((int) *str);
-		++str;
-	}
+    while (*str != '\0')
+    {
+        *str = toupper ((int) *str);
+        ++str;
+    }
 }
 
 /*  Newly allocated string containing lower case conversion of a string.
  */
 extern char* newLowerString (const char* str)
 {
-	char* const result = xMalloc (strlen (str) + 1, char);
-	int i = 0;
-	do
-		result [i] = tolower ((int) str [i]);
-	while (str [i++] != '\0');
-	return result;
+    char* const result = xMalloc (strlen (str) + 1, char);
+    int i = 0;
+    do
+        result [i] = tolower ((int) str [i]);
+    while (str [i++] != '\0');
+    return result;
 }
 
 /*  Newly allocated string containing upper case conversion of a string.
  */
 extern char* newUpperString (const char* str)
 {
-	char* const result = xMalloc (strlen (str) + 1, char);
-	int i = 0;
-	do
-		result [i] = toupper ((int) str [i]);
-	while (str [i++] != '\0');
-	return result;
+    char* const result = xMalloc (strlen (str) + 1, char);
+    int i = 0;
+    do
+        result [i] = toupper ((int) str [i]);
+    while (str [i++] != '\0');
+    return result;
 }
 
 /* Safe wrapper for strtoul
@@ -388,11 +388,11 @@ extern char* newUpperString (const char* str)
  */
 extern bool strToULong(const char *const str, int base, unsigned long *value)
 {
-	char *endptr;
+    char *endptr;
 
-	errno = 0;
-	*value = strtoul (str, &endptr, base);
-	return *endptr == '\0' && str != endptr && errno == 0;
+    errno = 0;
+    *value = strtoul (str, &endptr, base);
+    return *endptr == '\0' && str != endptr && errno == 0;
 }
 
 /* Safe wrapper for strtol/atol
@@ -402,33 +402,33 @@ extern bool strToULong(const char *const str, int base, unsigned long *value)
  */
 extern bool strToLong(const char *const str, int base, long *value)
 {
-	char *endptr;
+    char *endptr;
 
-	errno = 0;
-	*value = strtol (str, &endptr, base);
-	return *endptr == '\0' && str != endptr && errno == 0;
+    errno = 0;
+    *value = strtol (str, &endptr, base);
+    return *endptr == '\0' && str != endptr && errno == 0;
 }
 
 extern bool strToUInt(const char *const str, int base, unsigned int *value)
 {
-	unsigned long ulong_value;
+    unsigned long ulong_value;
 
-	if(!strToULong(str, base, &ulong_value) || ulong_value > UINT_MAX)
-		return false;
+    if(!strToULong(str, base, &ulong_value) || ulong_value > UINT_MAX)
+        return false;
 
-	*value = (unsigned int) ulong_value;
-	return true;
+    *value = (unsigned int) ulong_value;
+    return true;
 }
 
 extern bool strToInt(const char *const str, int base, int *value)
 {
-	long long_value;
+    long long_value;
 
-	if(!strToLong(str, base, &long_value) || long_value > INT_MAX || long_value < INT_MIN)
-		return false;
+    if(!strToLong(str, base, &long_value) || long_value > INT_MAX || long_value < INT_MIN)
+        return false;
 
-	*value = (int) long_value;
-	return true;
+    *value = (int) long_value;
+    return true;
 }
 
 /*
@@ -437,96 +437,96 @@ extern bool strToInt(const char *const str, int base, int *value)
 
 extern void setCurrentDirectory (void) /* TODO */
 {
-	char* buf;
-	if (CurrentDirectory == NULL)
-		CurrentDirectory = xMalloc ((size_t) (PATH_MAX + 1), char);
-	buf = getcwd (CurrentDirectory, PATH_MAX);
-	if (buf == NULL)
-		perror ("");
-	if (! isPathSeparator (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1]))
-	{
-		sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
-				OUTPUT_PATH_SEPARATOR);
-	}
-	canonicalizePath (CurrentDirectory);
+    char* buf;
+    if (CurrentDirectory == NULL)
+        CurrentDirectory = xMalloc ((size_t) (PATH_MAX + 1), char);
+    buf = getcwd (CurrentDirectory, PATH_MAX);
+    if (buf == NULL)
+        perror ("");
+    if (! isPathSeparator (CurrentDirectory [strlen (CurrentDirectory) - (size_t) 1]))
+    {
+        sprintf (CurrentDirectory + strlen (CurrentDirectory), "%c",
+                 OUTPUT_PATH_SEPARATOR);
+    }
+    canonicalizePath (CurrentDirectory);
 }
 
 /* For caching of stat() calls */
 extern fileStatus *eStat (const char *const fileName)
 {
-	struct stat status;
-	static fileStatus file;
-	if (file.name == NULL  ||  strcmp (fileName, file.name) != 0)
-	{
-		eStatFree (&file);
-		file.name = eStrdup (fileName);
-		if (lstat (file.name, &status) != 0)
-			file.exists = false;
-		else
-		{
-			file.isSymbolicLink = (bool) S_ISLNK (status.st_mode);
-			if (file.isSymbolicLink  &&  stat (file.name, &status) != 0)
-				file.exists = false;
-			else
-			{
-				file.exists = true;
-				file.isDirectory = (bool) S_ISDIR (status.st_mode);
-				file.isNormalFile = (bool) (S_ISREG (status.st_mode));
-				file.isExecutable = (bool) ((status.st_mode &
-					(S_IXUSR | S_IXGRP | S_IXOTH)) != 0);
-				file.isSetuid = (bool) ((status.st_mode & S_ISUID) != 0);
-				file.isSetgid = (bool) ((status.st_mode & S_ISGID) != 0);
-				file.size = status.st_size;
-			}
-		}
-	}
-	return &file;
+    struct stat status;
+    static fileStatus file;
+    if (file.name == NULL  ||  strcmp (fileName, file.name) != 0)
+    {
+        eStatFree (&file);
+        file.name = eStrdup (fileName);
+        if (lstat (file.name, &status) != 0)
+            file.exists = false;
+        else
+        {
+            file.isSymbolicLink = (bool) S_ISLNK (status.st_mode);
+            if (file.isSymbolicLink  &&  stat (file.name, &status) != 0)
+                file.exists = false;
+            else
+            {
+                file.exists = true;
+                file.isDirectory = (bool) S_ISDIR (status.st_mode);
+                file.isNormalFile = (bool) (S_ISREG (status.st_mode));
+                file.isExecutable = (bool) ((status.st_mode &
+                                             (S_IXUSR | S_IXGRP | S_IXOTH)) != 0);
+                file.isSetuid = (bool) ((status.st_mode & S_ISUID) != 0);
+                file.isSetgid = (bool) ((status.st_mode & S_ISGID) != 0);
+                file.size = status.st_size;
+            }
+        }
+    }
+    return &file;
 }
 
 extern void eStatFree (fileStatus *status)
 {
-	if (status->name != NULL)
-	{
-		eFree (status->name);
-		status->name = NULL;
-	}
+    if (status->name != NULL)
+    {
+        eFree (status->name);
+        status->name = NULL;
+    }
 }
 
 extern bool doesFileExist (const char *const fileName)
 {
-	fileStatus *status = eStat (fileName);
-	return status->exists;
+    fileStatus *status = eStat (fileName);
+    return status->exists;
 }
 
 extern bool doesExecutableExist (const char *const fileName)
 {
-	fileStatus *status = eStat (fileName);
-	return status->exists && status->isExecutable;
+    fileStatus *status = eStat (fileName);
+    return status->exists && status->isExecutable;
 }
 
 extern bool isRecursiveLink (const char* const dirName)
 {
-	bool result = false;
-	fileStatus *status = eStat (dirName);
-	if (status->isSymbolicLink)
-	{
-		char* const path = absoluteFilename (dirName);
-		while (isPathSeparator (path [strlen (path) - 1]))
-			path [strlen (path) - 1] = '\0';
-		while (! result  &&  strlen (path) > (size_t) 1)
-		{
-			char *const separator = strRSeparator (path);
-			if (separator == NULL)
-				break;
-			else if (separator == path)  /* backed up to root directory */
-				*(separator + 1) = '\0';
-			else
-				*separator = '\0';
-			result = isSameFile (path, dirName);
-		}
-		eFree (path);
-	}
-	return result;
+    bool result = false;
+    fileStatus *status = eStat (dirName);
+    if (status->isSymbolicLink)
+    {
+        char* const path = absoluteFilename (dirName);
+        while (isPathSeparator (path [strlen (path) - 1]))
+            path [strlen (path) - 1] = '\0';
+        while (! result  &&  strlen (path) > (size_t) 1)
+        {
+            char *const separator = strRSeparator (path);
+            if (separator == NULL)
+                break;
+            else if (separator == path)  /* backed up to root directory */
+                *(separator + 1) = '\0';
+            else
+                *separator = '\0';
+            result = isSameFile (path, dirName);
+        }
+        eFree (path);
+    }
+    return result;
 }
 
 /*
@@ -535,198 +535,198 @@ extern bool isRecursiveLink (const char* const dirName)
 
 static bool isPathSeparator (const int c)
 {
-	bool result;
+    bool result;
 #if defined (MSDOS_STYLE_PATH)
-	result = (bool) (strchr (PathDelimiters, c) != NULL);
+    result = (bool) (strchr (PathDelimiters, c) != NULL);
 #else
-	result = (bool) (c == PATH_SEPARATOR);
+    result = (bool) (c == PATH_SEPARATOR);
 #endif
-	return result;
+    return result;
 }
 
 static char *strSeparator (const char *s)
 {
 #if defined (MSDOS_STYLE_PATH)
-	return strpbrk (s, PathDelimiters);
+    return strpbrk (s, PathDelimiters);
 #else
-	return strchr (s, PATH_SEPARATOR);
+    return strchr (s, PATH_SEPARATOR);
 #endif
 }
 
 static char *strRSeparator (const char *s)
 {
 #if defined (MSDOS_STYLE_PATH)
-	const char *last = NULL;
+    const char *last = NULL;
 
-	while (( s = strSeparator (s) ))
-	{
-		last = s;
-		s++;
-	}
-	return (char*) last;
+    while (( s = strSeparator (s) ))
+    {
+        last = s;
+        s++;
+    }
+    return (char*) last;
 #else
-	return strrchr (s, PATH_SEPARATOR);
+    return strrchr (s, PATH_SEPARATOR);
 #endif
 }
 
 static void canonicalizePath (char *const path CTAGS_ATTR_UNUSED)
 {
 # if defined (MSDOS_STYLE_PATH)
-	char *p;
-	for (p = path  ;  *p != '\0'  ;  ++p)
-		if (isPathSeparator (*p)  &&  *p != ':')
-			*p = OUTPUT_PATH_SEPARATOR;
+    char *p;
+    for (p = path  ;  *p != '\0'  ;  ++p)
+        if (isPathSeparator (*p)  &&  *p != ':')
+            *p = OUTPUT_PATH_SEPARATOR;
 # endif
 }
 
 extern bool isSameFile (const char *const name1, const char *const name2)
 {
-	bool result = false;
+    bool result = false;
 #if defined (HAVE_STAT_ST_INO)
-	struct stat stat1, stat2;
+    struct stat stat1, stat2;
 
-	if (stat (name1, &stat1) == 0  &&  stat (name2, &stat2) == 0)
-		result = (bool) (stat1.st_ino == stat2.st_ino);
+    if (stat (name1, &stat1) == 0  &&  stat (name2, &stat2) == 0)
+        result = (bool) (stat1.st_ino == stat2.st_ino);
 #else
-	{
-		char *const n1 = absoluteFilename (name1);
-		char *const n2 = absoluteFilename (name2);
-		canonicalizePath (n1);
-		canonicalizePath (n2);
+    {
+        char *const n1 = absoluteFilename (name1);
+        char *const n2 = absoluteFilename (name2);
+        canonicalizePath (n1);
+        canonicalizePath (n2);
 # if defined (CASE_INSENSITIVE_FILENAMES)
-		result = (bool) (strcasecmp (n1, n2) == 0);
+        result = (bool) (strcasecmp (n1, n2) == 0);
 # else
-		result = (bool) (strcmp (n1, n2) == 0);
+        result = (bool) (strcmp (n1, n2) == 0);
 # endif
-		eFree (n1);
-		eFree (n2);
-	}
+        eFree (n1);
+        eFree (n2);
+    }
 #endif
-	return result;
+    return result;
 }
 
 extern const char *baseFilename (const char *const filePath)
 {
 #if defined (MSDOS_STYLE_PATH)
-	const char *tail = NULL;
-	unsigned int i;
+    const char *tail = NULL;
+    unsigned int i;
 
-	/*  Find whichever of the path delimiters is last.
-	 */
-	for (i = 0  ;  i < strlen (PathDelimiters)  ;  ++i)
-	{
+    /*  Find whichever of the path delimiters is last.
+     */
+    for (i = 0  ;  i < strlen (PathDelimiters)  ;  ++i)
+    {
 # ifdef HAVE_MBLEN
-		const char *p;
-		int ml;
+        const char *p;
+        int ml;
 
-		/* Some DBCS has letter contains 0x5C in trailing byte.
-		 * So skip to the trailing byte. */
-		for (p = filePath  ;  *p != '\0'  ;  ++p)
-		{
-			ml = mblen(p, MB_LEN_MAX);
-			if (ml > 1)
-				p += ml - 1;
-			else if (*p == PathDelimiters [i] && p > tail)
-				tail = p;
-		}
+        /* Some DBCS has letter contains 0x5C in trailing byte.
+         * So skip to the trailing byte. */
+        for (p = filePath  ;  *p != '\0'  ;  ++p)
+        {
+            ml = mblen(p, MB_LEN_MAX);
+            if (ml > 1)
+                p += ml - 1;
+            else if (*p == PathDelimiters [i] && p > tail)
+                tail = p;
+        }
 # else
-		const char *sep = strrchr (filePath, PathDelimiters [i]);
+        const char *sep = strrchr (filePath, PathDelimiters [i]);
 
-		if (sep > tail)
-			tail = sep;
+        if (sep > tail)
+            tail = sep;
 # endif
-	}
+    }
 #else
-	const char *tail = strRSeparator (filePath);
+    const char *tail = strRSeparator (filePath);
 #endif
-	if (tail == NULL)
-		tail = filePath;
-	else
-		++tail;  /* step past last delimiter */
+    if (tail == NULL)
+        tail = filePath;
+    else
+        ++tail;  /* step past last delimiter */
 
-	return tail;
+    return tail;
 }
 
 extern const char *fileExtension (const char *const fileName)
 {
-	const char *extension;
-	const char *pDelimiter;
-	const char *const base = baseFilename (fileName);
+    const char *extension;
+    const char *pDelimiter;
+    const char *const base = baseFilename (fileName);
 
-	pDelimiter = strrchr (base, '.');
+    pDelimiter = strrchr (base, '.');
 
-	if (pDelimiter == NULL)
-		extension = "";
-	else
-		extension = pDelimiter + 1;  /* skip to first char of extension */
+    if (pDelimiter == NULL)
+        extension = "";
+    else
+        extension = pDelimiter + 1;  /* skip to first char of extension */
 
-	return extension;
+    return extension;
 }
 
 extern char* baseFilenameSansExtensionNew (const char *const fileName,
-					   const char *const templateExt)
+        const char *const templateExt)
 {
-	const char *pDelimiter;
-	const char *const base = baseFilename (fileName);
-	char* shorten_base;
+    const char *pDelimiter;
+    const char *const base = baseFilename (fileName);
+    char* shorten_base;
 
-	pDelimiter = strrchr (base, templateExt[0]);
+    pDelimiter = strrchr (base, templateExt[0]);
 
-	if (pDelimiter && (strcmp (pDelimiter, templateExt) == 0))
-	{
-		shorten_base = eStrndup (base, pDelimiter - base);
-		return shorten_base;
-	}
-	else
-		return NULL;
+    if (pDelimiter && (strcmp (pDelimiter, templateExt) == 0))
+    {
+        shorten_base = eStrndup (base, pDelimiter - base);
+        return shorten_base;
+    }
+    else
+        return NULL;
 }
 
 extern bool isAbsolutePath (const char *const path)
 {
-	bool result;
+    bool result;
 #if defined (MSDOS_STYLE_PATH)
-	if (isPathSeparator (path [0]))
-		result = true;
-	else if (isalpha (path [0])  &&  path [1] == ':')
-	{
-		if (isPathSeparator (path [2]))
-			result = true;
-		else
-		{
-			result = false;
-			/*  We don't support non-absolute file names with a drive
-			 *  letter, like `d:NAME' (it's too much hassle).
-			 */
-			error (FATAL,
-				"%s: relative file names with drive letters not supported",
-				path);
-		}
-	}
-	else
-		result = false;
+    if (isPathSeparator (path [0]))
+        result = true;
+    else if (isalpha (path [0])  &&  path [1] == ':')
+    {
+        if (isPathSeparator (path [2]))
+            result = true;
+        else
+        {
+            result = false;
+            /*  We don't support non-absolute file names with a drive
+             *  letter, like `d:NAME' (it's too much hassle).
+             */
+            error (FATAL,
+                   "%s: relative file names with drive letters not supported",
+                   path);
+        }
+    }
+    else
+        result = false;
 #else
-	result = isPathSeparator (path [0]);
+    result = isPathSeparator (path [0]);
 #endif
-	return result;
+    return result;
 }
 
 extern char *combinePathAndFile (
-	const char *const path, const char *const file)
+    const char *const path, const char *const file)
 {
-	vString *const filePath = vStringNew ();
-	size_t len = strlen (path);
+    vString *const filePath = vStringNew ();
+    size_t len = strlen (path);
 
-	if (len)
-	{
-		const int lastChar = path [len - 1];
-		bool terminated = isPathSeparator (lastChar);
-		vStringCopyS (filePath, path);
-		if (! terminated)
-			vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
-	}
+    if (len)
+    {
+        const int lastChar = path [len - 1];
+        bool terminated = isPathSeparator (lastChar);
+        vStringCopyS (filePath, path);
+        if (! terminated)
+            vStringPut (filePath, OUTPUT_PATH_SEPARATOR);
+    }
 
-	vStringCatS (filePath, file);
-	return vStringDeleteUnwrap (filePath);
+    vStringCatS (filePath, file);
+    return vStringDeleteUnwrap (filePath);
 }
 
 /* Return a newly-allocated string whose contents concatenate those of
@@ -735,15 +735,15 @@ extern char *combinePathAndFile (
  */
 static char* concat (const char *s1, const char *s2, const char *s3)
 {
-	int len1 = strlen (s1), len2 = strlen (s2), len3 = strlen (s3);
-	char *result = xMalloc (len1 + len2 + len3 + 1, char);
+    int len1 = strlen (s1), len2 = strlen (s2), len3 = strlen (s3);
+    char *result = xMalloc (len1 + len2 + len3 + 1, char);
 
-	strcpy (result, s1);
-	strcpy (result + len1, s2);
-	strcpy (result + len1 + len2, s3);
-	result [len1 + len2 + len3] = '\0';
+    strcpy (result, s1);
+    strcpy (result + len1, s2);
+    strcpy (result + len1 + len2, s3);
+    result [len1 + len2 + len3] = '\0';
 
-	return result;
+    return result;
 }
 
 /* Return a newly allocated string containing the absolute file name of FILE
@@ -752,78 +752,78 @@ static char* concat (const char *s1, const char *s2, const char *s3)
  */
 extern char* absoluteFilename (const char *file)
 {
-	char *slashp, *cp;
-	char *res = NULL;
-	if (isAbsolutePath (file))
-	{
+    char *slashp, *cp;
+    char *res = NULL;
+    if (isAbsolutePath (file))
+    {
 #ifdef MSDOS_STYLE_PATH
-		if (file [1] == ':')
-			res = eStrdup (file);
-		else
-		{
-			char drive [3];
-			sprintf (drive, "%c:", currentdrive ());
-			res = concat (drive, file, "");
-		}
+        if (file [1] == ':')
+            res = eStrdup (file);
+        else
+        {
+            char drive [3];
+            sprintf (drive, "%c:", currentdrive ());
+            res = concat (drive, file, "");
+        }
 #else
-		res = eStrdup (file);
+        res = eStrdup (file);
 #endif
-	}
-	else
-		res = concat (CurrentDirectory, file, "");
+    }
+    else
+        res = concat (CurrentDirectory, file, "");
 
-	/* Delete the "/dirname/.." and "/." substrings. */
-	slashp = strSeparator (res);
-	while (slashp != NULL  &&  slashp [0] != '\0')
-	{
-		if (slashp[1] == '.')
-		{
-			if (slashp [2] == '.' &&
-				(isPathSeparator (slashp [3]) || slashp [3] == '\0'))
-			{
-				cp = slashp;
-				do
-					cp--;
-				while (cp >= res  &&  ! isAbsolutePath (cp));
-				if (cp < res)
-					cp = slashp;/* the absolute name begins with "/.." */
+    /* Delete the "/dirname/.." and "/." substrings. */
+    slashp = strSeparator (res);
+    while (slashp != NULL  &&  slashp [0] != '\0')
+    {
+        if (slashp[1] == '.')
+        {
+            if (slashp [2] == '.' &&
+                    (isPathSeparator (slashp [3]) || slashp [3] == '\0'))
+            {
+                cp = slashp;
+                do
+                    cp--;
+                while (cp >= res  &&  ! isAbsolutePath (cp));
+                if (cp < res)
+                    cp = slashp;/* the absolute name begins with "/.." */
 #ifdef MSDOS_STYLE_PATH
-				/* Under MSDOS and NT we get `d:/NAME' as absolute file name,
-				 * so the user could say `d:/../NAME'. We silently treat this
-				 * as `d:/NAME'.
-				 */
-				else if (!isPathSeparator (cp [0]))
-					cp = slashp;
+                /* Under MSDOS and NT we get `d:/NAME' as absolute file name,
+                 * so the user could say `d:/../NAME'. We silently treat this
+                 * as `d:/NAME'.
+                 */
+                else if (!isPathSeparator (cp [0]))
+                    cp = slashp;
 #endif
-				memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
-				slashp = cp;
-				continue;
-			}
-			else if (isPathSeparator (slashp [2])  ||  slashp [2] == '\0')
-			{
-				memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
-				continue;
-			}
-		}
-		slashp = strSeparator (slashp + 1);
-	}
+                memmove (cp, slashp + 3, strlen (slashp + 3) + 1);
+                slashp = cp;
+                continue;
+            }
+            else if (isPathSeparator (slashp [2])  ||  slashp [2] == '\0')
+            {
+                memmove (slashp, slashp + 2, strlen (slashp + 2) + 1);
+                continue;
+            }
+        }
+        slashp = strSeparator (slashp + 1);
+    }
 
-	if (res [0] == '\0')
-	{
-		const char root [] = {OUTPUT_PATH_SEPARATOR, '\0'};
-		eFree (res);
-		res = eStrdup (root);
-	}
-	else
-	{
+    if (res [0] == '\0')
+    {
+        const char root [] = {OUTPUT_PATH_SEPARATOR, '\0'};
+        eFree (res);
+        res = eStrdup (root);
+    }
+    else
+    {
 #ifdef MSDOS_STYLE_PATH
-		/* Canonicalize drive letter case. */
-		if (res [1] == ':'  &&  islower (res [0]))
-			res [0] = toupper (res [0]);
+        /* Canonicalize drive letter case. */
+        if (res [1] == ':'  &&  islower (res [0]))
+            res [0] = toupper (res [0]);
 #endif
-	}
-	canonicalizePath (res);
-	return res;
+    }
+    canonicalizePath (res);
+    return res;
 }
 
 /* Return a newly allocated string containing the absolute file name of dir
@@ -832,19 +832,19 @@ extern char* absoluteFilename (const char *file)
  */
 extern char* absoluteDirname (char *file)
 {
-	char *slashp, *res;
-	char save;
-	slashp = strRSeparator (file);
-	if (slashp == NULL)
-		res = eStrdup (CurrentDirectory);
-	else
-	{
-		save = slashp [1];
-		slashp [1] = '\0';
-		res = absoluteFilename (file);
-		slashp [1] = save;
-	}
-	return res;
+    char *slashp, *res;
+    char save;
+    slashp = strRSeparator (file);
+    if (slashp == NULL)
+        res = eStrdup (CurrentDirectory);
+    else
+    {
+        save = slashp [1];
+        slashp [1] = '\0';
+        res = absoluteFilename (file);
+        slashp [1] = save;
+    }
+    return res;
 }
 
 /* Return a newly allocated string containing the file name of FILE relative
@@ -853,107 +853,107 @@ extern char* absoluteDirname (char *file)
  */
 extern char* relativeFilename (const char *file, const char *dir)
 {
-	const char *fp, *dp;
-	char *absdir, *res;
-	int i;
+    const char *fp, *dp;
+    char *absdir, *res;
+    int i;
 
-	/* Find the common root of file and dir (with a trailing slash). */
-	absdir = absoluteFilename (file);
-	fp = absdir;
-	dp = dir;
-	while (fnmChEq (*fp++, *dp++))
-		continue;
-	fp--;
-	dp--;  /* back to the first differing char */
-	do
-	{  /* look at the equal chars until path sep */
-		if (fp == absdir)
-			return absdir;  /* first char differs, give up */
-		fp--;
-		dp--;
-	} while (!isPathSeparator (*fp));
+    /* Find the common root of file and dir (with a trailing slash). */
+    absdir = absoluteFilename (file);
+    fp = absdir;
+    dp = dir;
+    while (fnmChEq (*fp++, *dp++))
+        continue;
+    fp--;
+    dp--;  /* back to the first differing char */
+    do
+    {   /* look at the equal chars until path sep */
+        if (fp == absdir)
+            return absdir;  /* first char differs, give up */
+        fp--;
+        dp--;
+    } while (!isPathSeparator (*fp));
 
-	/* Build a sequence of "../" strings for the resulting relative file name.
-	 */
-	i = 0;
-	while ((dp = strSeparator (dp + 1)) != NULL)
-		i += 1;
-	res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
-	res [0] = '\0';
-	while (i-- > 0)
-	{
-		const char parent [] = {'.', '.', OUTPUT_PATH_SEPARATOR, '\0'};
-		strcat (res, parent);
-	}
+    /* Build a sequence of "../" strings for the resulting relative file name.
+     */
+    i = 0;
+    while ((dp = strSeparator (dp + 1)) != NULL)
+        i += 1;
+    res = xMalloc (3 * i + strlen (fp + 1) + 1, char);
+    res [0] = '\0';
+    while (i-- > 0)
+    {
+        const char parent [] = {'.', '.', OUTPUT_PATH_SEPARATOR, '\0'};
+        strcat (res, parent);
+    }
 
-	/* Add the file name relative to the common root of file and dir. */
-	strcat (res, fp + 1);
-	eFree (absdir);
+    /* Add the file name relative to the common root of file and dir. */
+    strcat (res, fp + 1);
+    eFree (absdir);
 
-	return res;
+    return res;
 }
 
 extern MIO *tempFile (const char *const mode, char **const pName)
 {
-	char *name;
-	FILE *fp;
-	MIO *mio;
-	int fd;
+    char *name;
+    FILE *fp;
+    MIO *mio;
+    int fd;
 #if defined(HAVE_MKSTEMP)
-	const char *const pattern = "tags.XXXXXX";
-	const char *tmpdir = NULL;
-	fileStatus *file = eStat (ExecutableProgram);
+    const char *const pattern = "tags.XXXXXX";
+    const char *tmpdir = NULL;
+    fileStatus *file = eStat (ExecutableProgram);
 # ifdef WIN32
-	tmpdir = getenv ("TMP");
+    tmpdir = getenv ("TMP");
 # else
-	if (! file->isSetuid)
-		tmpdir = getenv ("TMPDIR");
+    if (! file->isSetuid)
+        tmpdir = getenv ("TMPDIR");
 # endif
-	if (tmpdir == NULL)
-		tmpdir = TMPDIR;
-	name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
-	sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
-	fd = mkstemp (name);
+    if (tmpdir == NULL)
+        tmpdir = TMPDIR;
+    name = xMalloc (strlen (tmpdir) + 1 + strlen (pattern) + 1, char);
+    sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
+    fd = mkstemp (name);
 # ifdef WIN32
-	if (fd == -1)
-	{
-		/* mkstemp() sometimes fails with unknown reasons.
-		 * Retry a few times. */
-		int i;
-		for (i = 0; i < 5 && fd == -1; i++)
-		{
-			sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
-			fd = mkstemp (name);
-		}
-	}
+    if (fd == -1)
+    {
+        /* mkstemp() sometimes fails with unknown reasons.
+         * Retry a few times. */
+        int i;
+        for (i = 0; i < 5 && fd == -1; i++)
+        {
+            sprintf (name, "%s%c%s", tmpdir, OUTPUT_PATH_SEPARATOR, pattern);
+            fd = mkstemp (name);
+        }
+    }
 # endif
-	eStatFree (file);
+    eStatFree (file);
 #elif defined(HAVE_TEMPNAM)
-	const char *tmpdir = NULL;
+    const char *tmpdir = NULL;
 # ifdef WIN32
-	tmpdir = getenv ("TMP");
+    tmpdir = getenv ("TMP");
 # endif
-	if (tmpdir == NULL)
-		tmpdir = TMPDIR;
-	name = tempnam (tmpdir, "tags");
-	if (name == NULL)
-		error (FATAL | PERROR, "cannot allocate temporary file name");
-	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+    if (tmpdir == NULL)
+        tmpdir = TMPDIR;
+    name = tempnam (tmpdir, "tags");
+    if (name == NULL)
+        error (FATAL | PERROR, "cannot allocate temporary file name");
+    fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 #else
-	name = xMalloc (L_tmpnam, char);
-	if (tmpnam (name) != name)
-		error (FATAL | PERROR, "cannot assign temporary file name");
-	fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
+    name = xMalloc (L_tmpnam, char);
+    if (tmpnam (name) != name)
+        error (FATAL | PERROR, "cannot assign temporary file name");
+    fd = open (name, O_RDWR | O_CREAT | O_EXCL, S_IRUSR | S_IWUSR);
 #endif
-	if (fd == -1)
-		error (FATAL | PERROR, "cannot open temporary file: %s", name);
-	fp = fdopen (fd, mode);
-	if (fp == NULL)
-		error (FATAL | PERROR, "cannot open temporary file");
-	mio = mio_new_fp (fp, fclose);
-	DebugStatement (
-		debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
-	Assert (*pName == NULL);
-	*pName = name;
-	return mio;
+    if (fd == -1)
+        error (FATAL | PERROR, "cannot open temporary file: %s", name);
+    fp = fdopen (fd, mode);
+    if (fp == NULL)
+        error (FATAL | PERROR, "cannot open temporary file");
+    mio = mio_new_fp (fp, fclose);
+    DebugStatement (
+        debugPrintf (DEBUG_STATUS, "opened temporary file %s\n", name); )
+    Assert (*pName == NULL);
+    *pName = name;
+    return mio;
 }

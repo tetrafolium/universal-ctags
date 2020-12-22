@@ -21,62 +21,62 @@
 */
 
 struct sObjPool {
-	ptrArray *array;
-	unsigned int size;
-	objPoolCreateFunc createFunc;
-	objPoolDeleteFunc deleteFunc;
-	objPoolClearFunc clearFunc;
-	void *createArg;
+    ptrArray *array;
+    unsigned int size;
+    objPoolCreateFunc createFunc;
+    objPoolDeleteFunc deleteFunc;
+    objPoolClearFunc clearFunc;
+    void *createArg;
 };
 
 /*
 *   FUNCTION DEFINITIONS
 */
 extern objPool *objPoolNew (unsigned int size,
-	objPoolCreateFunc createFunc, objPoolDeleteFunc deleteFunc, objPoolClearFunc clearFunc,
-	void *createArg)
+                            objPoolCreateFunc createFunc, objPoolDeleteFunc deleteFunc, objPoolClearFunc clearFunc,
+                            void *createArg)
 {
-	objPool* const result = xMalloc (1, objPool);
-	result->array = ptrArrayNew (deleteFunc);
-	result->size = size;
-	result->createFunc = createFunc;
-	result->deleteFunc = deleteFunc;
-	result->clearFunc = clearFunc;
-	result->createArg = createArg;
-	return result;
+    objPool* const result = xMalloc (1, objPool);
+    result->array = ptrArrayNew (deleteFunc);
+    result->size = size;
+    result->createFunc = createFunc;
+    result->deleteFunc = deleteFunc;
+    result->clearFunc = clearFunc;
+    result->createArg = createArg;
+    return result;
 }
 
 extern void objPoolDelete (objPool *pool)
 {
-	ptrArrayDelete (pool->array);
-	eFree (pool);
+    ptrArrayDelete (pool->array);
+    eFree (pool);
 }
 
 extern void *objPoolGet (objPool *pool)
 {
-	void *obj;
+    void *obj;
 
-	if (ptrArrayCount (pool->array) > 0)
-	{
-		obj = ptrArrayLast (pool->array);
-		ptrArrayRemoveLast (pool->array);
-	}
-	else
-		obj = pool->createFunc (pool->createArg);
+    if (ptrArrayCount (pool->array) > 0)
+    {
+        obj = ptrArrayLast (pool->array);
+        ptrArrayRemoveLast (pool->array);
+    }
+    else
+        obj = pool->createFunc (pool->createArg);
 
-	if (pool->clearFunc)
-		pool->clearFunc (obj);
+    if (pool->clearFunc)
+        pool->clearFunc (obj);
 
-	return obj;
+    return obj;
 }
 
 extern void objPoolPut (objPool *pool, void *obj)
 {
-	if (obj == NULL)
-		return;
+    if (obj == NULL)
+        return;
 
-	if (ptrArrayCount (pool->array) < pool->size)
-		ptrArrayAdd (pool->array, obj);
-	else
-		pool->deleteFunc (obj);
+    if (ptrArrayCount (pool->array) < pool->size)
+        ptrArrayAdd (pool->array, obj);
+    else
+        pool->deleteFunc (obj);
 }

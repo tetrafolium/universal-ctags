@@ -32,7 +32,7 @@
 #  define Assert(c) do {} while(0)
 #  define AssertNotReached() do {} while(0)
 # else
-   /* We expect cc supports c99 standard. */
+/* We expect cc supports c99 standard. */
 #  if defined __STDC_VERSION__ && __STDC_VERSION__ >= 199901L
 #   define ASSERT_FUNCTION __func__
 #  else
@@ -58,12 +58,12 @@
 /*  Defines the debugging levels.
  */
 enum eDebugLevels {
-	DEBUG_READ   = 0x01,  /* echo raw (filtered) characters */
-	DEBUG_PARSE  = 0x02,  /* echo parsing results */
-	DEBUG_STATUS = 0x04,  /* echo file status information */
-	DEBUG_OPTION = 0x08,  /* echo option parsing */
-	DEBUG_CPP    = 0x10,  /* echo characters out of pre-processor */
-	DEBUG_RAW    = 0x20   /* echo raw (filtered) characters */
+    DEBUG_READ   = 0x01,  /* echo raw (filtered) characters */
+    DEBUG_PARSE  = 0x02,  /* echo parsing results */
+    DEBUG_STATUS = 0x04,  /* echo file status information */
+    DEBUG_OPTION = 0x08,  /* echo option parsing */
+    DEBUG_CPP    = 0x10,  /* echo characters out of pre-processor */
+    DEBUG_RAW    = 0x20   /* echo raw (filtered) characters */
 };
 
 /*

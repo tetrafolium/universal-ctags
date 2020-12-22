@@ -24,15 +24,15 @@
 *   DATA DECLARATIONS
 */
 struct sParameterHandlerTable {
-	const char *name;
-	const char *desc;
-	void  (* handleParameter) (langType lang, const char *name, const char *arg);
+    const char *name;
+    const char *desc;
+    void  (* handleParameter) (langType lang, const char *name, const char *arg);
 };
 
 /*
 *   FUNCTION PROTOTYPES
 */
 extern bool paramParserBool (const char *value, bool fallback,
-							 const char *errWhat, const char *errCategory);
+                             const char *errWhat, const char *errCategory);
 
 #endif	/* CTAGS_MAIN_PARAM_H */

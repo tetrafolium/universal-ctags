@@ -1,7 +1,7 @@
 #define Z
 namespace X {
-  extern class Y {
+extern class Y {
     int m;
-  } v;
+} v;
 }
 #undef Z

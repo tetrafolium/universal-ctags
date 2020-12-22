@@ -31,11 +31,11 @@ lang *
 
 typedef struct sIniconfSubparser iniconfSubparser;
 struct sIniconfSubparser {
-	subparser subparser;
+    subparser subparser;
 
-	bool  (* probeLanguage)  (const char *section, const char *key, const char *value);
-	void  (* newDataNotify)  (iniconfSubparser *s,
-							  const char *section, const char *key, const char *value);
+    bool  (* probeLanguage)  (const char *section, const char *key, const char *value);
+    void  (* newDataNotify)  (iniconfSubparser *s,
+                              const char *section, const char *key, const char *value);
 };
 
 #endif

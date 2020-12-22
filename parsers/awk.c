@@ -23,11 +23,11 @@
 *   DATA DEFINITIONS
 */
 typedef enum eAwkKinds {
-	K_FUNCTION
+    K_FUNCTION
 } awkKind;
 
 static kindDefinition AwkKinds [] = {
-	{ true, 'f', "function", "functions" }
+    { true, 'f', "function", "functions" }
 };
 
 /*
@@ -36,44 +36,44 @@ static kindDefinition AwkKinds [] = {
 
 static void findAwkTags (void)
 {
-	vString *name = vStringNew ();
-	const unsigned char *line;
+    vString *name = vStringNew ();
+    const unsigned char *line;
 
-	while ((line = readLineFromInputFile ()) != NULL)
-	{
-		if (strncmp ((const char*) line, "function", (size_t) 8) == 0  &&
-			isspace ((int) line [8]))
-		{
-			const unsigned char *cp = line + 8;
+    while ((line = readLineFromInputFile ()) != NULL)
+    {
+        if (strncmp ((const char*) line, "function", (size_t) 8) == 0  &&
+                isspace ((int) line [8]))
+        {
+            const unsigned char *cp = line + 8;
 
-			while (isspace ((int) *cp))
-				++cp;
-			while (isalnum ((int) *cp)  ||  *cp == '_')
-			{
-				vStringPut (name, (int) *cp);
-				++cp;
-			}
-			while (isspace ((int) *cp))
-				++cp;
-			if (*cp == '(')
-				makeSimpleTag (name, K_FUNCTION);
-			vStringClear (name);
-			if (*cp != '\0')
-				++cp;
-		}
-	}
-	vStringDelete (name);
+            while (isspace ((int) *cp))
+                ++cp;
+            while (isalnum ((int) *cp)  ||  *cp == '_')
+            {
+                vStringPut (name, (int) *cp);
+                ++cp;
+            }
+            while (isspace ((int) *cp))
+                ++cp;
+            if (*cp == '(')
+                makeSimpleTag (name, K_FUNCTION);
+            vStringClear (name);
+            if (*cp != '\0')
+                ++cp;
+        }
+    }
+    vStringDelete (name);
 }
 
 extern parserDefinition* AwkParser (void)
 {
-	static const char *const extensions [] = { "awk", "gawk", "mawk", NULL };
-	static const char *const aliases [] = { "gawk", "mawk", NULL };
-	parserDefinition* def = parserNew ("Awk");
-	def->kindTable      = AwkKinds;
-	def->kindCount  = ARRAY_SIZE (AwkKinds);
-	def->extensions = extensions;
-	def->aliases    = aliases;
-	def->parser     = findAwkTags;
-	return def;
+    static const char *const extensions [] = { "awk", "gawk", "mawk", NULL };
+    static const char *const aliases [] = { "gawk", "mawk", NULL };
+    parserDefinition* def = parserNew ("Awk");
+    def->kindTable      = AwkKinds;
+    def->kindCount  = ARRAY_SIZE (AwkKinds);
+    def->extensions = extensions;
+    def->aliases    = aliases;
+    def->parser     = findAwkTags;
+    return def;
 }

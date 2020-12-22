@@ -1,3 +1,3 @@
 struct {
-	char *name;
+    char *name;
 } x;

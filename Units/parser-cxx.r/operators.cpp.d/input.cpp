@@ -6,95 +6,95 @@ class Type {};
 class X
 {
 public:
-	X & operator = (const X &x)
-	{
-		return *this;
-	}
-	
-	bool operator == (const X &x)
-	{
-		return true;
-	}
-	
-	inline X & operator-=(const X &x)
-	{
-		return *this;
-	}
-	
-	inline X & operator += (const X &x)
-	{
-		return *this;
-	}
-	
-	X & operator *= (int x);
-	X & operator *= (const X & x);
-	X operator && (const X &a);
+    X & operator = (const X &x)
+    {
+        return *this;
+    }
 
-	inline void operator /= (int)
-	{
-	}
-	
-	inline void *** operator()()
-	{
-		return 0;
-	}
-	
-	inline X & operator++()
-	{
-		return *this;
-	}
+    bool operator == (const X &x)
+    {
+        return true;
+    }
+
+    inline X & operator-=(const X &x)
+    {
+        return *this;
+    }
+
+    inline X & operator += (const X &x)
+    {
+        return *this;
+    }
+
+    X & operator *= (int x);
+    X & operator *= (const X & x);
+    X operator && (const X &a);
+
+    inline void operator /= (int)
+    {
+    }
+
+    inline void *** operator()()
+    {
+        return 0;
+    }
+
+    inline X & operator++()
+    {
+        return *this;
+    }
 
 
-	X & operator--()
-	{
-		return *this;
-	}
-	
-	int operator[](int)
-	{
-		return 0;
-	}
-	
-	int operator[](const X &a) const
-	{
-		return 0;
-	}
-	
-	// This should appear as member of the global namespace
-	inline friend X operator*(const X &a, const X &b)
-	{
-		return X();
-	}
-	
-	// This should NOT appear at all
-	friend X operator && (const X &a,const X & b);
-	
-	void * operator new(size_t);
-	void operator delete(void *);
-	void * operator new[](size_t);
-	void operator delete[](void *);
+    X & operator--()
+    {
+        return *this;
+    }
 
-	operator Type() const;
+    int operator[](int)
+    {
+        return 0;
+    }
+
+    int operator[](const X &a) const
+    {
+        return 0;
+    }
+
+    // This should appear as member of the global namespace
+    inline friend X operator*(const X &a, const X &b)
+    {
+        return X();
+    }
+
+    // This should NOT appear at all
+    friend X operator && (const X &a,const X & b);
+
+    void * operator new(size_t);
+    void operator delete(void *);
+    void * operator new[](size_t);
+    void operator delete[](void *);
+
+    operator Type() const;
 };
 
 X & X::operator *= (int x)
 {
-	return *this;
+    return *this;
 }
 
 X & X::operator *= (const X & x)
 {
-	return *this;
+    return *this;
 }
 
 X X::operator && (const X &a)
 {
-	return *this;
+    return *this;
 }
 
 void * X::operator new(size_t)
 {
-	return NULL;
+    return NULL;
 }
 
 void X::operator delete(void *)
@@ -103,7 +103,7 @@ void X::operator delete(void *)
 
 void * X::operator new[](size_t)
 {
-	return NULL;
+    return NULL;
 }
 
 void X::operator delete[](void *)
@@ -112,13 +112,13 @@ void X::operator delete[](void *)
 
 int main(int argc,char ** argv)
 {
-	X x;
-	return x[0];
+    X x;
+    return x[0];
 }
 
 X::operator Type() const
 {
-	return Type();
+    return Type();
 }
 
 #ifdef DONT_CARE_ABOUT_COMPILATION
@@ -126,10 +126,10 @@ X::operator Type() const
 
 template<typename T> inline cv::Affine3<T>::operator Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)>() const
 {
-	Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)> r;
-	cv::Mat hdr(4, 4, cv::traits::Type<T>::value, r.matrix().data());
-	cv::Mat(matrix, false).copyTo(hdr);
-	return r;
+    Eigen::Transform<T, 3, Eigen::Affine, (Eigen::RowMajor)> r;
+    cv::Mat hdr(4, 4, cv::traits::Type<T>::value, r.matrix().data());
+    cv::Mat(matrix, false).copyTo(hdr);
+    return r;
 }
 
 #endif

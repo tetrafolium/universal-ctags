@@ -33,10 +33,10 @@ unsigned int hashInthash (const void * x);
 bool hashInteq (const void * a, const void * b);
 
 extern hashTable* hashTableNew         (unsigned int size,
-					hashTableHashFunc hashfn,
-					hashTableEqualFunc equalfn,
-					hashTableFreeFunc keyfreefn,
-					hashTableFreeFunc valfreefn);
+                                        hashTableHashFunc hashfn,
+                                        hashTableEqualFunc equalfn,
+                                        hashTableFreeFunc keyfreefn,
+                                        hashTableFreeFunc valfreefn);
 
 extern void       hashTableDelete      (hashTable *htable);
 extern void       hashTableClear       (hashTable *htable);
@@ -48,9 +48,9 @@ extern void       hashTableForeachItem (hashTable *htable, hashTableForeachFunc 
 extern int        hashTableCountItem   (hashTable *htable);
 
 extern hashTable* hashTableIntNew (unsigned int size,
-								   hashTableHashFunc hashfn,
-								   hashTableEqualFunc equalfn,
-								   hashTableFreeFunc keyfreefn);
+                                   hashTableHashFunc hashfn,
+                                   hashTableEqualFunc equalfn,
+                                   hashTableFreeFunc keyfreefn);
 #define HT_PTR_TO_INT(P) ((int)(intptr_t)(P))
 #define HT_INT_TO_PTR(P) ((void*)(intptr_t)(P))
 

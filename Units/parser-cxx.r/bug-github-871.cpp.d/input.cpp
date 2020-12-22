@@ -9,11 +9,11 @@ bool funa()
     if (a)
     {
         if (second)
-#else               
+#else
     if (a)
     {
-#endif              
-        return false;
+#endif
+            return false;
     }
 
     return true;

@@ -1,9 +1,9 @@
 union TestUnion
 {
-int _number;
+    int _number;
 };
 
 struct TestStruct
 {
-int _number;
+    int _number;
 };

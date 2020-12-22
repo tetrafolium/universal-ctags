@@ -142,7 +142,7 @@ scandir(const char *directory_name,
         /* This is what the linux header file says ... */
         int (*compare_function) (const void *, const void *)
 #endif
-    )
+       )
 {
     DIR *directory;
     struct dirent **array;
@@ -203,7 +203,7 @@ scandir(const char *directory_name,
             if (counter + 1 == allocated) {
                 allocated <<= 1;
                 array = (struct dirent **)
-                    eRealloc((char *)array, allocated * sizeof(struct dirent *));
+                        eRealloc((char *)array, allocated * sizeof(struct dirent *));
                 if (array == NULL) {
                     closedir(directory);
                     eFree(array);
@@ -232,9 +232,9 @@ scandir(const char *directory_name,
 
 #if defined (HAVE_DIRENT_H) || defined (_MSC_VER)
 int scanDirectory (const char *directory_name,
-				   struct dirent ***array_pointer, int (*select_function) (const struct dirent *),
-				   int (*compare_function) (const struct dirent **, const struct dirent **))
+                   struct dirent ***array_pointer, int (*select_function) (const struct dirent *),
+                   int (*compare_function) (const struct dirent **, const struct dirent **))
 {
-	return scandir (directory_name, array_pointer, select_function, compare_function);
+    return scandir (directory_name, array_pointer, select_function, compare_function);
 }
 #endif

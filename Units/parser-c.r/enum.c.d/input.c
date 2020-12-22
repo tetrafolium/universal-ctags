@@ -5,18 +5,20 @@ enum E1 {
 };
 
 enum {
-	Anon1_member1
+    Anon1_member1
 };
 
 enum E1 var1;
 enum { Anon2_member1 } var2;
 
 // The following is valid only in C
-enum { Anon3_member1 } function(){ return Anon3_member1; };
+enum { Anon3_member1 } function() {
+    return Anon3_member1;
+};
 
 // The following is accepted by gcc but it is also semantically flawed since the
 // function definition cannot be present in the same compilation unit.
-// 
+//
 // enum { Anon4_member1 } function2();
 //
 // It's true that the definition for function2 *could* be in some other compilation

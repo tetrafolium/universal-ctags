@@ -20,39 +20,39 @@
 
 extern struct colprintTable * paramColprintTableNew (void)
 {
-	return colprintTableNew ("L:LANGUAGE", "L:NAME","L:DESCRIPTION", NULL);
+    return colprintTableNew ("L:LANGUAGE", "L:NAME","L:DESCRIPTION", NULL);
 }
 
 extern void paramColprintAddParameter (struct colprintTable *table,
-									   langType language,
-									   const parameterHandlerTable *const paramHandler)
+                                       langType language,
+                                       const parameterHandlerTable *const paramHandler)
 {
-	struct colprintLine *line = colprintTableGetNewLine(table);
+    struct colprintLine *line = colprintTableGetNewLine(table);
 
-	colprintLineAppendColumnCString (line, getLanguageName (language));
-	colprintLineAppendColumnCString (line, paramHandler->name);
-	colprintLineAppendColumnCString (line, paramHandler->desc);
+    colprintLineAppendColumnCString (line, getLanguageName (language));
+    colprintLineAppendColumnCString (line, paramHandler->name);
+    colprintLineAppendColumnCString (line, paramHandler->desc);
 }
 
-static int paramColprintCompareLines (struct colprintLine *a , struct colprintLine *b)
+static int paramColprintCompareLines (struct colprintLine *a, struct colprintLine *b)
 {
-	const char *a_parser = colprintLineGetColumn (a, 0);
-	const char *b_parser = colprintLineGetColumn (b, 0);
+    const char *a_parser = colprintLineGetColumn (a, 0);
+    const char *b_parser = colprintLineGetColumn (b, 0);
 
-	int r;
-	r = strcmp (a_parser, b_parser);
-	if (r != 0)
-		return r;
+    int r;
+    r = strcmp (a_parser, b_parser);
+    if (r != 0)
+        return r;
 
-	const char *a_name = colprintLineGetColumn (a, 1);
-	const char *b_name = colprintLineGetColumn (b, 1);
+    const char *a_name = colprintLineGetColumn (a, 1);
+    const char *b_name = colprintLineGetColumn (b, 1);
 
-	return strcmp(a_name, b_name);
+    return strcmp(a_name, b_name);
 }
 
 extern void paramColprintTablePrint (struct colprintTable *table, bool noparser,
-									bool withListHeader, bool machinable, FILE *fp)
+                                     bool withListHeader, bool machinable, FILE *fp)
 {
-	colprintTableSort (table, paramColprintCompareLines);
-	colprintTablePrint (table, noparser? 1: 0, withListHeader, machinable, fp);
+    colprintTableSort (table, paramColprintCompareLines);
+    colprintTablePrint (table, noparser? 1: 0, withListHeader, machinable, fp);
 }

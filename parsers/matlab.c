@@ -18,21 +18,26 @@
 #include "selectors.h"
 
 static tagRegexTable matlabTagRegexTable [] = {
-	/* function [x,y,z] = asdf */
-	{ "^[ \t]*function[ \t]*\\[.*\\][ \t]*=[ \t]*([a-zA-Z0-9_]+)",
-	  "\\1", "f,function", NULL},
-	/* function x = asdf */
-	{"^[ \t]*function[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*([a-zA-Z0-9_]+)",
-	 "\\1", "f,function", NULL},
-	/* function asdf */
-	{"^[ \t]*function[ \t]*([a-zA-Z0-9_]+)[^=]*$", "\\1",
-	 "f,function", NULL},
-	/* variables */
-	{"^[ \t]*([a-zA-Z0-9_]+)[ \t]*=[ \t]", "\\1",
-	 "v,variable", NULL},
-	/* class definitions */
-	{"^[ \t]*classdef[ \t]*([a-zA-Z0-9_]+)", "\\1",
-	 "c,class", NULL},
+    /* function [x,y,z] = asdf */
+    {   "^[ \t]*function[ \t]*\\[.*\\][ \t]*=[ \t]*([a-zA-Z0-9_]+)",
+        "\\1", "f,function", NULL
+    },
+    /* function x = asdf */
+    {   "^[ \t]*function[ \t]*[a-zA-Z0-9_]+[ \t]*=[ \t]*([a-zA-Z0-9_]+)",
+        "\\1", "f,function", NULL
+    },
+    /* function asdf */
+    {   "^[ \t]*function[ \t]*([a-zA-Z0-9_]+)[^=]*$", "\\1",
+        "f,function", NULL
+    },
+    /* variables */
+    {   "^[ \t]*([a-zA-Z0-9_]+)[ \t]*=[ \t]", "\\1",
+        "v,variable", NULL
+    },
+    /* class definitions */
+    {   "^[ \t]*classdef[ \t]*([a-zA-Z0-9_]+)", "\\1",
+        "c,class", NULL
+    },
 };
 
 /*
@@ -40,14 +45,15 @@ static tagRegexTable matlabTagRegexTable [] = {
 */
 extern parserDefinition* MatLabParser (void)
 {
-	static const char *const extensions [] = { "m", NULL };
-	static selectLanguage selectors [] = { selectByObjectiveCAndMatLabKeywords,
-					       NULL };
-	parserDefinition* const def = parserNew ("MatLab");
-	def->extensions = extensions;
-	def->tagRegexTable = matlabTagRegexTable;
-	def->tagRegexCount = ARRAY_SIZE (matlabTagRegexTable);
-	def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
-	def->selectLanguage = selectors;
-	return def;
+    static const char *const extensions [] = { "m", NULL };
+    static selectLanguage selectors [] = { selectByObjectiveCAndMatLabKeywords,
+                                           NULL
+                                         };
+    parserDefinition* const def = parserNew ("MatLab");
+    def->extensions = extensions;
+    def->tagRegexTable = matlabTagRegexTable;
+    def->tagRegexCount = ARRAY_SIZE (matlabTagRegexTable);
+    def->method     = METHOD_NOT_CRAFTED|METHOD_REGEX;
+    def->selectLanguage = selectors;
+    return def;
 }

@@ -1,16 +1,16 @@
 int
 main(int argc)
 {
-  goto out;
-  switch (argc)
+    goto out;
+    switch (argc)
     {
     case 1:
-      break;
+        break;
     case A|B:
-      break;
+        break;
     default:
-      break;
+        break;
     }
-   out:
-  return 0;
+out:
+    return 0;
 }

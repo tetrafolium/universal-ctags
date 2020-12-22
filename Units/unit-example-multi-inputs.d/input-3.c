@@ -1,3 +1,3 @@
 struct {
-	int age;
+    int age;
 } y;

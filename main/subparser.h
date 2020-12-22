@@ -28,26 +28,26 @@
 *   DATA DECLARATIONS
 */
 typedef enum eSubparserRunDirection {
-	SUBPARSER_UNKNOWN_DIRECTION =  0,
-	SUBPARSER_BASE_RUNS_SUB = 1 << 0,
-	SUBPARSER_SUB_RUNS_BASE = 1 << 1,
-	SUBPARSER_BI_DIRECTION  = SUBPARSER_BASE_RUNS_SUB|SUBPARSER_SUB_RUNS_BASE,
+    SUBPARSER_UNKNOWN_DIRECTION =  0,
+    SUBPARSER_BASE_RUNS_SUB = 1 << 0,
+    SUBPARSER_SUB_RUNS_BASE = 1 << 1,
+    SUBPARSER_BI_DIRECTION  = SUBPARSER_BASE_RUNS_SUB|SUBPARSER_SUB_RUNS_BASE,
 } subparserRunDirection;
 
 struct sSubparser {
-	/* private in the main part */
-	slaveParser *slaveParser;
-	subparser *next;
-	bool schedulingBaseparserExplicitly;
-	bool chosenAsExclusiveSubparser;
+    /* private in the main part */
+    slaveParser *slaveParser;
+    subparser *next;
+    bool schedulingBaseparserExplicitly;
+    bool chosenAsExclusiveSubparser;
 
-	/* public to the parser */
-	subparserRunDirection direction;
+    /* public to the parser */
+    subparserRunDirection direction;
 
-	void (* inputStart) (subparser *s);
-	void (* inputEnd) (subparser *s);
-	void (* exclusiveSubparserChosenNotify) (subparser *s, void *data);
-	void (* makeTagEntryNotify) (subparser *s, const tagEntryInfo *tag, int corkIndex);
+    void (* inputStart) (subparser *s);
+    void (* inputEnd) (subparser *s);
+    void (* exclusiveSubparserChosenNotify) (subparser *s, void *data);
+    void (* makeTagEntryNotify) (subparser *s, const tagEntryInfo *tag, int corkIndex);
 };
 
 /*

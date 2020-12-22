@@ -1,6 +1,6 @@
 // Assembly1.cs
 // compile with: /target:library
-internal class BaseClass 
+internal class BaseClass
 {
-   public static int IntM = 0;
+    public static int IntM = 0;
 }
